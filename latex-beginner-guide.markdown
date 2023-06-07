@@ -2,6 +2,9 @@
 
 by Stefan Kottwitz
 
+### Chapter 1: Introduction to Latex
+* Latex was create by American computer scientist Leslie Lamport
+
 ### Chapter 2 Formatting Words, Lines and Paraghraph
 * pg 28: Latex commands usually have this syntax `\command[optional argument] {argument}`
 * pg 31: Text-formatting commands usually look like `\text**{argument}`, where ** stands for a two letter abbreviatoin like **bf** for bold face or etc
@@ -51,3 +54,7 @@ by Stefan Kottwitz
 * pg 50: Environments are like declaration with a built-in scope, with `\begin` to introduces a change in properties and close by `\end`
 * pg 52: We can use the **microtype** `\usepacakge{microtype}` package to introduce font expansion to tweak the justification and improve the optical appearance
 * pg 54: The command `\linebreak` can be used to end a line but to keep the full justification, and it counterpart `\nolinebreak` used to prevents a line break at the current pos. Both command takes 1 argument which is number to influence the line break slightly or strongly
+* pg 60: Latex provides some commands to produce a variety of accents, we can use the **inputenc** package or just manually make the character
+* pg 62: We can use environment for justification for every decleration, we could have writter `\begin{centering} ... \end{centering}` to make the text center. It also applied for `ragged-right` and `ragged-left`.
+
+### Chapter 3: Designing Pages
