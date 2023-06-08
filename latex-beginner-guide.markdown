@@ -93,3 +93,25 @@ More dummy text\footnote{serving as a placeholder} will follow.
 
 * pg 98: As a rule of thumb, if a command causes an error when it's used inside an argument, like in headings, try to fix it by putting \protect right before that command. Cases where \protect would hurt instead of helping are rare.
 * pg 101: The footnote line can be modified by using \renewcommand such as `\renewcommand{\footnoterule}{\noindent\smash{\rule[3pt]{\textwidth}{0.4pt}}}`. The command \rule[raising]{width}{height} draws a line, here 0.4 pt thick, and as wide as the text, raised a bit by 3 pt. Through the command \smash, we let our line pretend to have a height and a depth of zero, so it's occupying no vertical space at all.
+
+### Chapter 4: Creating Lists
+> Latex provides several packages for designing the layout:
+> * geometry
+> * typearea
+> * fancyhdr
+> * scrpage2
+> * setspace
+
+* pg 106: We can use unordered list by using environment command `\begin{itemize} ... \end{itemize}`. For the ordered list we can simply put the command `\begin{enumerate} ... \end{enumerate}` before the \begin or \item command.
+* pg 110: The **paralist** package can be used to reduce the space created by using enumerate of list by simply using `\compactenum` or `\compactitem`
+* pg 116: The \description environment from **paralist** package can be used to create a definition list (there are also \compactlist, \inparadesc command)
+```
+\begin{description}
+ \item[paralist] provides compact lists and list versions that
+can be used within paragraphs, helps to customize labels and
+layout
+\end{description}
+```
+
+### Chapter 5: Creating Tables and Insereting Pictures
+* pg 122
