@@ -114,4 +114,68 @@ layout
 ```
 
 ### Chapter 5: Creating Tables and Insereting Pictures
-* pg 122
+* pg 126: Creating tables in Latex involves using the **tabular** environment. Furthermore, the complete definition of _tabular_ is
+```
+\begin{tabular}{<column specifiers>}
+    <table content>
+\end{tabular\begin{tabular}[position]{column specifiers}
+row 1 col 1 entry & row 1 col 2 entry ... & row 1 col n entry\\
+ ...
+\end{tabular}
+```
+and one way to example it
+```
+\begin{tabular}{|l|c|r|p{1.7cm}|}
+ \hline
+left & centered & right & a fully justified paragraph cell\\
+\hline
+ l & c & r & p\\
+ \hline
+\end{tabular}
+```
+* pg 127: The options by the _tabular_ environment are as follows
+
+| Options | Definition                       |
+|---------|----------------------------------|
+| l       | left alignment                   |
+| c       | centered alignment               |
+| r       | right alignment                  |
+| p       | a fully justified paragraph cell |
+| r       | right alignment                  |
+| @{code}       |  used to customize the inter-column spacing in a table. It allows you to insert any desired content between columns, such as whitespace, vertical lines, or even custom separators. |
+| l       | vertical line                  |
+| *{n}{options}       | equivalent to n copies of options, where n is a positive integer and options may consist of one or more column specifiers including * as well. |
+
+* pg 127: Column entries are separated by &, while rows are terminated by \\. Don't end the last line by \\ unless you further wish to write a line below. It's also a good idea to align the ampersands in our source code to keep it readable.
+
+* pg 127: The **array** package use some option such as
+> * m{width} is similar to\parbox{width}: the base line is at the middle
+> * b{width} is like \parbox[b]{width}: the base line is at the bottom
+> * !{code} can be used like | but inserts code instead of a vertical line. In contrast to @{…}, the space between columns will not be suppressed.
+> * `>{code}` can be used before an l, c, r, p, m, or b option and inserts code right at the beginning of each entry of that column
+> * <{code} can be used after an l, c, r, p, m, or b option and inserts code at the end of the entry of that column
+
+* pg 129: The **booktabs** package comes to enhance the quality of your tables by replacing \hline and \cline. The defintions of each commands are these
+> * \toprule[thickness] may be used to draw a horizontal line at the top of the
+table. If desired, a thickness may be specified, like 1pt or 0.5mm.
+> * \midrule[thickness] draws a horizontal dividing line between rows of a table.
+> * \bottomrule[thickness] draws a horizontal line to finish off a table
+> * \cmidrule[thickness](trim){m–n} draws a horizontal line from column m to
+column n. (trim) is optional like thickness, it could be (l) or (r) to trim the line at its left or right end. Write (lr) to trim at both ends. Even adding {width}, like in (l{10pt}), is possible and specifies the trim width.
+
+* pg 132: The command `\multicolumn` used to merge two cells, and by its definition: `\multicolumn{number of columns}{formatting options}{entry text}`
+```
+\multicolumn{3}{|c|}{A multiple column}
+```
+Will create 3 combined column into 1 column with text 'A multiple column'
+
+* pg 135: Using the environment table, we can simply put the captions of the table. `\begin{table} ... \end{table`
+
+* pg 139: We can use the **xcolor** package to coloring columns, rows, entries and many more. `\usepackage[table]{xcolor}`
+
+* pg 141: We can use the **graphicx** package to inserting a picture to the paper,the most important command is `\includegraphics{path}` where we specified the file and this file would be loaded if it exists.
+* pg 142: Here are the most popular options of the **graphicx** package
+> * width: The graphic would be resized to this width. Example: width=0.9\textwidth.
+> * height: The graphic would be resized to this height. Example: height=3cm.
+> * scale: The graphic would be scaled by this factor. Example: scale=0.5.
+> * angle: The graphic would be turned by this angle. Example: angle=90.
