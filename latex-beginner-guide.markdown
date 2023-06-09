@@ -179,3 +179,88 @@ Will create 3 combined column into 1 column with text 'A multiple column'
 > * height: The graphic would be resized to this height. Example: height=3cm.
 > * scale: The graphic would be scaled by this factor. Example: scale=0.5.
 > * angle: The graphic would be turned by this angle. Example: angle=90.
+
+### Chapter 6: Cross-Referencing
+* pg 155: We created cross-references with just three commands: `\label{<labelname>}` to marks the position, `\ref{<labelname>}` to prints the number of the element we refer to and `\pageref{<labelname>}` to prints page number of that element.
+* pg 155: To avoid any problem because of a possible unsuitable positioning, a good rule of thumb is to place the \label command right after the position we would like to mark. For instance, place it directly after the corresponding \chapter or after \section—not before, of course.
+* pg 157: Using a command we can make such referencing easier such as:
+` \newcommand{\fullref}[1]{\ref{#1} on page~\pageref{#1}} ` Where ~ is non-nonbreaking space which prevents line breaking between page and following referencing number.
+* pg 160: The package **cleverev** automatically determines the type of cross-reference and the context in which it's used. The first thing we used is the command \crefname to tell cleveref which name it should use for enumerated items. The definition of \crefname is:
+`\crefname{type}{singular}{plural}` where type is may be _chapter, section, figure, etc._ and The singular version will be used for single references and vice versa. `\crefname{enumi}{position}{positions}`
+
+* pg 162: The package **hyperref** can be used as hyperlink to your document (_Note_: The loaded order must hyperref first before claveref to ensure the references to work)
+
+### Chapter 7: Listing Content and References
+* pg 168: There are the standard sectioning commands and their so called TOC level:
+
+| Commmand       | Level                              |
+|----------------|------------------------------------|
+| \part          | -1 (Book and Report class)         |
+| \chapter       | 0 (not available in Article class) |
+| \section       | 1                                  |
+| \subsection    | 2                                  |
+| \subsubsection | 3                                  |
+| \paragraph     | 4                                  |
+| \subparagraph  | 5                                  |
+> In book and report class, Latex creates TOC entries until level 2 (section) and level 3 in article, which means in book, \subsubsection doesn't generate a TOC entry
+
+* pg 168: There's a variable representing the level, namely, \tocdepth. It's an integer variable which we call a counter. To tell LaTeX to include subsubsections in the TOC, we would have to raise this counter. There are two basic ways to adjust a counter value:
+> * \setcounter{name}{n} specifies an integer value of n for the counter name
+> * \addtocounter{name}{n} adds the integer value of n to value of the counter
+name. n may be negative
+> * and u can also using \addcounter to raise or lower the level
+
+* pg 169: We can add entries manually for such case as \chapter* that doesn't produce a TOC entry by this command: `\addcontentsline{file extension}{sectional unit}{text}` Where file extension may be ***toc (table of content), lof (list of figures), lot (list of tables)***
+* pg 169: Or you can just directly insert with commands: `\addtocontents{file extension}{entry}` where this is more flexible than the first one. There are some options with the command also
+> 1. \protect: In LaTeX, some commands are considered "fragile" and may cause issues when used in certain contexts, such as within the table of contents.
+> 2. \contentsline: This command is commonly used within the <content> argument to specify the structure and formatting of the added entry. It has some commands `\contentsline{<type>}{<entry>}{<page>}`
+> > * <type>: Specifies the type of the entry, such as chapter, section, subsection, figure, table, or any custom entry type you define.
+> > * <entry>: Specifies the text or title of the entry.
+> > * <page>: Specifies the page number associated with the entry. This argument is optional and can be left empty ({}) if you don't want to include the page number.
+
+* A example out of this commands are
+> 1. `\addtocontents{toc}{\protect\contentsline{section {\hspace{1em}\textit{Appendices}}{}}` Where adds a custom entry titled "Appendices" to the Table of Contents. The entry is indented using \hspace and formatted in italics using \textit.
+> 2. `\addtocontents{toc}{\protect\enlargethispage{\baselineskip}}` extends the text height such that one additional line fits to the contents page.
+
+* pg 170: We can use the **makeidx** package to make a index. The command itself just take one argument `\index{text}` and this is will be written to a file with a extension _.idx_
+* pg 174: `\index` allows customization with symbols and macros, when u are want to add a symbol: `\index{Symbol@\textit{Symbol}}` and combine the macro and symbol to create this: 
+```
+\newcommand{\mypage}[1]{Page #1}
+...
+\index{Symbol@\textit{Symbol}!\mypage{42}}
+```
+where the @\ symbol: This symbol is used to create a subentry within the index and the !\ symbol: This symbol is used to create a subsubentry within the index.
+ 
+* pg 175: We can use index cross-referencing by using symbols |, like this `\index{Term1|see{Term2}}` the Term1 is the term you are indexing, and Term2 is the related term that you want Term1 to cross-reference. When the index is generated, the entry for Term1 will include a "see" cross-reference pointing to Term2. This informs the reader that they should look up Term2 for more information related to Term1.
+
+* pg 178: We use **thebibliography** environment to typeset the list of references with these commands:
+```
+\begin{thebibliography}{widest label}
+\bibitem[label]{key} author, title, year etc.
+\bibitem…
+…
+\end{thebibliography}
+```
+* pg 180: Or we can use external program like **BibTex** to create a _.bib_ file extension to make the bibliography. [Ref.](https://www.bibtex.org/)
+```
+@article{DK89,
+author = "D.E. Knuth",
+title = "Typesetting Concrete Mathematics",
+journal = "TUGboat",
+volume = 10,
+number = 1,
+pages = "31--36",
+month = apr,
+year = 1989
+}
+```
+* pg 185: We can changing the headings content by using macro `\renewcommand\`
+ 
+| List              | Heading Commands                                 | Default Heading                                                  |
+|-------------------|--------------------------------------------------|------------------------------------------------------------------|
+| Table of contents | \contentsname                                    | Contents                                                         |
+| List of figure    | \listfigurename                                  | List of figures                                                  |
+| List of tables    | \listtablename                                   | List of tables                                                   |
+| Bibliography      | \bibname in book and report; \refname in article | **Bibliography** in book and report; **References** in article** |
+| Index             | \indexname                                       | Index                                                            |
+ 
