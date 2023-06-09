@@ -263,4 +263,51 @@ year = 1989
 | List of tables    | \listtablename                                   | List of tables                                                   |
 | Bibliography      | \bibname in book and report; \refname in article | **Bibliography** in book and report; **References** in article** |
 | Index             | \indexname                                       | Index                                                            |
+### Chapter 8: Typing Math Formulas
+* pg 193: The environment **equation** used to display equations and formulas in general
+* pg 194: Extracting roots can be used by using the command `\sqrt[order]{value}` where the default value of order is 2
+* pg 195: For the Greek letters and omicron can be found [Here](https://www.overleaf.com/learn/latex/List_of_Greek_letters_and_math_symbols)
+* pg 196: Producing an ellipsis can be done by using some commands here
+> * \ldots for left dots alignement
+> * \rdots for rights dots alignment
+> * \ddots for diagonal dots alignement
+> * \vdots for vertical dots alignment
  
+* pg 200: Here's a list of the amsmath multi-line environments:
+ 
+| Name     | Meaning                                                                                                               |
+|----------|-----------------------------------------------------------------------------------------------------------------------|
+| multline | First line is left-aligned, last line is right-aligned, all others are centered.                                      |
+| gather   | Each line is centered.                                                                                                |
+| align    | Use & to mark a symbol where the formulas shall be aligned. Use another                                               |
+| flalign  | Similar to align with more than one column, but the columns are flushed to the left and the right margin, repectively |
+| alignat  | Alignment at several places, each has to be marked by &.                                                              |
+| split    | Similar to align, but within another math environment, thus unnumbered                                                |
+
+* pg 206: Writing units can be done in latex by using package **siuitx** that provide most modern and comprehensive unit. [Ref.](https://ctan.org/pkg/siunitx?lang=en)
+ * pg 207: Example of using building math structure
+ 1. Creating arrays
+ ```
+ \[
+ A = \left(
+ \begin{array}{cc}
+ a_{11} & a_{12} \\
+ a_{21} & a_{22}
+ \end{array}
+ \right)
+\]
+ ```
+2. Writing binomial coef.
+`\binom{n}{k} = \frac{n!}{k!(n-k)!}`
+ 
+* pg 208: Formulas may become complex: we might need to put one symbol above another one or above whole expressions, or we wish to put lines, braces, or dots above symbols. There are several ways.
+1. \underlining and \overlining, which put a line above / below its argument, Ex. `\overline{AB}`
+2. \underbrace and \overbrace, which will create a braces between its argument, Ex. `N = \underbrace{1 + 1 + \cdots + 1}_n`
+ 
+* pg 208: Math accents (bar, hat, acute, etc) also can be done using some commands [here](https://abstractmath.org/MM/MMOtherSymbols.htm) 
+* pg 209: LaTeX provides environment for theorems, definitions, and alike. Returning to our first example in this chapter, we could define a theorem environment by:
+`\newtheorem{thm}{Theorem}`
+Then, we declare a definition environment, using an optional argument stating an existing environment with which we would like to share the numbering:
+`\newtheorem{dfn}[thm]{Definition}`
+ 
+### Chapter 9: Using Fonts
