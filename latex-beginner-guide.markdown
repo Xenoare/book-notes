@@ -311,3 +311,126 @@ Then, we declare a definition environment, using an optional argument stating an
 `\newtheorem{dfn}[thm]{Definition}`
  
 ### Chapter 9: Using Fonts
+* pg 216: TeX Live includes only freely licensed fonts. Non-free fonts may be installed using a separate program. It's called getnonfreefonts. If it's not already installed with your version of TeX Live, you can download it from [Here.](http://www.tug.org/fonts/getnonfreefonts/)
+* pg 219: The package **mathptmx** defines a Times Roman text font. Additionally, it provides math support using suitable symbols of the standard Computer Modern symbol font together with Times Roman letters and more glyphs of further fonts. It supersedes the times package.
+ * pg 224: Probably the best place to browse LaTeX fonts is The LaTeX Font Catalogue. Visit [http://www.tug.dk/FontCatalogue/](http://www.tug.dk/FontCatalogue)
+ 
+### Chapter 10: Developing Large Document  
+* pg 228: Thus, while we are writing, we will be able to manage a huge project consisting of many chapters in separate files.
+1. First thing first we can create a preamble.tex as our preamble template
+ ```
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{natbib}
+\usepackage{tocbibind}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\newtheorem{thm}{Theorem}[chapter]
+\newtheorem{lem}[thm]{Lemma}
+\theoremstyle{definition}
+\newtheorem{dfn}[thm]{Definition}
+ ```
+2. And for sake of this book, we make another document that contains the chapter _Equations_ as chapter1.tex
+ ```
+\chapter{Equations}
+\section{Quadratic equations}
+\begin{dfn}
+A quadratic equation is an equation of the form
+\begin{equation}
+\label{quad}
+ax^2 + bx + c = 0
+\end{equation}
+where \( a, b \) and \( c \) are constants and \( a \neq 0 \).
+\end{dfn}
+ ```
+3. Lastly, now we shall construct the top-level document. Create another file called equations.tex. This one starts with the documentclass and lists the
+preamble and the chapters for inclusion:
+```
+\documentclass{book}
+\input{preamble}
+\begin{document}
+\tableofcontents
+\include{chapter1}
+\include{chapter2}
+\end{document}
+```
+> * \input reads in another file, just as if it had been typed in.
+> * \include also reads in an external file, but automatically inserts \clearpage
+before and after. The \include implicitly starts new pages, This makes it useful for page ranges such as chapters or sections. One consequence is that you may use \include only after \begin{document}. \include cannot be nested. You could still use \input within included documents, though it might not be a good idea to complicate the structure further. Most importantly, \include supports a mechanism of choosing which parts of the document you wish to compile—so we come to another command, namely, \includeonly.
+ 
+ * pg 232: In contrast to reports, books often begin with introductory material such as copyright information, a foreword, acknowledgements, or a dedication. This part, including the title page and the table of contents, is called the **front matter**. At the end, a book might include an afterword and supporting material like a bibliography, and an index. This part is called the **back matter**.
+> The three commands \frontmatter, \mainmatter, and \backmatter are responsible.
+They modified both the page and chapter numbering in the following way:
+> * \frontmatter Pages are numbered with lowercase Roman numbers. Chapters generate a table of contents entry but don't get a number.
+> * \mainmatter Pages are numbered with Arabic numbers. Chapters are numbered and produce a table of contents entry.
+> * \backmatter Pages are numbered with Arabic numbers. Chapters generate a table of contents entry but don't get a number. 
+ 
+ * pg 235: The titlepage environment typesets its contents on a separate page. Though this title page will be numbered like any other page, the page number won't be printed on that page. Within this environment, we used some basic LaTeX font commands to modify the font size and shape. By grouping with curly braces, we limited those commands. Line breaks like \\[.2in] just cause some more space before the following line. \vfill inserts an elastic vertical space which stretches as much as possible such that the page is filled. This way we put the last line off to the end of the page.
+```
+\begin{titlepage}
+\raggedleft
+{\Large The Author\\[1in]}
+{\large The Big Book of\\}
+{\Huge\scshape Equations\\[.2in]}
+{\large Packed with hundreds of examples and solutions\\}
+\vfill
+{\itshape 2011, Publishing company}
+\end{titlepage}
+```
+Save this as _title.tex_, and use `\input` and use `\maketitle` to display the title
+ 
+* pg 237: You will find a collection of templates, arranged by document type such as thesis, reports, letters, and presentations, accompanied by sample output, in a template gallery at http://texblog.net/latex/templates.
+ 
+### Chapter 11: Enhancing Your Documents Further
+* pg 251: There's a huge amount of LaTeX packages. For nearly every possible task, somebody has written a package either solving or supporting it. Nearly all packages are stored on CTAN. But how can we find what we need? Let's have a look at an online catalogue. (http://texcatalogue.sarovar.org/), The TeX Catalogue is a really valuable source. Its category view is especially useful if you are looking for a package but don't know its exact name. It's also an easy way to locate and download documentation if texdoc doesn't work for you.
+ 
+### Chapter 12: Troubleshooting
+```
+\documentclass{article}
+\begin{document}
+\Latex\ says: Hello world!
+\end{document}
+```
+* pg 266: LaTeX commands are case-sensitive. Because we did not respect that, LaTeX had to deal with a macro called \Latex, which is just unknown. As a command is also called a control sequence, we got the error Undefined control sequence.
+* pg 267: Command names might easily be misspelled or just misused. Let's check out LaTeX's common complaints.
+> * Undefined control sequence: As in our example, TeX stumbled across an unknown command name. There are two possible reasons:
+> * The command name might be misspelled. In that case, you just need to correct it and restart the typesetting.
+> * The command name is correct, but it's defined by a package you didn't load. Add a \usepackage command to your preamble, which loads that package.
+> * Environment undefined: That's similar to Undefined control sequence, but this time you began an environment which is unknown. Again, this may be caused by misspelling or by a missing package—you know how to correct it.
+> * Command already defined: This happens when you create a command with a name that's already used, for example, with \newcommand or \newenvironment. Just choose a different name. If you really would like to override that command, use \renewcommand or \renewenvironment instead.
+> *  Missing control sequence inserted: A control sequence has been expected but didn't appear. A common cause is using \newcommand, \renewcommand, or \providecommand, but not specifying a command name as its first argument.
+> * \verb illegal in command argument: The \verb command for producing verbatim text is a delicate one; it cannot be used within arguments of commands or environments. The examplep package offers commands for using verbatim text in such places.
+ 
+* pg 274: Many warnings deal with referencing. Common mistakes are missing label or cite keys or keys that have been used twice. Sometimes LaTeX just tells you that another typeset run is required.
+> *  Label multiply defined: \label or \bibitem has been used with a label name that's already been used. Make label names unique.
+> * There were multiply-defined labels: Like the previous warning, but after processing the complete document; a label has been defined by two \label commands.
+> * Labels may have changed. Rerun to get cross-references right: Just typeset again to let LaTeX correct the referencing.
+> * Reference ... on page ... undefined: \ref or \pageref has been used without a corresponding \label definition. Insert a \label command at a suitable place.
+> *  Citation ... on page ... undefined: A \cite command did not have a corresponding \bibitem command.
+> * There were undefined references or citations: Summarizing after processing any \ref or \cite command did not have a corresponding \label or \bibitem command.
+ 
+Note: Whenever you get warnings regarding referencing, it’s a good idea to simply
+rerun typesetting. Often, such warnings then disappear, because LaTeX couldn’t
+resolve all references in the first run itself.
+ 
+* pg 275: Many problems just occur because of the use of obsolete packages. For example, some that aren't maintained any more may conflict with newer packages. Often, you just need to find the recommended successor of an obsolete package and use that.
+ 
+### Chapter 13: Using Online Resources
+* pg 287: Here the few list Frequently Asked Questions (FAQ) of Latex community:
+> AMS-Math FAQ http://www.ams.org/tex/amsmath-faq.html
+> As you know, amsmath is the most recommended math package. There's a list of questions and answers to amsmath and AMS classes and packages on the website of the American Mathematical Society.
+> tex-live http://tug.org/mailman/listinfo/tex-live
+> The name says it all: it deals with the TeX Live collection. If you installed this software distribution, you might be interested in subscribing to get the latest news and to read and write about issues with it.
+ 
+* pg 290: LaTeX distributions. Today there are two big LaTeX distributions, both very modern and comprehensive, plus some descendants:
+> * TeX Live: http://tug.org/texlive/ is a cross-platform LaTeX software collection. It runs on Windows, Mac OS X, Linux, and Unix.
+> * MiKTeX: http://www.miktex.org/ is a very user-friendly and popular LaTeX
+distribution specifically for the Windows operating system.
+> * proTeXt: http://www.tug.org/protext/ is a MiKTeX-based distribution for
+Windows that especially focuses on easy installation.
+> * MacTeX: http://www.tug.org/mactex/ is derived from TeX Live and has been
+customized specifically for Mac OS X.
+ 
