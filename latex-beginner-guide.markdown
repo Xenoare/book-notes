@@ -5,7 +5,7 @@ by Stefan Kottwitz
 ### Chapter 1: Introduction to Latex
 * Latex was create by American computer scientist Leslie Lamport
 
-### Chapter 2 Formatting Words, Lines and Paraghraph
+### Chapter 2: Formatting Words, Lines and Paraghraph
 * pg 28: Latex commands usually have this syntax `\command[optional argument] {argument}`
 * pg 31: Text-formatting commands usually look like `\text**{argument}`, where ** stands for a two letter abbreviatoin like **bf** for bold face or etc
 > Summarizing font commands and declarations
