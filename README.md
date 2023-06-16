@@ -18,6 +18,7 @@ Incomplete notes from books that I haven't yet finished reading.
 ### Other Notes
 Notes from things that I've read or watched on the web:
 * [Learn Vim (the Smarter Way)](learn-vim.markdown)
+* [Ultimate Setup Windows Termina](setup-terminal.markdown)
 
 ### Other
 
