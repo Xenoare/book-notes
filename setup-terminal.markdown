@@ -51,3 +51,31 @@ Install-Module z -AllowClobber
 and paste this [powershell](https://gist.github.com/shanselman/25f5550ad186189e0e68916c6d7f44c3?WT.mc_id=-blog-scottha) profile to `$PROFILE` script.
 
 There you have it, you can still play with the segment profiles or color of the terminal itsef, there are still many ways to customize it. Have fun :)
+
+### Setup Oh-my-posh and zoxide on Linux (WSL)
+Based on this [reference](https://calebschoepp.com/blog/2021/how-to-setup-oh-my-posh-on-ubuntu/), we can install oh-my-posh on linux by this following step
+1. First, install oh-my-posh and its themes
+```
+## Install Oh my Posh
+sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
+sudo chmod +x /usr/local/bin/oh-my-posh
+
+## Download the themes
+mkdir ~/.poshthemes
+wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/themes.zip -O ~/.poshthemes/themes.zip
+unzip ~/.poshthemes/themes.zip -d ~/.poshthemes
+chmod u+rw ~/.poshthemes/*.json
+rm ~/.poshthemes/themes.zip
+```
+2. Put this line into your `~/.bashrc` profile configuration
+```
+eval "$(oh-my-posh --init --shell bash --config ~/.poshthemes/{theme}.omp.json)"
+```
+3. Install zoxide package
+```
+curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+```
+4. Put this line into the `~.bashrc` config
+```
+eval "$(zoxide init bash)"
+```
