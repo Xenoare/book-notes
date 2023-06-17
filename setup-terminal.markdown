@@ -79,3 +79,7 @@ curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | 
 ```
 eval "$(zoxide init bash)"
 ```
+5. Source the file using
+```
+source ~/.bashrc
+```
