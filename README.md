@@ -19,6 +19,7 @@ Incomplete notes from books that I haven't yet finished reading.
 Notes from things that I've read or watched on the web:
 * [Learn Vim (the Smarter Way)](learn-vim.markdown)
 * [Ultimate Setup Windows Terminal](setup-terminal.markdown)
+* [Vimtutor](vimtutor.markdown)
 
 ### Other
 
