@@ -32,4 +32,83 @@ by iggredible [Ref.](https://github.com/iggredible/Learn-Vim)
 > 5. :tablast to go to last tab
 > 6. :tabfirst to go to first tab
 * Moving between windows just like move in 2-dimensional space where the command `CTRL-W H/J/K/L` use to navigate like in X-Y axis Cartesian coordinates.
-* and moving between buffers just like traveling accross Z axis where we traverse between depth of a buffer (buffer stacking to the top and we traverse it with `:bnext` and `:bprevious`). 
+* and moving between buffers just like traveling accross Z axis where we traverse between depth of a buffer (buffer stacking to the top and we traverse it with `:bnext` and `:bprevious`).
+
+
+### Chapter 3: Searching Files
+* To open a file in vim, you can use either `:find` or `:path`. 
+```
+:edit <path> FILENAME
+:find <path> FILENAME
+```
+Their differences is that `:find` finds file in their `path` and we can set the path to what we desire (normally is user directory).
+* There are 2 ways of searching files in Vim
+> 1. Internal grep (:vim or :vimgrep)
+> 2. External grep (:grep)
+1. The `:vim` has the following syntax:
+```
+:vim /pattern/ file
+```
+Where `/pattern/` is a regex pattern ([Reference of Vim Regex Here.](https://vimregex.com/)) and the `file` argument to search pattern inside the file argument. Similar to `:find`, you can pass it some `*` and `**` wildcards.
+
+After running thath, you will be redirected to the first result. `vim` search command uses `quickfix` operation. To see all search result, run `:copen` to open quickfix window. Use `:h quickfix` to learn about quickfix or here are some useful quickfix command
+```
+:copen     Open the quickfix window
+:cclose    Close the quickfix window
+:cnext     Go to next find
+:cprev     Go to the prev find
+:cnewer    Go to the newer find
+:colder    Go to the older find
+```
+2. External greg. By default, it uses `grep` terminal command. For example if we want to search "lunch" inside the `app/controllers` directory, you can do this:
+```
+:grep -R "lunch" app/controllers/
+```
+The ripgrep command that will come later will have no diff in the command.
+
+* Vim is also have it's built-in file explorer such as `netrw`. One way to launch `netrw` window is to using these command:
+```
+:Explore    Start netrw on current file
+:Sexplore   Starts netrw on split top half of the screen
+:Vexplore   Starts netrw on split left half of the screen
+```
+There are some plugin that more advanced than netrw such as [NERDTree](https://github.com/preservim/nerdtree) or [vim-vinegar](https://github.com/tpope/vim-vinegar)
+
+* Using FZF plugins
+First thing first, we need to have fzf and ripgrep already downloaded. And then we can setup the fzf in the `bashrc_profile` or (`$profile` if windows)
+```
+export FZF_DEFAULT_COMMAND='rg --files'
+export FZF_DEFAULT_OPTS='-m'
+```
+and then use the fzf.vim plugin in the `vimrc`
+```
+# Setup Pluggin
+call plug#begin()
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+call plug#end()
+
+# Setup ripgrep to :grep command
+set grepprg=rg\ --vimgrep\ --smart-case\ --follow  
+```
+#### Note
+Using vim-gripper can very useful to invoke the fzf and rg. Any docs of ripgrep [here](https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md)
+
+* Search and replace in Multiple Files can be done in Vim using `:grep` (remember we already invoke the :grep method to have the ripgrep).
+* The first method is to replacce all matching phrases, here's what you do:
+```
+:grep "pizza"
+:cfdo %s/pizza/donut/g | update
+```
+> 1. :grep "pizza" uses ripgrep to search for all instances of "pizza"
+> 2. :cfdo executes any command you pass in your quickfix list (in this case %s/pizza/donut/g to replace pizza with donut). The pipe (|) is a chain operator used invoke update command saves each file after substitution.
+
+* The second method is to search and replace in selected files.
+```
+# Clear the buffer first
+:%bd | e# (%bd deletes all the buffer and e# opens the file you were just on)
+```
+Run `:Files` (or Ctrl + F) to select the files. And then
+```
+:bufdo %s/pizza/donut/g | update (substituting all buffer entries with "donut")
+```
