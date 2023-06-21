@@ -112,3 +112,6 @@ Run `:Files` (or Ctrl + F) to select the files. And then
 ```
 :bufdo %s/pizza/donut/g | update (substituting all buffer entries with "donut")
 ```
+
+# Useful References
+Nickjj's Pluggins: https://github.com/nickjj/dotfiles/blob/master/.vimrc
