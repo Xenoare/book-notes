@@ -113,5 +113,75 @@ Run `:Files` (or Ctrl + F) to select the files. And then
 :bufdo %s/pizza/donut/g | update (substituting all buffer entries with "donut")
 ```
 
+### Chapter 4: Vim Grammar
+* There is only one grammar rule in vim Language:
+```
+verb + noun
+```
+* Nouns are vim motions (motions are used to move around within vim)
+```
+# Below is list of motion in vim
+h    left
+j    down
+k    up
+l    right
+w    move to next begining letter word's
+}    jump to next paragraph
+$    go to end of a line
+0    go to the start of a line
+...
+and many more 
+```
+* Verb are vim operators (there are 16 operators in Vim), there are some of them:
+```
+y    tank text (copy)
+d    delete text and save into register
+c    delete text, save to register and start insert mode
+```
+Since we know the verb and nouns in vim, let's apply the grammar rule. Suppose you have these expression:
+```
+const text = "Hello word"
+```
+1. Suppose the cursor in at const, to `yank` to the end of the line: `y$`
+2. To delete the next word: `dw`
+3. To change the name of `const text`, just type `c2w`
+* If the texts are structured (let's say HTML tags), we can also edit the content inside of it. For example we have these expression:
+```
+const hello = function() {
+  console.log("Hello Vim");
+  return true;
+}
+```
+1. To delete the "Hello Vim" text we can put the cursor at H and `di(` (delete in "(" paramter )
+
+Or these HTML tags:
+```
+<div>
+  <h1>Header1</h1>
+  <p>Paragraph1</p>
+  <p>Paragraph2</p>
+</div>
+```
+1. If we want to delete the content inside the <div>, put the cursor at "div" just type `dit` (delete in tag).
+
+Text objects are powerful since we can target different objects from one location. we can delete the objects inside parantheses, function block etc. 
+Here's a list of common text objects (you can learn more in `:h text-objects)`:
+```
+w         A word
+p         A paragraph
+s         A sentence
+( or )    A pair of ( )
+{ or }    A pair of { }
+[ or ]    A pair of [ ]
+< or >    A pair of < >
+t         XML tags
+"         A pair of " "
+'         A Pair of ' '
+`         A pair of ` `
+```
+
+* Vim can invoke set of general commands to perform a complex command (compasability) 
+
+
 # Useful References
 Nickjj's Pluggins: https://github.com/nickjj/dotfiles/blob/master/.vimrc
