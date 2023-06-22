@@ -180,8 +180,106 @@ t         XML tags
 `         A pair of ` `
 ```
 
-* Vim can invoke set of general commands to perform a complex command (compasability) 
+* Vim can invoke set of general commands to perform a complex command (compasability)
+* Motions and operators are extendable. You can create custom motions and operators to add into your vim. The [vim-textobj-user](https://github.com/kana/vim-textobj-user) plugin allows you to create your own text objects.
 
+### Chapter 5: Moving in file
+* Relative numbering in vim is useful when you've got a situation where you need to target some lines but don't know how much (like `d12j` to delete 12 line below)
+* There are 2 types of word navigation unit: `word` and `WORD` where their difference are that word is a sequence of character containing *only* `a-zA-Z0-9_` and WORD is a sequence of all character *except* white space (space, tab, EOL). Let's say we have these expression:
+```
+const hello = "world";
+```
+1. It takes 21 key press with 'l'
+2. Using 'w', it will take 6 and
+3. Using 'W', it only take 4
+
+* These are their definition
+```
+w     Move forward to the beginning of the next word
+W     Move forward to the beginning of the next WORD
+e     Move forward one word to the end of the next word
+E     Move forward one word to the end of the next WORD
+b     Move backward to beginning of the previous word
+B     Move backward to beginning of the previous WORD
+ge    Move backward to end of the previous word
+gE    Move backward to end of the previous WORD
+```
+
+* You can do current line search with `f` and `t`. The difference is that `f` takes you to the first letter of the match and `t` takes you before the first match letter.
+```
+f    Search forward for a match in the same line
+F    Search backward for a match in the same line
+t    Search forward for a match in the same line, stopping before match
+T    Search backward for a match in the same line, stopping before match
+;    Repeat the last search in the same line using the same direction
+,    Repeat the last search in the same line using the opposite direction
+```
+
+* Sentence and paragraph navigation can be done using these:
+```
+(    Jump to the previous sentence
+)    Jump to the next sentence
+{    Jump to the previous paragraph
+}    Jump to the next paragraph
+```
+You also can do window navigation by these:
+```
+H     Go to top of screen
+M     Go to medium screen
+L     Go to bottom of screen
+nH    Go n line from top
+nL    Go n line from bottom
+```
+
+* Scrolling in Vim also can be done using this
+```
+Ctrl-E    Scroll down a line
+Ctrl-D    Scroll down half screen
+Ctrl-F    Scroll down whole screen
+Ctrl-Y    Scroll up a line
+Ctrl-U    Scroll up half screen
+Ctrl-B    Scroll up whole screen
+```
+
+* Marking position to save your current pos and return to this pos later (like bookmark). you can set with a mark `mx` where `x` can be any alphabet.
+```
+ma    Mark position with mark "a"
+`a    Jump to line and column "a"
+'a    Jump to line "a"
+```
+To view all marks, use `:marks` where there are somme other marks
+```
+''    Jump back to the last line in current buffer before jump
+``    Jump back to the last position in current buffer before jump
+`[    Jump to beginning of previously changed / yanked text
+`]    Jump to the ending of previously changed / yanked text
+`<    Jump to the beginning of last visual selection
+`>    Jump to the ending of last visual selection
+`0    Jump back to the last edited file when exiting vim
+```
+
+* Summary, any motion that moves farther than a word is a jump (motion before this are jump). You can keep track where you've been when move around and see this list inside `:jumps`
+```
+'       Go to the marked line
+`       Go to the marked position
+G       Go to the line
+/       Search forward
+?       Search backward
+n       Repeat the last search, same direction
+N       Repeat the last search, opposite direction
+%       Find match
+(       Go to the last sentence
+)       Go to the next sentence
+{       Go to the last paragraph
+}       Go to the next paragraph
+L       Go to the the last line of displayed window
+M       Go to the middle line of displayed window
+H       Go to the top line of displayed window
+[[      Go to the previous section
+]]      Go to the next section
+:s      Substitute
+:tag    Jump to tag definition
+```
 
 # Useful References
 Nickjj's Pluggins: https://github.com/nickjj/dotfiles/blob/master/.vimrc
