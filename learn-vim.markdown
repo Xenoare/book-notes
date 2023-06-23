@@ -281,5 +281,62 @@ H       Go to the top line of displayed window
 :tag    Jump to tag definition
 ```
 
+### Chapter 6: Insert Mode
+* There are many ways to get into insert mode
+```
+i      Insert text before the cursor
+I      Insert text before the first character of the line
+a      Append text after cursor
+A      Append text at the end of a line
+o      Starts new line below the cursor
+O      Starts new line above the cursor
+s      Delete the character under the cursor and insert text
+S      Delete the line and insert text
+gi     Insert text in the same pos where the last insert mode end
+gI     Insert text at the start of line
+```
+* There are also different ways to exit insert mode
+```
+<Esc>      Exits insert mode and enter normal mode
+Ctrl - [   
+Ctrl - C   
+```
+* Deleting chunks is also possible in insert mode rather than in normal mode / using <Backspace>
+```
+Ctrl-h      Delete one character
+Ctrl-w      Delete one word
+Ctrl-u      Delete the entire line
+```
+* Vim register can store word for future use (it's using register to save the current word and paste it later), type `Ctrl-R` + register symbol (for now just register (a-z) ). To see in action, first we need to yank a word to register by this
+```
+"ayiw
+```
+1. Where `"a` is put the target of next action to the register a
+2. and "yiw" is yank inner word to yank the word into register a
+3. Now while in insert mode, to paste the stored word in register a, just type
+```
+Ctrl - R a
+```
+
+* Autocompletion in vim can be done using `Ctrl-X` to enter the sub-mode, Here are some useful autocomplete commands
+```
+Ctrl-X Ctrl-L	   Insert a whole line
+Ctrl-X Ctrl-N	   Insert a text from current file
+Ctrl-X Ctrl-I	   Insert a text from included files
+Ctrl-X Ctrl-F	   Insert a file name
+```
+In general, Vim looks at the text in all available buffers for autocompletion source. If you have an open buffer with a line that says "Chocolate donuts are the best":
+1. When you type "Choco" and do Ctrl-X Ctrl-L, it will match and print the entire line.
+2. When you type "Choco" and do Ctrl-P, it will match and print the word "Chocolate".
+Autocomplete is a vast topic in Vim. This is just the tip of the iceberg. To learn more, check out :h ins-completion.
+
+* Executing normal mode command also can be done in insert mode if you're press `Ctrl-O` you'll be in `insert-normal sub-mode` (one sign to see it is the insert mode changes to `-- (insert) --`.
+Here's some example:
+```
+Ctrl-O zz       Center window
+Ctrl-O H/M/L    Jump to top/middle/bottom window
+Ctrl-O 'a       Jump to mark a
+```
+
 # Useful References
 Nickjj's Pluggins: https://github.com/nickjj/dotfiles/blob/master/.vimrc
