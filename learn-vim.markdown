@@ -417,10 +417,68 @@ Ctrl-R =1-1
 10. Viewing the registers, To view all your registers, use the :register command. To view only registers "a, "1, and "-, use :register a 1 -.
 
 
+### Chapter 9: Macros
+* Here's the basic syntax of Vim macro:
+```
+qa                     Start recording a macro in register a
+q (while recording)    Stop recording macro
+```
+and Here's how you can execute a macro
+```
+@a    Execute macro from register a
+@@    Execute the last execute macros
+```
+* Let's say you have these line and want to uppercase everything on each line
+```
+hello
+vim
+macros
+are
+awesome
+```
+With your cursor at the start of the first line, run:
+```
+qa0gU$jq
+```
+Where `qa` starts recording a macro in a register, `0` goes to beginning of the line, `gU$` to uppercase the text from current loc. to end of the line, `j` to goes one line down and `q` to stop recording.
+To replay it, run `@a` (it support motions like `3@a` to exec 3 times)
 
+* You also can execute this macro via command line by `:normal` command, this command accepts range as arguemnts such as if you want your macro between lines 2 and 3, you can run: `:2,3 normal @a`
+  
+* You can recursilvely exec. a macro by calling the same macro over and over. Suppose you have this list
+```
+a. chocolate donut
+b. mochi donut
+c. powdered sugar donut
+d. plain donut
+```
+To make the first character is Uppercase. Run
+```
+qaqqa0W~j@aq
+```
+Where `qaq` records an empty maccro (it is imporatant since it will run whatever is in that register). `qa` starts recording on register a, `0` goes to the first character in the current line, `W` goes to next WORD, `~` to toggle the charcter under the cursor, `j` goes down one line, `@a` to executes the macro a. and q to step recording.
+This thing goes recursively until there are on the last line where it tried to run `j`, it stop the macro.
 
+* To append a macro, you can do by using capital letter of the register like `qA` to append to the register a.
 
+Note: This macro module is kinda to complex, i need to learn it more in the future
 
+### Chapter 10: Undo
+* To perform a basic undo and redo, you can use `u` or `:undo` for undo and `Ctrl + R` or `:redo` to redo 
+
+* You can make an undo breakpoint to mark the undo by `<Ctrl-G u>`, like for example `ione<Ctrl-G u> two<Esc>` to seperate one and two from undo.
+
+* Undo tree is not easy to visualize. I find [vim-mundo](https://github.com/simnalamburt/vim-mundo) plugin to be very useful to help visualize Vim's undo tree. Give it some time to play around with it.
+
+* Persistent undo, you can rollover to the last editing session by preserving undo history with `:wundo {my-undo-file}` and to recover it by `:rundo {undo-file}.undo`
+* You can set the automatic undo persistence in `vimrc` config
+```
+set undodir=~/.vim/undo_dir
+set undofile
+```
+The setting above will put all the undofile in one centralized directory, the ~/.vim directory. The name undo_dir is arbitrary. set undofile tells Vim to turn on undofile feature because it is off by default. Now whenever you save, Vim automatically creates and updates the relevant file inside the undo_dir directory (make sure that you create the actual undo_dir directory inside ~/.vim directory before running this).
+
+* The `:earlier <time>` can be used to travel to a text state in the past. Like `:earlier 10s` will bring you back to the 10 seconds ago state.
 
 # Useful References
 Nickjj's Pluggins: https://github.com/nickjj/dotfiles/blob/master/.vimrc
