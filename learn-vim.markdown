@@ -338,5 +338,50 @@ Ctrl-O H/M/L    Jump to top/middle/bottom window
 Ctrl-O 'a       Jump to mark a
 ```
 
+### Chapter 7: Dot Command
+* In general, you should try to avoid re-doing stuff possible. Using dot command we can redo the previous command for repetitions.
+* Dot command as it's name used by pressing the dot key (`.`). For example, let's say we've got these expression:
+```
+let one = "1";
+let two = "2";
+let three = "3";
+```
+If we want to change "let" with "const", we can do these following things
+1. Search with `/let` to find the first match
+2. Change the `let` with `cw` and type `const` and escape with <Esc>
+3. Navigate with `n` to find next match
+4. Repeat the last command with dot command (`.`)
+
+* Any time you update (add, modify, or delete) the content of the current buffer, you are making a **change**. Let' say you want to delete the textext from the start of the line to the next occurrence of a comma.
+```
+pancake, potatoes, fruit-juice,
+```
+1. First thing we can do is to delete the first word with `df,` and then repeat with `..` for the rest of 2 words.
+> Dot command works to the previous command, the df command is going to delete the word until it found comma (it count as 1 changes). If you want to delete the comma, then the command `f,x..` will not work since the last change is x to delete the character after the cursor. To make this work just type `;` to find another match for comma and use the dot command to delete the character.
+
+* Multi-line repeat also can be done in Vim, let say we have these expression:
+```
+let one = "1";
+let two = "2";
+let three = "3";
+const foo = "bar';
+let four = "4";
+let five = "5";
+let six = "6";
+let seven = "7";
+let eight = "8";
+let nine = "9";
+```
+To remove all lines except the "foo" lines
+1. First we can delete the first three lines with 'd2j'
+2. Move the cursor below the foo lines with 'j'
+3. Redo the changes before with `. .` 
+
+* Including a motion in a change, we can use the `cgn` motion rather than `cw` since `gn` search for the last search pattern and automatically does a visual highlight. And to replace the next occurrence, just type (. .) rather than traverse with (n . n .)
+
+* When you are editing, always be on the lookout for the motions that can do several things at once such as `gn` whenever possible.
+
+
+
 # Useful References
 Nickjj's Pluggins: https://github.com/nickjj/dotfiles/blob/master/.vimrc
