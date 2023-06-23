@@ -381,6 +381,45 @@ To remove all lines except the "foo" lines
 
 * When you are editing, always be on the lookout for the motions that can do several things at once such as `gn` whenever possible.
 
+### Chapter 8: Registers
+* To use registers, you need to store them with operators (usually operators `y`, `c`, `d`) and to paste a text from register, you can use:
+```
+p     Paste the text after the cursor
+P     Paste the text before the cursor
+```
+**There are 10 Vim register types:**
+1. The unnamed register, where it stores the last text you yanked, changed, or deleted. To get the text from this register, do `""p` (default is `p`)
+2. The numbered register, this register will fill themselves up in ascending order. There are 2 different numbered registers: the yanked register `0` and the numbered registers `1-9`
+> The yanked registers, if you yank entire line (yy), Vim actually store that in two registers: The unnamed register (p) and the yanked registers ("0p) where the any other operation after yank will be stored in the (p) register and the yank is still in the yanked register
+> The non-zero numbered registers, when you change or delete a text that is one line long, that text will be stored in 1-9 registers sorted by the most recent. To paste from this registers, do ("1p) to paste from the numbered regsiter 1 and (.) to the next register
+3. The small delete register, changes or deletions taht less than one line (word example) stored in this register ("-)
+4. The named register, it store the edit into registers (a-z). To yank a word into register a, you can do it with `"ayiw` where `"a` is a target for register a, and the `yiw` is yanks the word. and to get the text from this register, do `"ap`
+> Sometimes you may want to add to your existing named register. In this case, you can append your text instead of starting all over. To do that, you can use the uppercase version of that register. For example, suppose you have the word "Hello " already stored in register a. If you want to add "world" into register a, you can find the text "world" and yank it using A register ("Ayiw).
+5. The read-only registers, Vim has three read-only registers:
+```
+.    Stores the last inserted text
+:    Stores the last executed command-line
+%    Stores the name of current file
+```
+6. The expression register, uses `"=` to evaluate expression. Let's say to evalaute mathematical expressions `1+1`.
+```
+"=1+1<Enter>p
+#or you can do in insert mode
+Ctrl-R =1-1
+```
+> You also can get the values from any register via the expression regsiter when appended with `@`. if you with to get text from register a
+```
+"=@a <Enter> p
+```
+7. The selection registers, you can copy from external programs (like chrome) and paste in vim, and vice versa with `quotestar` (`"*`) and `quoteplus` (`"p`). Like for example to copy text from chrome and paste it to vim by `"*p` and to copy text from vim to clipboard by `*yiw` to copy a word (or `*yy` to copy an entire line to the clipboard)
+8. The black hole register, You can use the black hole register ("_). To delete a line and not have Vim store the deleted line into any register, use "_dd.
+9. The last search, To paste your last search (/ or ?), you can use the last search pattern register ("/). To paste the last search term, use "/p.
+10. Viewing the registers, To view all your registers, use the :register command. To view only registers "a, "1, and "-, use :register a 1 -.
+
+
+
+
+
 
 
 # Useful References
