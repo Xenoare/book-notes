@@ -521,5 +521,94 @@ It is a bad practice to have several ids having the same name, so let's incremen
 `>    Go to the last place of the previous visual mode highlight
 ```
 
+### Chapter 12: Search and Subtitute
+* You can filter to match the first and last character in line using `^` and `$`. For example, if you want to target the first "hello" in line, use `/^hello` and vice versa. 
+* You also can repeat the previous search with `//`, and to see all your search history, you can run with `:history /`
+
+* Using regex to match any search. If you wanted to search either one or two character in a text, you can use the `|` operator, like
+```
+\hello\|hola     # This will search hello or hola
+\vhello|hola     # This method is also work using magic `v` button rather than \|
+```
+
+* You can search any digit or alfabet by using some regex, `/[0-9]` to search any digit number, or `/[a-zA-Z]` to search for any upper/lower alphabet (You also can combine both, let's say for hex searching pattern `/[0-9a-fA-F]`)
+
+* And you also can do a negative search by using `^` inside the bracket ( `/[^0-9]` this will search for a non-digit)
+
+* You can also search for any repeating character like `11` or `111` by these regex, `count` command has these syntax `{n,m}` where this command has 4 variations:
+1. {n} is an exact match. /[0-9]\{2\} matches the two digit numbers: "11" and the "11" in "111".
+2. {n,m} is a range match. /[0-9]\{2,3\} matches between 2 and 3 digit numbers: "11" and "111".
+3. {,m} is an up-to match. /[0-9]\{,3\} matches up to 3 digit numbers: "1", "11", and "111".
+4. {n,} is an at-least match. /[0-9]\{2,\} matches at least a 2 or more digit numbers: "11" and "111".
+
+* There are some predifired character ranges
+```
+\d    Digit [0-9]
+\D    Non-digit [^0-9]
+\s    Whitespace character (space and tab)
+\S    Non-whitespace character (everything except space and tab)
+\w    Word character [0-9A-Za-z_]
+\l    Lowercase alphas [a-z]
+\u    Uppercase character [A-Z]
+```
+
+* Below is any search example of text using regex
+1. Let's say you want to search a phrase surrounded by a pair of double quotes
+```
+"Vim is awesome!"
+# Run this
+/"[^"]\+" or
+/\v"[^"]+"
+```
+2. Or when you want to capture a phone number
+```
+123-456-789
+# Run this
+/\v\d{3}-\d{3}-\d{3}
+```
+
+* The substitution syntax are:
+```
+:[range #usually (x,y) or % for entire file]s/{old-pattern}/{new-pattern}/[substitution flag]
+```
+
+* You also can do substitution based on a pattern matching.
+1. let's say you have these expressions:
+```
+let one = 1;
+let two = 2;
+let three = 3;
+let four = 4;
+let five = 5;
+```
+To add a pair of double quoutes around the digits:
+```
+:s/\v\d/"\0"/
+# Where \0 is a special character flap representating the entire macthed pattern.
+```
+2. Or this situation where you want to swap the variable names
+```
+one let = "1";
+two let = "2";
+three let = "3";
+four let = "4";
+five let = "5";
+```
+You can do this:
+```
+%s/\v(\w+) (\w+)/\2 \1/
+# Where \w+ is used as a group match where this takes ranges of a word character more than one
+# \2 \1 used to capture the group in a reversed order
+```
+* There are some useful substtituion flag (or you can check `:h s_flags`).
+```
+&    Reuse the flags from the previous substitute command.
+g    Replace all matches in the line.
+c    Ask for substitution confirmation.
+e    Prevent error message from displaying when substitution fails.
+i    Perform case insensitive substitution.
+I    Perform case sensitive substitution.
+```
+
 # Useful References
 Nickjj's Pluggins: https://github.com/nickjj/dotfiles/blob/master/.vimrc
