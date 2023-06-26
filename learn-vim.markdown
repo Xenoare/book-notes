@@ -480,5 +480,46 @@ The setting above will put all the undofile in one centralized directory, the ~/
 
 * The `:earlier <time>` can be used to travel to a text state in the past. Like `:earlier 10s` will bring you back to the 10 seconds ago state.
 
+### Chapter 11: Visual Mode 
+* There are three ways to open a visual modes.
+```
+v                    Character-wise visual mode
+V                    Line-wise visual mode
+Ctrl-V Or Ctrl-Q     Block-wise visual mode
+```
+* Visual mode shares many operations with normal mode, let's say delete command or replace command
+```
+Chapter One
+Chapter One 
+```
+You can replace the second line with visual mode `V` and type 'r=` to replace with `=========`
+
+* You also can selectively apply command-lines on a highlighted block. Lets say you have these expressions:
+```
+const one = "one"
+const two = "two"
+const three = "three"
+```
+you can substitute the first two lines with any visual mode and run these substitute command `:s/const/let/g`
+
+* Incrementing number is also possible in vim
+```
+<div id="app-1"></div>
+<div id="app-1"></div>
+<div id="app-1"></div>
+<div id="app-1"></div>
+<div id="app-1"></div>
+```
+It is a bad practice to have several ids having the same name, so let's increment them to make them unique:
+1. Move your cursor to the "1" on the second line.
+2. Start block-wise visual mode and go down 3 lines (`Ctrl-V 3j`). This highlights the remaining "1"s. Now all "1" should be highlighted (except the first line).
+3. Run `g Ctrl-A`. (`g Ctrl-A` increments numbers on multiple lines)
+
+* You can selecting the last visual mode by using `gv` to quickly highlight the last visual mode, or you can use these command marks
+```
+`<    Go to the first place of the previous visual mode highlight
+`>    Go to the last place of the previous visual mode highlight
+```
+
 # Useful References
 Nickjj's Pluggins: https://github.com/nickjj/dotfiles/blob/master/.vimrc
