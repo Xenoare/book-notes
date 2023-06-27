@@ -610,5 +610,27 @@ i    Perform case insensitive substitution.
 I    Perform case sensitive substitution.
 ```
 
+* You also can do special replace (like `\U` or check `:h sub-replace-special)`). Let's say you want to uppercase this word
+```
+vim is the greatest text editor in the whole galaxy
+```
+You can run
+```
+:s/\<./\U&/g
+# Where \<  match the start of a word and . to match andy character, so it will match the first character of any word. \U& uppercases the subsequent symbol where & represent the whole match
+```
+
+* You can also need to match for multiple pattern, ley's say ou have these expressions
+```
+hello vim
+hola vim
+salve vim
+bonjour vim
+```
+To substitute the word "vim" with "friend", but only on the lines contain the word "hello" or "hola" you can do this
+```
+:%s/\v(hello|hola) vim/\1 friend/g
+```
+
 # Useful References
 Nickjj's Pluggins: https://github.com/nickjj/dotfiles/blob/master/.vimrc
