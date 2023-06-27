@@ -630,6 +630,29 @@ bonjour vim
 To substitute the word "vim" with "friend", but only on the lines contain the word "hello" or "hola" you can do this
 ```
 :%s/\v(hello|hola) vim/\1 friend/g
+# Where \1 is the first group, which is either text "hello" or "hola"
+```
+
+* You can substitute the n-th match in a line with this
+```
+One Mississippi, two Mississippi, three Mississippi, four Mississippi, five Mississippi.
+```
+```
+:s/\v(.{-}\zsMississippi){3}/Arkansas/g
+# Where . is a single repeat and {-} performs non-greedy match of 0 or more of the preceding atom, where (...){3} is looking for the third match.
+```
+The `{-}` finds the shortest match of the given pattern, contrast with `*` finds the longest match
+
+* Alternatively you can also run substitute command accross multiple files with macros
+```
+:args *.txt
+qq
+:%s/dog/chicken/g
+:wnext
+q
+99@q
+
+# Where wnext saves the file and go to the next file on the args list
 ```
 
 # Useful References
