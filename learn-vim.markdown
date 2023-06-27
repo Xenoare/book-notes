@@ -655,5 +655,122 @@ q
 # Where wnext saves the file and go to the next file on the args list
 ```
 
+### Chapter 13: Global Command
+* The global command has the following syntax:
+```
+:g/pattern/command
+```
+Lets say you have these expressions:
+```
+const one = 1;
+console.log("one: ", one);
+
+const two = 2;
+console.log("two: ", two);
+
+const three = 3;
+console.log("three: ", three);
+```
+To remove all lines containing "console", you can run:
+```
+:g/console/d
+```
+
+* You can run command for the inverse match by using this
+```
+:g!/patter/command
+or
+:v/patter/command
+```
+* You can pass a range before the `g` command
+1. `:1,5g/console/d` matches the string "console" between lines 1 and 5 and deletes them.
+2. `:,5g/console/d` if there is no address before the comma, then it starts from the current line. It looks for the string "console" between the current line and line 5 and deletes them.
+3. `:3,g/console/d` if there is no address after the comma, then it ends at the current line. It looks for the string "console" between line 3 and the current line and deletes them.
+4. `:3g/console/d` if you only pass one address without a comma, it executes the command only on line 3. It looks on line 3 and deletes it if has the string "console".
+> In addition to numbers, you can also use these symbols are range.
+> * . means the current line. A range of .,3 means between the current line and line 3.
+> * $ means the last line in the file. 3,$ range means between line 3 and the last line.
+> * +n means n lines after the current line. You can use it with . or without. 3,+1 or 3,.+1 means between line 3 and the line after the current line.
+
+* You also can use macro with the global command. let say you to add a `;` in a lines with "const", then you have to do this:
+```
+:g/const/normal @a
+``` 
+
+* You also can recursively use global command as a type of command-line. let say you want to delete the second `console.log` statement:
+```
+const one = 1;
+console.log("one: ", one);
+
+const two = 2;
+console.log("two: ", two);
+
+const three = 3;
+console.log("three: ", three);
+```
+You can run
+```
+:g/console/g/two/d
+# Where the first g is looking for "console" pattern and the second g is looking for the "two" pattern.
+```
+
+* To reverse the entire buffer, run
+```
+:g/^/m 0
+# The ^ to match all lines, including empty lines. and m is to moves the lines to the given destination, in this case the range is "^" and the destination is "0".
+```
+
+* You can also pass a range to limit the command
+```
+:5,10g/^/m 0
+# This is to reverse the line between line 5 and 10
+```
+
+* When coding, sometimes i would write TODOs in the file that i'm editing
+```
+const one = 1;
+console.log("one: ", one);
+// TODO: feed the puppy
+
+const two = 2;
+// TODO: feed the puppy automatically
+console.log("two: ", two);
+
+const three = 3;
+console.log("three: ", three);
+// TODO: create a startup selling an automatic puppy feeder
+```
+You can keep track of the created TODOs by using `:t`(copy) or `:m`(move) method
+```
+:g/TODO/t $
+or 
+:g/TODO/m $
+# Both lines search for pattern TODO and copy or move to the end of the buffer
+```
+
+* Recall from the register chapter that deleted texts are stored inside the numbered registers (granted they are sufficiently large ). Whenever you run :g/console/d, Vim stores the deleted lines in the numbered registers. If you delete many lines, you can quickly fill up all the numbered registers. To avoid this, you can always use the black hole register ("_) to not store your deleted lines into the registers. Run:
+```
+:g/console/d_
+```
+By passing _ after d, Vim won't use up your scratch registers.
+
+* You can also run the global command with this form
+```
+g/pattern1/,/pattern2/command
+```
+Let's say you want to reduce the empty lines into one empty line with:
+```
+:g/^$/,/./-1j
+# Where the first pattern ^$ is represents for an empty line. , separates the range. In this case, it specifies a range from the matched empty line (/^$/) to the next line containing any content (/./). This range encompasses consecutive empty lines.
+The -1 means offset that subtraccts one from the ending line, and the j is the commmand used to join lines.
+```
+
+* Vim has `:sort` command to sort the lines within a range. If you need to sort the elements inside the arrays, you can run this:
+```
+:g/\[/+1,/\]/-1sort
+# Where /\[ is meaning the left bracket and +1 refers line below it. /\] is meaning the right bracket and -1 refers the line above it.
+```
+The conclusion is that `/\[/+1,/\]/-1 then refers to any lines between "[" and "]".
+
 # Useful References
 Nickjj's Pluggins: https://github.com/nickjj/dotfiles/blob/master/.vimrc
