@@ -1608,5 +1608,23 @@ A case-insensitively matched global tag in the a different file.
 A case-insensitively matched static tag in the current file.
 ```
 
+Chapter 17: Fold
+* The fold operator `z` hide some line text. Remember the fold operator `zf` can used with a motion of text object. 
+```
++-- 2 lines: Fold me -----
+```
+
+* You can open a folded text with `zo` and `zc` to close the fold. There are some many more folding commands in `:h fold-commands`
+
+* There are six different folding method (you can change the fold by `:set foldmethod={mode}` where the default is `manual`). You can check the ref [here](https://github.com/iggredible/Learn-Vim/blob/master/ch17_fold.md)
+```
+1. Manual
+2. Indent
+3. Expressions
+4. Syntax
+5. Diff
+6. Marker
+```
+
 # Useful References
 Nickjj's Pluggins: https://github.com/nickjj/dotfiles/blob/master/.vimrc
