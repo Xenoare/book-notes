@@ -1580,6 +1580,33 @@ There's also some shortcut to open history mode by pressing `q:`
 
 * Vim has hundreds of built-in commands. To see all the commands Vim have, check out :h ex-cmd-index or :h :index.
 
+### Chapter 16: Tags
+> Ref. Here: https://courses.cs.washington.edu/courses/cse451/10au/tutorials/tutorial_ctags.html
+
+* Usually tag item is composed fo four componenents such as a `tagname`, a `tagfile`, a `tagaddress` and a tag options.
+```
+1.  {tagname} {TAB} {tagfile} {TAB} {tagaddress}
+2.  {tagname} {TAB} {tagfile} {TAB} {tagaddress} {term} {field} ..
+```
+
+* You also can exclude some module since it will take long time (let's say node_module)
+```
+ctags -R --exclude=node_modules .
+```
+
+* Beside of using `CTRL-]`, you also can use command `:tag {tag-name}` to jump.
+
+* There are some tag priority if vim is presented with duplicate item names
+```
+A fully matched static tag in the current file.
+A fully matched global tag in the current file.
+A fully matched global tag in a different file.
+A fully matched static tag in another file.
+A case-insensitively matched static tag in the current file.
+A case-insensitively matched global tag in the current file.
+A case-insensitively matched global tag in the a different file.
+A case-insensitively matched static tag in the current file.
+```
 
 # Useful References
 Nickjj's Pluggins: https://github.com/nickjj/dotfiles/blob/master/.vimrc
