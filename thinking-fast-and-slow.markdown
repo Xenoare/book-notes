@@ -67,6 +67,13 @@ by Daniel Kahneman
 * Sistem 1 lebih mudah tertipu dan bias untuk percaya, sementara sistem 2 bertugas dalam keraguan dan ketidakpercayaan, namun sistem 2 terkadang sibuk dan sering malas. Tidak seperti ilmuan, yang melakukan hipotesis untuk meyanggah hipotesisnya, namun kami mencari data yang mungkin sesuai dengan keyakinan yang kita pegang saat ini.
 * Kecerundungan untuk suka maupun tidak suka terhadap segalanya tentang seseorang, termasuk hal yang belum diamati, dikenal sebagai efek Halo.
 * Efek Halo meningkatkan bobot kesan pertama, kadang-kadang sampai titik informasi berikutnya sebagian besar terbuang sia-sia (Sistem ini digunakan untuk mengecek nilai mahasiswa yang bagus untuk saya `Halaman 86`)
-* Untuk mendapatkan informasi berguna dari berbagai sumber, kamu harus berusaha untuk membuat sumber ini independen dari bukti apapun. Disksi terbuka akan memberikan terlalu banyak bobot pada orang yang bicara lebih awal dan tegas, menyebabkan orang berbaris dibelakangnya dan mengikuti informasinya.
+* Untuk mendapatkan informasi berguna dari berbagai sumber, kamu harus berusaha untuk membuat sumber ini independen dari bukti apapun. Disksi terbuka akan memberikan terlalu banyak bobot pada orang yang bicara lebih awal dan tegas, menyebabkan orang berbaris dibelakangnya dan mengikuti informasinyaf
 * Sistem 1 unggul dalam membangun cerita terbaik yang menggabungkan ide-ide yang saat ini diaktifkan, tetapi tidak dapat mengizinkan informasi yang tidak dimilikinya.
 * Lompat langung ke kesimpulan memfasilitasi pencapaian dan koherensi dari kemudahan kognitif yang meyebabkan kita untuk menerima benar sebuah argument. Hal ini menjelaskan tingkat percaya diri yang tinggi.
+
+### Chapter 8: Cara Pertimbangan Memori
+* Sistem 1 terus-menerus memantau apa yang terjadi di luar dan di dalam akal budi, serta terus-menerus menampilkan penilaian atas berbagai aspek situasi tanpa niat khusus dna tanpa perlu usaha. Penilaian dasar ini berperan penting dalam pertimbagnan intuitif (hal ini merupakan gagasan inti dalam pendekatan heuristik dan bias).
+* *Alex Tudorov* menemukan bahwa orang meniliai kompetensi dengan memadukan dimensi kekuatan dan sifat bisa dipercaya. Wajah yang mengesankan kompetensi memadukan dagu yang kuat dengan senyum kecil percaya diri.
+* Sistem 1 bekerja dengan merepresentasikan kelompok dengan satu prototipe atau satu set contoh khas.
+* Sistem 1 memiliki suatu skala intensitas untuk memprediksi berdasarkan penyesuaian lintas dimensi, hal ini tentu salah secara statistik, namun hal ini wajar bagi sistem 1 dan sistem 2.
+* Sistem 1 sulit untuk tidak melakukan perhitungan lebih dari yang diminta sistem 2 dan ini akan jauh dari tepat, hal ini dikenal sebagai *senapan tabur mental*
