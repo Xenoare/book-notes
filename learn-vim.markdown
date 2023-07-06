@@ -1000,5 +1000,120 @@ source $HOME/.vim/settings/functions.vim
 source $HOME/.vim/settings/mappings.vim
 ```
 
+### Chapter 23: Vim Packages
+* Vim has it's built-in plugin manager called *packages*
+```
+.vim/pack/{name-folder}/{start|opt}
+or 
+vimfiles/pack/{name-folder}/{start|opt} 
+```
+
+* There are two types of Loading packages mechanisms
+1. Automatic loading
+To load plugins when Vim starts, you need to put them in the `start/` directory
+```
+vimfiles/pack/{name-folder}/{start} 
+```
+2. Manual Loading
+To load plugin manually when Vim starts, you need to put them into the `opt/` directory
+```
+vimfiles/pack/{name-folder}/{opt}
+```
+Every time you need the plugin, you have to load the pluggin first
+```
+:packadd {pluggin-folder}
+```
+
+* You can organize the packages to group your pluggins based on categories such as:
+```
+~/.vim/pack/colors/
+~/.vim/pack/syntax/
+~/.vim/pack/games/
+```
+
+### Chapter 24: Vim Runtime
+* Vim has a plugin runtime path (In the ~/.vim/plugin) that executes any script in this directory one each time Vim starts. Let's say in this file `~/.vim/plugin/donut.vim`
+```
+echo "donut!"
+```
+Now, every time you start Vim, you will see both "donut!" echoed before get in into the vim.
+
+* Vim knows how to detect "common" file types (Ruby, Python, Javascript, etc). But what if you have a custom file? You need to teach Vim to detect and assign it with the correct file type.
+
+* There are two methods of detection using file name and file content. 
+1. File name detection
+File name detection detects a file type using the name of that file. Let's say when you open the hello.rb, Vim knows it is a Ruby file from the `.rb` extension.
+
+* There are two ways to do file name detection
+1. Using `ftdetect/`
+This method using a directory named `ftdetect/` in the runtime `~/.vim/`. Let's say you have an weird file `hello.banana`, u can create a file name inside the file.
+`~/.vim/ftdetect/banana.vim` and add:
+```
+autocmd BufNewFile,BufRead *.banana set filetype=banana
+```
+Where `BufNewFile` and `BufRead` are triggered whenever you create a new buffer and open a buffer. `*.banana` means that this event will only be triggered if the openned buffer has a `.banana` filename extension. Finnaly `set filetype=banana` command sets the file type to be a banana file.
+
+2. Using filetype.vim
+The second file detection requires you to create a `filetype.vim` in the root directory (`~/.vim/filetype.vim`). Let's say you have `hello.plaindonut` file, you can add this:
+```
+if exists("did_load_filetypes")
+  finish
+endif
+
+augroup donutfiletypedetection
+  
+  # Below here to add a new file extension
+  autocmd! BufRead,BufNewFile *.plaindonut setfiletype plaindonut
+
+augroup END
+```
+
+2. File typescript
+* If you want to detect and assign a file based on the file content.  if you have some unknown file and want to assign these files to a `donut`, you can make these files and add a line contains (for example in this case `donutify`).Then in the runtime root path, add a `scripts.vim` file (`~/.vim/scripts.vim`). Inside it, add these:
+```
+if did_filetype()
+  finish
+endif
+
+if getline(1) =~ '^\\<donutify\\>'
+  setfiletype donut
+endif
+```
+The function `getline(1)` returns the text on the first line. It checks if the first line starts with the word "donutify". The function did_filetype() is a Vim built-in function. It will return true when a file type related event is triggered at least once. It is used as a guard to stop re-running file type event.
+
+* Note that `scripts.vim` is only run when Vim opens a file with an unknown file type. If Vim opens a file with a known file type, `scripts.vim` won't run.
+
+* Vim has an indent runtime path that works similar to ftplugin, where Vim looks for a file named the same as the opened file type. The purpose of these indent runtime paths is to store indent-related codes. If you have the file `~/.vim/indent/chocodonut.vim`, it will be executed only when you open a chocodonut file type. You can store indent-related codes for chocodonut files here.
+
+* Vim has a colors runtime path (`~/.vim/colors`) to store color schemes. Any file that goes inside the directory will be displayed in the `:color` command line command. If you want to check out the color schemes other people made, a good place to visit is [vimcolors](https://vimcolors.com/).
+
+* Vim also has a syntax runtime path (`~/.vim/syntax`) to define sytax highlighting. The [vim-polyglot](https://github.com/sheerun/vim-polyglot) plugin is a great plugin that provides highlights for many popular programming languages.
+
+* Vim have a doc runtime, if u have created a plugin and need a documentation. Let's try to create a file (`~/.vim/doc/donut.txt`). Add these inside:
+```
+*chocodonut* Delicious chocolate donut
+
+*plaindonut* No choco goodness but still delicious nonetheless
+```
+* If you try to search for chocodonut and plaindonut (:h chocodonut and :h plaindonut), you won't find anything.
+
+* First, you need to run :helptags to generate new help entries. Run :helptags ~/.vim/doc/
+
+* Now if you run :h chocodonut and :h plaindonut, you will find these new help entries. Notice that the file is now read-only and has a "help" file type.
+
+* The function naming convention for the autoload feature is:
+```
+function fileName#functionName()
+  ...
+endfunction
+```
+
+* To invoke a function, you need the call command. Let's call that function with `:call tasty#donut()`.
+
+* Vim has an after runtime path (`~/.vim/after/`) that mirrors the structure of `~/.vim/`. Anything in this path is executed last, so developers usually use these paths for script overrides.
+
+* For example, if you want to overwrite the scripts from `plugin/chocolate.vim`, you can create `~/.vim/after/plugin/chocolate.vim` to put the override scripts. Vim will run the `~/.vim/after/plugin/chocolate.vim` after `~/.vim/plugin/chocolate.vim`.
+
 # Useful References
 Nickjj's Pluggins: https://github.com/nickjj/dotfiles/blob/master/.vimrc
+Idiomatic-vimrc: https://github.com/romainl/idiomatic-vimrc/blob/master/README.md#defaultsvim
