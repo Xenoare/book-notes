@@ -22,3 +22,51 @@ by Daniel Kahneman
 * Sistem 2 adalah satu-satunya yang dapat mengikuti aturan, membandingkan objek dengan beberapa attribut, dan dapat membuat pilihan yang disengaja dari objek tersebut.
 * Kapasitas krusial dari sistem 2 adalah dapat memprogram memori untuk mengikuti instruksi yang mengabaikan respons kebiasaan.
 * Mutlitasking itu sulit. Tekanan waktu adalah salah satu pendorongnya. Segala tugas yang memerlukan untuk mengingat beberapa ide secara bersamaan memiliki sifat tergesa-gesa yang sama.
+
+### Chapter 3: Si Pengendali Yang Malas
+* Sistem 2 sendiri mempunyai kecepatan alami. Anda menghabiskan sejumlah energi mental untuk berbagai macam pemikiran dan mengawasi apa yang sedang terjadi, bahkan ketika anda tidak melakukan sesuatu.
+* *Mihaly Csikzentemihalyi* menjabarkan keadaan flow (alir) dimana orang yang mengalami keadaan tersebut bisa mempertahankan perhatian yang terfokus ke kegiatan yang membutuhkan pengarahan kendali diri seperti bermain catur atau mengendarai motor.
+* Orang yang *sibuk secara kognitif* lebih mungkin untuk membuat pilihan egois, menggunakan bahasa seksis dan membuat pertimbangan dangkal dalam situasi sosial.
+* Usaha memusatkan kendali diri itu melelahkan; jika Anda harus melakukan sesuatu maka Anda cenderung enggan ketika tantangan berikutnya datang ("ego terkuras").
+* Sistem saraf mengonsumsi lebih banyak glukosa dari sebagian besar bagian tubuh lain, sehingga aktivitas mental nampaknya lebih mahal dalam ekonomi glukosa.
+* Integelensi bukan sekedar kemampuan bernalar; Integelensi juga mencakup kemampuan menemukan bahan yang relevan dalam ingatan dan mengarahkan perhatian ke tempat yang membutuhkan.
+* Fungsi ingatan adalah bagian dari sistem 1, tapi semua orang punya pilihan untuk memperlambat berpikir untuk aktif mencari dalam ingatan.
+* Orang yang "terlibat" akan lebih waspada, sukar untuk puas akan jawaban yang menarik, dan mudah curiga terhadap intuisi mereka.
+* Orang yang "tidak terlibat" mudah terkana impuls, tidak sabaran dan selalu mencari kepuasan yang instan.
+
+### Chapter 4: Mesin Pembuat Ingatan
+* Sistem 1 bertindak dalam aktivitas asosiatif, dimana peristiwa-peristiwa yang terjadi sebagai akibat Anda melihat kata-kata yang muncul.
+* Kata memancing ingatan, ingatan memancing emosi, yang lalu menancing ekpresi wajah dan reaksi lain, seperti tegangnya tubuh dan kecenderungan untuk menghindar.
+* *David Hume* mereduksi kaidah-kaidah kaitan menjadi 3 saja: Kemiripan, urutan dalam waktu dan tempat, serta sebab akibat. Konsep kaitan kita mudah berubah secara radikal sejak zaman Hume
+* Para psikolog menganggap gagasan sebagai simpul-simpul dalam jejaring yang amat luas yang disebut inagatan asosiatif.
+* Fenomena efek penyiapan yang luar biasa itu gagasan yang memengaruhi tindakan yang dikenal sebagai efek ideomotor, contohnya berfikir tentang usia tua membuat Anda bertindak layaknya orang tua.
+* Ide adalah simpul dalam jaringan luas yang disebut sebagai ingatan asosiatif, dimana penyebab terkait dengan efek, benda dengan propertinya dan kategorinya.
+* Uang mengutamakan individualisme; Dimana keengganan untuk terlibat dengan orang lain, bergantung pada hal lain, maupun menerima bantuan dari orang lain.
+* Perasaan satu orang yang jiawanya kotor akan memicu keinginan untuk membersihkan tubuhnya, hal ini disebut impuls yang dijulikki sebagai Lady Macbeh Effect.
+* Sistem 1 menyediakan kessan yang kadang akan menjadi keyakinan, dan ini menjadi sumber dorongan yang kadang menjadi pilihan dari aksi yang dilakukan.
+
+### Chapter 5: Kemudahan Kognitif
+* Ketegangan kognitif dipengaruhi oleh baik tingkat usaha saat ini dan adanya tuntutan yang tidak terpenuhi. Hal ini menggerakan sistem 2.
+* Pengalaman yang diulang-ulang, pandangan yang jelas, ide prima dan mood yang bagus meningkatkan ketegangan kognitif. Ini membuat segala sesuatunya menjadi akrab, baik dan mudah.
+* Ketika tegang, anda waspada, curiga, dan mengalokasikan lebih banyak usaha, merasa lebih tidak nyaman dan membuat lebih sedikit kesalahan. Namun anda akan kurang intuitif dan kurang kreatif.
+* Ilusi yang diprediksi terjadi jika penilian kita didasarkan pada kesan kemudahan maupun kemudahan maupun ketegangan kognitif. Contohnya pengulangan yang sering membuat orang lebih mudah percaya kebohongan.
+* Untuk dapat membuat pesan persuasif. Gunakan kertas berkualitas tinggi, warna yang cerah, kata-kata yang sederhana, kalimat yang mudah diingat, dan kutip sumber dengan nama yang sederhana.
+* Ketegangan kognitif, apapun sumbernya akan menggearakan sistem 2, yang dimana akan mudah sekali untuk menolak jawaban intuitif dari yang sistem 1 sajikan.
+* Efek paparan belaka menghubungkan pengulangan stimulus yang sewenang-wenang dan kasih sayang ringan yang dimiliki orang untuk itu. Lebih kuat untuk rangsangan yang tidak kita lihat secara sadar.
+* Mood mempengaruhi cara kerja sistem 1. Ketika kita dalam situasi yang tidak menyenangkan maupun tidak senang, kita akan kehilangan dengan intuisi kita.
+
+### Chapter 6: Norma, Kejutan dan Penyebab
+* Fungsi utama sistem 1 adalah untuk memelihara dan memperbaharui model dunia pribadi anda yang dibangun melalui hubungan asosiatif gagasan-gagasan keadaan.
+* Peristiwwa-peristiwa yang tampak normal sebenernya karena adanya peristiwa pertama, yang dimana sistem mengambil peristiwa pertama dari ingatan dan ditafsirkan sesuai peristiwa pertama.
+* Kita bisa berkomunikasi dengan sesama karena kita mempunyai norma atas dunia dan norma-norma tersebut menyediakan latar untuk deteksi langsung anomali seperti laki-laki hamil atau bangsawan bertato.
+* Kebijaksanaan yang biasa dianut adalah bahwa kita menyimpulkan hubungan sebab akibat fisik dari pengamatan korelasi yang berulang-ulang.
+
+### Chapter 7: Mesim Untuk Lompat Ke Kesimpulan
+* Melompat langsung ke kesimpulan akan lebih efisien ketika lompatan tersebut akan mengehamat waktu dan tenaga, kesimpulan kemungkinan besar akan benar, dan biaya kesalahan sesekali akan diterima.
+* Sistem 1 bertaruh pada jawaban, ketika peristiwa dan konteks saat ini lebih besar dalam penentuan dan interpretasi. jika tidak, maka ingatan yang akan mengambil alih.
+* Sistem 1 lebih mudah tertipu dan bias untuk percaya, sementara sistem 2 bertugas dalam keraguan dan ketidakpercayaan, namun sistem 2 terkadang sibuk dan sering malas. Tidak seperti ilmuan, yang melakukan hipotesis untuk meyanggah hipotesisnya, namun kami mencari data yang mungkin sesuai dengan keyakinan yang kita pegang saat ini.
+* Kecerundungan untuk suka maupun tidak suka terhadap segalanya tentang seseorang, termasuk hal yang belum diamati, dikenal sebagai efek Halo.
+* Efek Halo meningkatkan bobot kesan pertama, kadang-kadang sampai titik informasi berikutnya sebagian besar terbuang sia-sia (Sistem ini digunakan untuk mengecek nilai mahasiswa yang bagus untuk saya `Halaman 86`)
+* Untuk mendapatkan informasi berguna dari berbagai sumber, kamu harus berusaha untuk membuat sumber ini independen dari bukti apapun. Disksi terbuka akan memberikan terlalu banyak bobot pada orang yang bicara lebih awal dan tegas, menyebabkan orang berbaris dibelakangnya dan mengikuti informasinya.
+* Sistem 1 unggul dalam membangun cerita terbaik yang menggabungkan ide-ide yang saat ini diaktifkan, tetapi tidak dapat mengizinkan informasi yang tidak dimilikinya.
+* Lompat langung ke kesimpulan memfasilitasi pencapaian dan koherensi dari kemudahan kognitif yang meyebabkan kita untuk menerima benar sebuah argument. Hal ini menjelaskan tingkat percaya diri yang tinggi.
