@@ -6,7 +6,7 @@ by iggredible [Ref.](https://github.com/iggredible/Learn-Vim)
 * Part 1: [Learn Vim the Smart Way](#part-1-learn-vim-the-smart-way)
 * Part 2: [Customize Vim the Smart Way](#part-2-customize-vim-the-smart-way)
 * Part 3: [Learn Vimscript the Smart Way](#part-3-learn-vimscript-the-smart-way)
-* Extras: [Useful Reference](#useful-reference)
+* Extras: [Useful References](#useful-references)
 
 ## Part 1: Learn Vim the Smart Way 
 ### Chapter 1: Starting Vim {abcd}
