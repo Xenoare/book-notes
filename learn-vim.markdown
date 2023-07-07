@@ -2,7 +2,14 @@
 
 by iggredible [Ref.](https://github.com/iggredible/Learn-Vim)
 
-### Chapter 1: Starting Vim
+## Table of Content
+* Part 1: [Learn Vim the Smart Way](#part-1-learn-vim-the-smart-way)
+* Part 2: [Customize Vim the Smart Way](#part-2-customize-vim-the-smart-way)
+* Part 3: [Learn Vimscript the Smart Way](#part-3-learn-vimscript-the-smart-way)
+* Extras: [Useful Reference](#useful-reference)
+
+## Part 1: Learn Vim the Smart Way 
+### Chapter 1: Starting Vim {abcd}
 * The vim command usually started with `:` and there are so many options you do co with it:
 * Opening a file: you can open a file by typing in terminal `vim <file>`, and also vim support opening multiple windows and multiple files by simply typing `vim -o2 file1.txt file2.txt`, this is will create a 2 horizontal window and fill the first one with file1.txt and file2.txt. The argument `-o<window>` is possible to open multiple page.
 * You can start coding in vim by typing `i` to switch to insert mode.
@@ -969,6 +976,7 @@ For example, if you have three windows opened (you can open new windows with Ctr
 7. location list (`ldo`)
 8. location list filewise (`lfdo`)
 
+## Part 2: Customize Vim the Smart Way
 ### Chapter 22: Vimrc
 * In the nutshell, a vimrc is a collection of:
 1. Plugins
@@ -1114,6 +1122,365 @@ endfunction
 
 * For example, if you want to overwrite the scripts from `plugin/chocolate.vim`, you can create `~/.vim/after/plugin/chocolate.vim` to put the override scripts. Vim will run the `~/.vim/after/plugin/chocolate.vim` after `~/.vim/plugin/chocolate.vim`.
 
+## Part 3: Learn Vimscript the Smart Way
+### Chapter 25: Vimscript Basic Data Types
+* Vim has Ex-mode like an extended command-line version. To enter the Ex-mode, you simply can type `Q` or `gQ` in normal mode.
+
+* The `:echo` or `:echom` prints the evaluated expressions you give, but the `:echom` stores the result in the message history
+
+* You can view the message
+```
+:message
+
+# And here's to clear your message
+:message clear
+```
+
+* Vim has 4 different number types:
+1. Decimal
+2. Hexadecimal, starts with `0x` or `0X`
+3. Binary, starts with `0b` or `0B`
+4. Octal, starts with `0`, `0o` and `0O`
+
+* There are two ways represent the floating number. The `dot notation` (like 31.4) and `exponent` (like 3.14e1), `ex` is like `10^x`.
+```
+:echo +123.4
+" returns 123.4
+
+:echo -1.234e2
+" returns -123.4
+
+:echo 0.25
+" returns 0.25
+
+:echo 2.5e-1
+" returns 0.25
+```
+
+* There are few string operation that you can do
+1. String Concatenation
+To concatenate a string in Vim, use the . operator.
+```
+:echo "Hello" . " world"
+" returns "Hello world"
+```
+2. String Arithmetic
+When you run arithmetic operators (+ - * /) with a number and a string, Vim coerces the string into a number.
+```
+:echo "12 donuts" + 3
+" returns 15
+```
+Remember, for this string-to-number to work, the number character needs to be the `first character in the string`.
+
+* There are some difference between single and double quotes in string, double quotes can accept special character which is `\` like `\n` to acts as a newline or `\"` to behaves like a literal `"`.
+> For a list of other special charaters, check out `"h expr-quote`.
+
+* There are also many other string procedures, you can check out on `:h string-functions`
+
+* Vimscript list is like an Array in Javascript or List in Python (If you have already understand that it's good then).
+
+* For more list function operation, check `:h list-functions`
+
+* You can unpact a list and assign variables to the list items:
+```
+:let favoriteFlavor = ["chocolate", "glazed", "plain"]
+:let [flavor1, flavor2, flavor3] = favoriteFlavor
+
+:echo flavor1
+" returns "chocolate"
+
+:echo flavor2
+" returns "glazed"
+
+# To assign the rest of the item you can use ; followed by a variable name
+:let favoriteFruits = ["apple", "banana", "lemon", "blueberry", "raspberry"]
+:let [fruit1, fruit2; restFruits] = favoriteFruits
+```
+
+* A Vimscript dictionary is an associative, unordered list. A non-empty dictionary consists of at least a key-value pair.
+```
+{"breakfast": "waffles", "lunch": "pancakes"}
+{"meal": ["breakfast", "second breakfast", "third breakfast"]}
+{"dinner": 1, "dessert": 2}
+```
+
+* To convert a dictionary into a list of lists, use `items()`
+```
+:let mealPlans = #{breakfast: "waffles", lunch: "pancakes", dinner: "donuts"}
+
+:echo items(mealPlans)
+" returns [['lunch', 'pancakes'], ['breakfast', 'waffles'], ['dinner', 'donuts']]
+```
+
+* Vim has some special primitives:
+1. `v:true` which is equivalent of `true` or a non-0 value.
+2. `v:false` which is equivalent of `false`
+3. `v:none` which is equal to `null`
+4. `v:null`
+
+### Chapter 26: Vimscript Conditionals and Loops 
+* Vim has some relational operators for comparing strings:
+```
+# First is =~ to performs a regex match against given string
+a =~ b
+
+# Second is !~ is the inverse of !~
+a !~ b
+```
+
+* You can always match the case by using some suffix `#` at the end
+```
+set ignorecase
+echo str =~# "hearty"
+" returns true
+
+echo str =~# "HearTY"
+" returns false
+
+set noignorecase
+echo str =~# "hearty"
+" true
+
+echo str =~# "HearTY"
+" false
+
+echo str !~# "HearTY"
+" true
+```
+
+* The if-conditional operator, has these syntax
+```
+if {clause}
+  {some expression}
+endif
+```
+
+* The for looop is commonly used with the list data type
+```
+let meals = [["breakfast", "pancakes"], ["lunch", "fish"], ["dinner", "pasta"]]
+
+for [meal_type, food] in meals
+  echo "I am having " . food . " for " . meal_type
+endfor
+```
+* For error handling, vim has `try`, `finally and catch` to handle errors. To simulate an error, you can use the `throw` command.
+```
+try
+  echo "Try"
+  throw "Nope"
+catch
+  echo "Caught it"
+finally
+  echo "Finally"
+endtry
+```
+This time Vim displays both "Caught it" and "Finally". No error is displayed because Vim caught it.
+
+* The difference between catch and finally is that finally is always run, error or not, where a catch is only run when your code gets an error.
+
+### Chapter 27: Vimscript Variable Scopes
+* The `let` in Vim is mutable, which means that, you can change the variable content inside of it (you still need to explicitly use `let` to change the value).
+```
+let pancake = "pancake"
+let pancake = "not waffles"
+
+echo pancake
+" returns "not waffles"
+```
+
+* In the other hand, `const` is an immutable variable, which will throw an error if you try to modify it.
+```
+const waffle = "waffle"
+const waffle = "pancake"
+" throws an error
+```
+
+* There are three sources for variables: 
+1. Environtal variable, let's say you have $VIM file path, you can access it from Vim by:
+```
+echo $VIM
+```
+2. Option variable, you can access Vim options with `&` (these are the settings you can access with `set`). Let's see what kind of background Vim do u use.
+```
+echo &background
+
+# You can set the background by run set background=<dark/light>
+```
+3. Register Variable, let's say you have register `a` with value "chocolate", then you can access it by:
+```
+echo @a
+" returns chocolate
+
+let @a .= " donut"
+
+echo @a
+" returns "chocolate donut"
+```
+
+* There are 9 different variable scopes in Vim.
+```
+g:           Global variable
+{nothing}    Global variable
+b:           Buffer-local variable
+w:           Window-local variable
+t:           Tab-local variable
+s:           Sourced Vimscript variable
+l:           Function local variable
+a:           Function formal parameter variable
+v:           Built-in Vim variable
+```
+
+* Vim also have some built-in variable, here's some of them.
+1. `v:version` tells you what Vim version you are using.
+2. `v:key` contains the current item value when iterating through a dictionary.
+3. `v:val` contains the current item value when running a `map()` or `filter()` operation.
+4. `v:true`, `v:false`, `v:null`, and `v:none` are special data types.
+For a list of other variables, check `:h vim-variable` or `:h v:`
+
+### Chapter 28: Vimscript Functions
+* Vimscript function has these following syntax
+```
+function {FunctionName}()
+  {do-something}
+endfunction
+```
+
+* Remember a function defintion must start with a capital letter. A function name cannot start with a number. 1Tasty() is not a valid function name, but Tasty1() is. A function also cannot contain non-alphanumeric characters besides _. Tasty-food(), Tasty&food(), and Tasty.food() are not valid function names. Tasty_food() is.
+```
+function! Tasty()
+  echo "Tasty"
+endfunction
+```
+
+* To see all the built-in and custom function in Vim, you can run `:function` or u can look the specific function, in this case `:function Tasty`
+
+* To remove an existing function, use `:delfunction {Function_name}`
+
+* For a function to return a value, you need to pass it an explicit `return` value. Otherwise, Vim automatically returns an implicit value of `0`.
+```
+# This function will return "Tasty" string
+function! Tasty()
+  return "Tasty"
+endfunction
+```
+
+* You can pass a formal `argument` into the function. Let's say you want to pass `food` into `Tasty` function.
+```
+function! Tasty(food)
+  return "Tasty " . a:food
+endfunction
+
+echo Tasty("pastry")
+" returns "Tasty pastry"
+```
+The `a:` is a variables scope for parameter variable, so without this, Vim will throw an error.
+
+* Or you can create a local variable inside the function. But you need a local variable scope (`l:`) before assigning any variable.
+```
+function! Calories()
+  let l:count = "count"
+  return "I do not " . l:count . " my calories"
+endfunction
+
+echo Calories()
+" returns "I do not count my calories"
+```
+
+* There are two methods of calling a function. First we can use the `:call` command or the `call()` function. This `call()` accepts the first argument the function name, and the second argument list of parameters.
+```
+echo call("Tasty", ["gravy"])
+" returns "Tasty gravy"
+```
+For more information, you can check `:h call()` or `:h :call`.
+
+* You can pass a variable argument with three dots (`...`). Variable argument is useful when you don't know how many variables a user will give.
+Suppose you have some Buffet function that takes a variable arguments.
+```
+function! Buffet(...)
+  return a:1
+endfunction
+```
+Vim uses `a:1` up to `a:20` to store the arguments variable.
+
+
+* We can use some iterator to display out the arguments, with Vim special variable `a:0` to display the number of arguments. or `a:000` to display the arguments in a list format.
+```
+function! Buffet(...)
+  let l:food_counter = 1
+  let l:foods = ""
+  while l:food_counter <= a:0
+    let l:foods .= a:{l:food_counter} . " "
+    let l:food_counter += 1
+  endwhile
+  return l:foods
+endfunction
+```
+
+* In Vim, if you want to assign a function to a variable, you can't just run assign it directly like let MyVar = MyFunc. You need to use the function() function, like let MyVar = function("MyFunc").
+```
+function! Breakfast(item)
+  return "I am having " . a:item . " for breakfast"
+endfunction
+
+let Breakfastify = Breakfast
+" returns error
+
+let Breakfastify = function("Breakfast")
+
+echo Breakfastify("oatmeal")
+" returns "I am having oatmeal for breakfast"
+
+echo Breakfastify("pancake")
+" returns "I am having pancake for breakfast"
+```
+
+* You can even do more to use funcref with maps and filter, note that maps and filters will pass an index as the first argument and the iterated value as the second argument.
+```
+function! Breakfast(index, item)
+  return "I am having " . a:item . " for breakfast"
+endfunction
+
+let breakfast_items = ["pancakes", "hash browns", "waffles"]
+let first_meals = map(breakfast_items, function("Breakfast"))
+
+for meal in first_meals
+  echo meal
+endfor  
+```
+
+* A better way to use functions in maps and filters is to use lambda expression (sometimes known as unnamed function). For example:
+```
+let Plus = {x,y -> x + y}
+echo Plus(1,2)
+" returns 3
+
+let Tasty = { -> 'tasty'}
+echo Tasty()
+" returns "tasty"
+```
+
+* You can chain several vimscript function and lambda sequentialy with `->`. Keep that in mind `->` must be followed by a method name *without a space*.
+```
+Source->Method1()->Method2()->...->MethodN()
+```
+Here's the complicated example one's, we are trying to capitalize the word in each list and concat them
+```
+function! Capitalizer(word)
+  return substitute(a:word, "\^\.", "\\u&", "g")
+endfunction
+
+function! CapitalizeList(word_list)
+  return map(a:word_list, {index, word -> Capitalizer(word)})
+endfunction
+
+let dinner_items = ["bruschetta", "antipasto", "calzone"]
+
+echo dinner_items->CapitalizeList()->sort()->join(", ")
+" returns "Antipasto, Bruschetta, Calzone"
+```
+
+* When you define a variable inside a function, that variable exist within that function boundaries (lexical scope).
+
 # Useful References
-Nickjj's Pluggins: https://github.com/nickjj/dotfiles/blob/master/.vimrc
-Idiomatic-vimrc: https://github.com/romainl/idiomatic-vimrc/blob/master/README.md#defaultsvim
+* Nickjj's Pluggins: https://github.com/nickjj/dotfiles/blob/master/.vimrc
+* Idiomatic-vimrc: https://github.com/romainl/idiomatic-vimrc/blob/master/README.md#defaultsvim
