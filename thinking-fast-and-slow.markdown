@@ -83,4 +83,11 @@ by Daniel Kahneman
 * Proses otomatis *senapan tabur mental* dan penyesuaian intensitas sering menyediakan satu atau beberapa jawaban bagi pertanyaan-pertanyaan mudah yang bisa diterakan ke pertanyaan target (Dalam beberapa kesempatan, substitusi heuristik akan terjadi dan satu jawaban heuristik akan dipilih oleh Sistem 2).
 * Pertanyaan apapun yang penting secara emosional dan mengubah suasana hati akan punya efek yang sama yakni WYSIATI (*What You See Is ALl There Is*). Suasana hati berpengaruh besar ketika orang mengevaluasi kebahagiaan.
 * Psikolog *Paul Slovic* telah mengusulkan *heuristik afeksi* yaitu orang membiarkan rasa suka dan tak suka memengaruhi kepercayaan mereka mengenai dunia.
-* Ketika *self-critisim* merupkan ciri dari Sistem 2. Tapi ketika dalam konteks, Sistem 2 cenderung lebih apologis dan menerima Sistem 1. Sistem 1 yang aktif dan banyak mencari koherensi mengusulkan solusi kepada Sistem 2 yang tidak banyak menuntut. 
+* Ketika *self-critisim* merupkan ciri dari Sistem 2. Tapi ketika dalam konteks, Sistem 2 cenderung lebih apologis dan menerima Sistem 1. Sistem 1 yang aktif dan banyak mencari koherensi mengusulkan solusi kepada Sistem 2 yang tidak banyak menuntut.
+
+### Chapter 10: Hukum Jumlah Kecil
+* Dalam artikel "Belief in the Law of Small Numbers", intuisi mengenai sampel acak tampak mengikuti hukum jumlah kecil, yang menyatakan bahwa jukum jumlah besar berlaku pada jumlah kecil juga.
+* Sistem 1 tidak suka meragukan. Sistem 1 meredam ambiguitas dan secara spontan membuat cerita yang se-koheren mungkin.
+* Bias kuat ke arah percaya bahwa sampel kecil memang mewalkili populasi sumbernya adalah bagian dari kisah besar: Sistem 1 rentan mendahului fakta dalam membangun gambaran yang lengkap mengenai sedikit bukti dan langsung lompat ke kesimpulan.
+* Statistika menghasilkan banyak pengamatan yang tampaknya menuntut penjelasan sebab-akibat tapi sebenarnya tidak bisa dijelaskan demikian.
+* Banyak fakta di dunia terjadi karena kebetulan, termasuk dalam pengambilan sampel.
