@@ -61,3 +61,31 @@ snippet ff "The LaTeX \frac{}{} command"
 \frac{$1}{$2}$0
 endsnippet
 ```
+![snippet example](https://www.ejmastnak.com/images/vim-latex/snippets/texttt-frac.gif)
+#### Tabstop Placeholder
+Use placeholders to enrich a tabstop with a description of default text. The syntax for defining placeholder text is `${1:placeholder}`.
+```
+snippet hr "The hyperref package's \href{}{} command (for url links)"
+\href{${1:url}}{${2:display name}}$0
+endsnippet
+```yaml
+#### Mirrored Tabstops
+Just repeat the tabstop you wish to mirror. This is useful when we working with HTML tags. note how `$1` tabstop containing the environment name is mirrored in both the `\begin` and `\end` commands.
+```yaml
+# Snippet for creating new generic LaTeX environments
+snippet env "New LaTeX environment" b
+\begin{$1}
+    $2
+\end{$1}
+$0
+endsnippet
+```
+#### Visual Placeholder
+The visual placholder lets you use text selected in Vim's visual mode inside the content of a snippet body.
+```yaml
+# Snippet for italic font
+snippet tii "The \textit{} command for italic font"
+\textit{${1:${VISUAL:}}}$0
+endsnippet
+```
+!(visual placeholder)[https://www.ejmastnak.com/images/vim-latex/snippets/visual-placeholder.gif]
