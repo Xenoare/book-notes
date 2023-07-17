@@ -91,3 +91,13 @@ by Daniel Kahneman
 * Bias kuat ke arah percaya bahwa sampel kecil memang mewalkili populasi sumbernya adalah bagian dari kisah besar: Sistem 1 rentan mendahului fakta dalam membangun gambaran yang lengkap mengenai sedikit bukti dan langsung lompat ke kesimpulan.
 * Statistika menghasilkan banyak pengamatan yang tampaknya menuntut penjelasan sebab-akibat tapi sebenarnya tidak bisa dijelaskan demikian.
 * Banyak fakta di dunia terjadi karena kebetulan, termasuk dalam pengambilan sampel.
+
+### Chapter 11: Jangkar
+* *Efek jangkar* terjadi ketika seseorang mempertimbangkan sebuah nilai untuk sebuah kuantitas yang tidak diketahui sebelum meng-estimasi nilainya.
+* Menyesuaikan perkiraan anda dari jangkar adalah aktivitas yang melelahkan. Penyesuian yang tidak memadai, dimana kita menerima jangkar adalah tanda dari malasnya sistem 2.
+* Jangkar juga termasuk efek utama, dimana secara selektif membangkitkan bukti yang kompitabel. Hal ini merupkan operasi otomatis dari sistem 1.
+* *Indeks jangkar* adalah 100% untuk orang yang memilih jangkar sebagai estimasi, dan 0 untuk orang yang menhiraukan jangkar.
+* Jangkar yang secara jelas acak bisa menjadi efektif seperti jangkar yang berpotensi informatif.
+* Ketika bernegosiasi, jangan membuat penawaran balasan yang tidak masuk akal terhadap proposal yang ditawarkan, tetapi buat keributan dan jelaskan bahwa anda tidak akan melanjutkan dengan angka tersebut di atas meja.
+* Untuk menolak efek jangkar, cari argumen yang menentang jangkar tersebut. Hal ini menolak bias dari pikiran yang dihasilkan dari efek jangkar ini.
+* Sistem 2 rentan terhadap efek bias dri sebuah jangkar yang membuat beberapa informasi mudah untuk diterima. Ia memiliki kontrol atas atau pengetahuan tentang efeknya.
