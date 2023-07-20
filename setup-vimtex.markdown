@@ -136,3 +136,67 @@ endsnippet
 ```
 > The use of `!p snip.rv = "snippet" is to insert the literal string "snippet" in place.
 
+### Getting started with VimTeX: doing practical stuff
+1. Change and delete stuff. You can delete **surrounding environments** using `dse` command.
+```yaml
+\begin{quote}                 dse
+Using VimTeX is lots of fun!  -->  Using VimTeX is lots of fun!
+\end{quote}
+```
+![dse-command](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/dse.gif)
+
+2. Change surrounding environment using `cse`. Change the type of a LaTeX environent without changing the environment contents.
+```yaml
+\begin{equation*}   cse align   \begin{align*}
+    % contents         -->          % contents 
+\end{equation*}                 \end{align*}
+```
+![cse-command](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/cse.gif)
+
+3. Delete surrounding commands using `dsc`. Delete a LaTeX command while preserving the command's argument(s) (it is also delete parameters inside the square brackets)
+```yaml
+                      dsc
+\textit{Hello, dsc!}  -->  Hello, dsc!
+```
+![dsc-image](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/dsc.gif)
+
+4. Delete surrounding delimeters by using `dsd`. Delete delimeters such as `()` ,`[]`, `{}` and their `\left \right` variants without changing its content.
+```yaml
+         dsd
+(x + y)  -->  x + y
+
+                    dsd
+\left(X + Y\right)  -->  X + Y
+```
+![dsd](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/dsd.gif)
+
+5. Changing surrounding delimetrs using `csd`
+```yaml
+         csd [
+(a + b)   -->   [b + b]
+```
+
+6. Delete surrounding math using `ds$`. Delete the environment or the `$` delimeters of the LaTeX inline math without changing the math contents.
+```yaml
+$ 1 + 1 = 2 $   -->  1 + 1 = 2
+```
+
+7. Changing surrounding math using `cs$`.
+```yaml
+               cs$ equation
+$ 1 + 1 = 2 $       -->       \begin{equation}
+                                  1 + 1 = 2 
+                              \end{equation}
+                  cs$ $
+\begin{equation}   -->  $x + y = z$
+    x + y = z
+\end{equation}                               
+```
+![cs$](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/csm.gif)
+
+8. Change surrounding commands using `csc`. For example if you want to chang italic text into boldface
+```yaml
+                          csc textit
+\textbf{Make me italic!}     -->      \textit{Make me italic!}
+```
+![csc](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/csc.gif)
