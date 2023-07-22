@@ -182,6 +182,7 @@ $ 1 + 1 = 2 $   -->  1 + 1 = 2
 ```
 
 7. Changing surrounding math using `cs$`.
+![cs$](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/csm.gif)
 ```yaml
                cs$ equation
 $ 1 + 1 = 2 $       -->       \begin{equation}
@@ -192,7 +193,6 @@ $ 1 + 1 = 2 $       -->       \begin{equation}
     x + y = z
 \end{equation}                               
 ```
-![cs$](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/csm.gif)
 
 8. Change surrounding commands using `csc`. For example if you want to chang italic text into boldface
 ```yaml
@@ -200,3 +200,65 @@ $ 1 + 1 = 2 $       -->       \begin{equation}
 \textbf{Make me italic!}     -->      \textit{Make me italic!}
 ```
 ![csc](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/csc.gif)
+
+### Toggle-style mappings. You can toggle back and forth between states of various LaTeX environment and commands.
+1. Toggle starred commands with `tsc` and `tse`
+![tsc](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/tsc-tse.gif)
+
+2. Toggle between inline, display math and `equation` environment with `ts$`.
+```yaml
+              ts$  \[              ts$   \begin{equation}
+$1 + 1 = 2$   -->     1 + 1 = 2    -->       x + y = z
+                   \]                    \end{equation}
+```
+![ts$](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/tsm.gif)
+
+3. Toggle surrounding delimeters with `tsd`
+![tsd](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/tsd.gif)
+
+4. Toggle surrounding fractions with `tsf`.
+![img](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/tsf.gif)
+
+### Motions mappings.
+1. Naviagate matching content using `%`. Move between matching delimeters, and latex environment using `%`.
+![img](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/move-matching.gif)
+
+2. Navigate sections using `]]`. Jump to the beginning of `\section`, `\subsection` by using shortcut `]]` and vice versa with `[[`.
+![img](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/move-section.gif)
+
+### Vimtex customization. 
+You can actually make a shortcut and key binding to any `<Plug>` map, for example you can map any trigger action in this `vimtex-mapping` section (check `:h vimtex-mappping`.
+```yaml
+" Manually redefine only the mappings you wish to use
+" --------------------------------------------- "
+" Some text objects
+omap ac <Plug>(vimtex-ac)
+omap id <Plug>(vimtex-id)
+omap ae <Plug>(vimtex-ae)
+xmap ac <Plug>(vimtex-ac)
+xmap id <Plug>(vimtex-id)
+xmap ae <Plug>(vimtex-ae)
+
+" Some motions
+map %  <Plug>(vimtex-%)
+map ]] <Plug>(vimtex-]])
+map [[ <Plug>(vimtex-[[)
+
+" A few commands
+nmap <localleader>li <Plug>(vimtex-info)
+nmap <localleader>ll <Plug>(vimtex-compile)
+```
+
+### Text objects.
+Here's the table of VimTeX text objects
+| Mapping    | Text objects                                   |
+|------------|------------------------------------------------|
+| `ac`, `ic` | LaTeX commands                                 |
+| `ad`, `id` | Paired delimeters                              |
+| `ae`, `ie` | LaTeX environment                              |
+| `a$`, `i$` | Inline math                                    |
+| `aP`, `iP` | Sections                                       |
+| `am`, `im` | Items in `itemize` and `enumerate` environment |
+> The ad and id delimiter text object covers all of (), [], {}, etc. and their \left \right, \big \big, etc. variants, which is very nice. Here is a visual mode example of the delimiter and environment text objects:
+
+![img-text-objects](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/text-objects.gif)
