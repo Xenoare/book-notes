@@ -1,5 +1,7 @@
 ## Setup Ultisnips
 
+This setup in for my Windows (idk about Linux, maybe later lul)
+
 ### First steps after installing Ultisnips, we have to configure
 1. The key to trigger (expand) snippets, which set by global variable `g:UltiSnipsExpandTrigger`
 2. The key to move forward through snippet's tabstop, which set by `g:UltiSnipsJumpForwardTrigger`
@@ -262,3 +264,85 @@ Here's the table of VimTeX text objects
 > The ad and id delimiter text object covers all of (), [], {}, etc. and their \left \right, \big \big, etc. variants, which is very nice. Here is a visual mode example of the delimiter and environment text objects:
 
 ![img-text-objects](https://www.ejmastnak.com/tutorials/vim-latex/vimtex/text-objects.gif)
+
+### Vimtex compilling and QuickFix menu
+After compiling with :VimtexCompile or :VimtexCompileSS, VimTeX will automatically open the QuickFix menu if warnings or errors occurred during compilation (the QuickFix menu stays closed if compilation completes successfully). For most compilation errors, the QuickFix menu will display the error’s line number and a (hopefully) useful error message. In such cases you can use the Vim commands :cc and :cn to jump directly to the offending line (much more info at :help quickfix in the Vim docs).
+![quickfix menu](https://www.ejmastnak.com/tutorials/vim-latex/compilation/quickfix-error-short.gif)
+
+### Cross-platform concepts
+1. Forward Search, the process of jumping from the current position in LaTeX source file to the corresponding pos in PDF reader displaying in the compiler doc. To to this, simpy move the cursor into the part you want to show (like `section`, `figure`, etc) and use the command `:VimtexView` or key `<leader>lv` to show in the pdf reader.
+![img](https://www.ejmastnak.com/tutorials/vim-latex/pdf-reader/forward-search.gif)
+Here's the configuration in `vimrc`
+```yaml
+Configuration: >vim
+  let g:vimtex_view_general_viewer = 'SumatraPDF'
+  let g:vimtex_view_general_options
+      \ = '-reuse-instance -forward-search @tex @line @pdf'
+```
+
+2. Inverse search, the process of switching focus from a line in the PDF docs, into corresponding LaTeX source code.
+![inverse-search](https://www.ejmastnak.com/tutorials/vim-latex/pdf-reader/inverse-search.gif)
+```yaml
+To configure with `VimtexInverseSearch`, use: >bash
+
+  vim -v --not-a-term -T dumb -c "VimtexInverseSearch %l '%f'"
+
+  nvim --headless -c "VimtexInverseSearch %l '%f'"
+
+On Windows, the above commands may lead to an annoying command window "popup".
+This may be avoided, or at least reduced, with the following variants: >bash
+
+  cmd /c start /min "" vim -v --not-a-term -T dumb -c "VimtexInverseSearch %l '%f'"
+
+  cmd /c start /min "" nvim --headless -c "VimtexInverseSearch %l '%f'"
+```
+
+### Key Mappings
+> Another more sufficient material is here:
+> - https://www.ejmastnak.com/tutorials/vim-latex/vimscript/#leader
+> - https://learnvimscriptthehardway.stevelosh.com/
+
+Vim key mappings allow you to map arbitrary logic to keyboard keys, and I would count key mappings among the fundamental Vim configuration tools. In the context of this series, key mappings are mostly used to define shortcuts for calling commands and functions that would be tedious to type out in full (similar to aliases in, say, the Bash shell). The official documentation of key mappings lives in the Key mapping chapter of the Vim documentation file map.txt, and you can access it with :help key-mapping. I will summarize here what I deem necessary for understanding the key mappings used in this series.
+
+### Basic syntax for key mappings
+```yaml
+:map {lhs} {rhs}
+```
+Here is what’s involved in the mapping definition:
+- `{lhs}` (left hand side): A (generally short and memorable) key combination you wish to map.
+- `{rhs}` (right hand side): A (generally longer, tedious-to-manually-type) key combination you want the short, memorable {lhs} to trigger.
+- The Vim mode you want the mapping to apply in, which you can control by replacing `:map` with `:nmap` (normal mode), `:vmap` (visual mode), `:imap` (insert mode), or a host of other related commands, listed in `:help :map-commands`.
+```yaml
+" Map `Y` to `y$` (copy from current cursor position to the end of the line),
+" which makes Y work analogously to `D` and `C`.
+" (Not vi compatible, and enabled by default on Neovim)
+noremap Y y$
+
+" Map `j` to `gj` and `k` to `gk`, which makes it easier to navigate wrapped lines.
+noremap j gj
+noremap k gk
+```
+
+Vim offers two types of mappings commands:
+1. The *recursive* commands `map`, `nmap`, `imap` and any `*map` relatives.
+2. The *non-recursive* commands `noremap`, `nnoremap` and their `*noremap`.
+Both the `map {lhs} {rhs}` and `:noremap {lhs} {rhs}` will map `{lhs}` to `{rhs}`, but here's the main diff.
+- `map`: If any keys in the `{rhs}` of a :map mapping have been used the `{lhs}` of a different mapping (e.g. somewhere else in your Vim config or in third-party plugin), then the second mapping will in turn be triggered as a result of the first (often with unexpected results!).
+- `noremap`: Using `:noremap {lhs} {rhs}` is safer—it ensures a mapping’s `{rhs}` is interpreted literally and won’t unexpectedly trigger other mappings.
+
+### Notion for special keys
+Certain keys can be used in key mappings only if you refer them with a special keyword like `Space` -> `<Space>` or `Enter` -> `CR`. See `:help keycodes` for a full list of special keys, and `:h <>` for the rules between Vim's `<>` notation.
+```yaml
+" map `<Space>q` to the `:quit` command using the <Enter> and <CR> keywords
+nnoremap <Space>q :quit<CR>
+```
+
+### See what shortcut that already used by Vim
+You can use the Vim command `:help {key}<C-D>` (where `<C-D>` is Vim notation for `<Ctrl>d`:) to see if `{key}` is used for some built-in or plugin-defined Vim command. For example `:help s<C-D>` shows a multi-column list of all commands beginning with s (there are a lot!). You can then type out the full version of any command you see in this list and press enter to go its help page. This useful tip is tucked away at the bottom of `:help map-which-keys.`
+
+
+
+
+
+
+
