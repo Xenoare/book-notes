@@ -101,3 +101,11 @@ by Daniel Kahneman
 * Ketika bernegosiasi, jangan membuat penawaran balasan yang tidak masuk akal terhadap proposal yang ditawarkan, tetapi buat keributan dan jelaskan bahwa anda tidak akan melanjutkan dengan angka tersebut di atas meja.
 * Untuk menolak efek jangkar, cari argumen yang menentang jangkar tersebut. Hal ini menolak bias dari pikiran yang dihasilkan dari efek jangkar ini.
 * Sistem 2 rentan terhadap efek bias dri sebuah jangkar yang membuat beberapa informasi mudah untuk diterima. Ia memiliki kontrol atas atau pengetahuan tentang efeknya.
+
+### Chapter 12: Ilmu Ketersediaan
+* Heuristik ketersediaan adalah proses menilai frekuensi suatu kategori berdasarkan "kemudahan memikirkan contoh yang ada di pikiran".
+* Peristiwa yang menonjol, peristiwa dramatis dan pengalaman pribadi dapat memudahkan pencarian contoh.
+* Hal ini menjelaskan mengapa di dalam grup, orang merasa dia melakukan bagian lebih dari seharusnya.
+* Dengan meminta orang untuk memberikan lebih banyak contoh perilaku tertentu, Anda meningkatkan perjuangan mereka, dan akibatnya mereka menyimpulkan bahwa mereka tidak mengadopsi perilaku itu.
+* Kemudahan contoh terpikir merupakan heuristik sistem 1, yang digantikan dengan fokus kepada isi ketika sistem 2 terlibat.
+* Sekedar mengingatkan orang tentang masa ketika mereka memiliki kekuasaan meningkatkan kepercayaan nyata mereka pada intuisi mereka sendiri.
