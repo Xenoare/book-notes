@@ -109,3 +109,20 @@ by Daniel Kahneman
 * Dengan meminta orang untuk memberikan lebih banyak contoh perilaku tertentu, Anda meningkatkan perjuangan mereka, dan akibatnya mereka menyimpulkan bahwa mereka tidak mengadopsi perilaku itu.
 * Kemudahan contoh terpikir merupakan heuristik sistem 1, yang digantikan dengan fokus kepada isi ketika sistem 2 terlibat.
 * Sekedar mengingatkan orang tentang masa ketika mereka memiliki kekuasaan meningkatkan kepercayaan nyata mereka pada intuisi mereka sendiri.
+
+### Chapter 13: Ketersediaan, Emosi dan Resiko 
+* Gagasan ketersediaan itu bersangkut paut terhadap urusan mereka.
+* Peristiwa-peristiwa luar biass menarik perhatian secara berlebihan, sehingga dipersepsi sebagai tak seluar biasa kenyataannya. 
+* Dunia dalam kepala kita bukanlah replika persis realitas, harapan kita atas frekulensi peristiwa terdistorsi kelimpahan dana kekuatan emosional pesan-pesan yang kita terima.
+* Orang membuat pendapat dan membuat pilihan langsung yang langsung mengekspresikan perasaan mereka dan kecenderungan dasar mereka untuk mendekat atau menjauh.
+* Heuristik afeksi menyederhanakan kehidupan kita dengan menciptakan dunia yang jauh lebih rapi dibandingkan realitas.
+* Kucuran ketersediaan adalah ringkasan peristiwa yang menopang diri sendiri, yang bisa berawal dari laporan media atas satu peristiwa relatif kecil dan mengarah ke kepanikan publik dan tindakan skala besar pemerintah.
+
+### Chapter 14: Bidang Tom W.
+* *Nilai dasar* adalah proporsi jumlah suatu jenis dari keseluruhan jenis.
+* *Keterwakilan* - mengabaikan nilai dasar dan keraguan mengenai kualitas deskripsi.
+* Pertanyaan mengenai probabilitas (kemungkinan) itu sukar, dan pertanyaan mengenai kemiripan lebih mudah, dan mudahlah yang dijawab (Ini merupakan kesalahan serius karena penilaian kemiripan dan probabilitas tidak diatur oleh aturan logika yang sama).
+* Salah satu dosa keterwakilan adalah kesediaan berlebihan untuk memprediksi terjadinya peristiwa yang berkemungkinan kecil (nilai dasar rendah).
+* Jika anda dipilih menebak apakah seorang perempuan dengan deskripsi "pecinta puisi yang pemalu" kuliah sastra Cina atau administrasi bisnis, sebaiknya pilihan kedua lebih baik dari segi jumlah mahasiswa.
+* Kunci penting untuk mendisiplinkan situasi secara sederhana: 1. Jangkarkan pertimbangan probabilitas Anda ke nilai dasar yang masuk akal; 2. Pertanyaan diagnosis bukti Anda.
+
