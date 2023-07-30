@@ -126,3 +126,9 @@ by Daniel Kahneman
 * Jika anda dipilih menebak apakah seorang perempuan dengan deskripsi "pecinta puisi yang pemalu" kuliah sastra Cina atau administrasi bisnis, sebaiknya pilihan kedua lebih baik dari segi jumlah mahasiswa.
 * Kunci penting untuk mendisiplinkan situasi secara sederhana: 1. Jangkarkan pertimbangan probabilitas Anda ke nilai dasar yang masuk akal; 2. Pertanyaan diagnosis bukti Anda.
 
+### Chapter 15: Linda: Kurang Itu Lebih
+* Gagasan *sesat pikir penggabungan*, dimana ketika orang menganggap penggabungan dua peristiwa (dalam hal ini, kasir bank dan feminis) lebih mungkin daripada salah satu peristiwa (kasir bank) dalam perbandingan lanjut.
+* Cerita paling koheren tidak harus paling mungkin terjadi, tetapi *terasa bisa dipercaya* dan gagasan koherensi, kemungkinan dipercaya dan probabilitas gampang tercampur pada orang yang tak waspada.
+* Menambah perincian pada skenario membuat skenario makin persuasif, tapi lebih kecil kemungkinannya untuk terjadi.
+* Saat melakukan *evaluasi tunggal* alih-alih *evaluasi bersama*, prinsip *less is more* mengevaluasi kumpulan item berdasarkan rata-ratanya dan bukan jumlahnya.
+* Pertanyaan yang diutarakan sebagai "berapa banyak" membuat Anda memikirkan individu, sedangkan "berapa persentase" tidak. Hal ini mengurangi kejadian kesalahan konjungsi.
