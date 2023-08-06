@@ -140,3 +140,20 @@ by Daniel Kahneman
 * Keberadaan orang lain bakal mengurangi rasa tanggung jawab pribadi lebih banyak daripada.
 * Ketika hasilnya mengejutkan kita, kita enggan menyimpulkan yang khusus dari yang umum, tapi bersedia menyimpulkan yang umum dari yang khusus.
 * Konsekuensinya, kita lebih cenderung mempelajari sesuatu dengan memberikan kejutan terhadap perilaku diri sendiri daripada dengan mendengar fakta mengejutkan tentang orang pada umumnya.
+
+### Chapter 17: Regresi ke Rata-rata
+* Regresi ke rata-rata adalah ketika performa yang buruk diikuti dengan perbaikan, dan performa yang baik diikuti oleh penurunan.
+* Kita cenderung baik kepada orang yang membuat kita senang, dan jahat kalau membuat kita tidak senang. Kita dihukum secara statistik kalau bersikap baik dan dihadiahi kalau bersikap jahat.
+* Perbedaan antara dua percobaan tidak memerlukan penjelasan lebih jauh, seringkali keberuntungan menjelaskan mengapa seseorang lebih signifikan dari yang lainnya.
+* Koefisien korelasi adalah besaran bobot relatif faktor-faktor yang sama antara keduanya.
+* Ketika koefisien korelasi dari dua variabel tidak sempurna, akan terjadi regresi ke rata-rata.
+* Penjelasan kasual akan muncul ketika kita mendeteksi regresi, tetapi akan salah karena regresi ke rata-rata memiliki penjelasan tetapi tidak memiliki sebab.
+
+### Chapter 18: Menjinakan Prediksi Intuitif
+* Kita mampu untuk menolak informasi yang tidak relevan dan salah, namun menyesuaikan untuk kelemahan yang lebih kecil di dalam bukti bukanlah sesuatu yang dapat dilakukan sistem 1.
+* Jika kita diminta untuk membuat suatu prediksi namun mengganti evaluasi bukti, kita membuat prediksi yang bias yang mengabaikan regresi ke rata-rata.
+* Untuk membuat prediksi yang tidak bias, mulai dengan prediksi dasar dan prediksi berdasarkan bukti yang ada, lalu pilih nilai berdasarkan korelasi yang proporsional dengan kedua variabel.
+* Prediksi yang tidak bias seperti itu membuat kesalahan, tetapi lebih kecil dan tidak mendukung hasil yang lebih tinggi atau lebih rendah.
+* Prediksi yang tidak bias memungkinkan untuk memprediksi kasus yang jarang atau ekstrim hanya jika informasinya sangat bagus, jadi Anda tidak akan pernah puas menyebut kasus ekstrim.
+* Prediksi bias kurang disukai ketika terdapat kesalahan yang memiliki jenis dan tingkat keparahan bervariasi, dan kasus ekstrim dapat diyakini bahkan jika itu mempunyai banyak eror di suatu tempat.
+* Intuisi Anda akan memberikan prediksi yang terlalu ekstrim dan Anda akan cenderung terlalu percaya padanya.
