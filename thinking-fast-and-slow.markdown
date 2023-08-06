@@ -132,3 +132,11 @@ by Daniel Kahneman
 * Menambah perincian pada skenario membuat skenario makin persuasif, tapi lebih kecil kemungkinannya untuk terjadi.
 * Saat melakukan *evaluasi tunggal* alih-alih *evaluasi bersama*, prinsip *less is more* mengevaluasi kumpulan item berdasarkan rata-ratanya dan bukan jumlahnya.
 * Pertanyaan yang diutarakan sebagai "berapa banyak" membuat Anda memikirkan individu, sedangkan "berapa persentase" tidak. Hal ini mengurangi kejadian kesalahan konjungsi.
+
+### Chapter 16: Penyebab Mengalahkan Statistika
+* *Nilai dasar statistik* adalah fakta mengenai suatu populasi yang mencakup satu kasus, tapi tidak ada sangkut pautnya dengan kasus itu.  Nilai dasar ini biasanya di abaikan, ketika informasi spesifik mengenai kasus tersedia.
+* *Nilai dasar sebab akibat* mengubah pandangan Anda mengenai bagaimana kasus terjadi dan mudah dipadukan dengan informasi spesifik kasus lain.
+* Stereotipe adalah pernyataan mengenai kelompok (setidaknya secara tentatif)yang diterima sebagai fakta mengenai semua anggotanya.
+* Keberadaan orang lain bakal mengurangi rasa tanggung jawab pribadi lebih banyak daripada.
+* Ketika hasilnya mengejutkan kita, kita enggan menyimpulkan yang khusus dari yang umum, tapi bersedia menyimpulkan yang umum dari yang khusus.
+* Konsekuensinya, kita lebih cenderung mempelajari sesuatu dengan memberikan kejutan terhadap perilaku diri sendiri daripada dengan mendengar fakta mengejutkan tentang orang pada umumnya.
