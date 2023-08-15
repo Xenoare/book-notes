@@ -85,6 +85,8 @@ by Daniel Kahneman
 * Psikolog *Paul Slovic* telah mengusulkan *heuristik afeksi* yaitu orang membiarkan rasa suka dan tak suka memengaruhi kepercayaan mereka mengenai dunia.
 * Ketika *self-critisim* merupkan ciri dari Sistem 2. Tapi ketika dalam konteks, Sistem 2 cenderung lebih apologis dan menerima Sistem 1. Sistem 1 yang aktif dan banyak mencari koherensi mengusulkan solusi kepada Sistem 2 yang tidak banyak menuntut.
 
+### Bagian 2: Heuristik dan Bias
+
 ### Chapter 10: Hukum Jumlah Kecil
 * Dalam artikel "Belief in the Law of Small Numbers", intuisi mengenai sampel acak tampak mengikuti hukum jumlah kecil, yang menyatakan bahwa jukum jumlah besar berlaku pada jumlah kecil juga.
 * Sistem 1 tidak suka meragukan. Sistem 1 meredam ambiguitas dan secara spontan membuat cerita yang se-koheren mungkin.
@@ -157,3 +159,11 @@ by Daniel Kahneman
 * Prediksi yang tidak bias memungkinkan untuk memprediksi kasus yang jarang atau ekstrim hanya jika informasinya sangat bagus, jadi Anda tidak akan pernah puas menyebut kasus ekstrim.
 * Prediksi bias kurang disukai ketika terdapat kesalahan yang memiliki jenis dan tingkat keparahan bervariasi, dan kasus ekstrim dapat diyakini bahkan jika itu mempunyai banyak eror di suatu tempat.
 * Intuisi Anda akan memberikan prediksi yang terlalu ekstrim dan Anda akan cenderung terlalu percaya padanya.
+
+### Bagian 3: Keyakinan Berlebihan
+* Akal budi manusia tidak bagus dalam menghadapi peristiwa-peristiwa yang tidak terjadi. Kenyataan bahwa banyak peristiwa penting yang benar-benar terjadi itu melibatkan pilihan makin menggoda Anda unntuk membesar-besarkan peran keahlian dan meremehkan peran keberuntungan dalam hasil akhir.
+* Efek halo menambah sentuhan akhir, memberi aura tak terkalahkan kepada tokoh-tokoh dalam cerita.
+* Anda tidak bisa menganggap seluruh informasi yang tersedia sebagai semua informasi yang ada. Anda membangun cerita terbaik yang dimungkinkan dari bukti yang tersedia, dan jika ceritanya bagus, Anda percaya.
+* Keyakinan kita yang nyaman bahwa dunia bisa dimengerti bersandar pada dasar yang kuat: kemampuan nyaris tak terbatas kita untuk mengabaikan ketidaktahuan kita.
+* Satu keterbatasan umum akal manusia adalah kemampuannya yang tak sempurna untuk merekonstruksi keadaan pengathuan masa lalu, atau kepercayaan yan sudah berubah. Sekali Anda menerima pandangan dunia baru, Anda langsung kehilangan banyak kemampuan Anda mengingat apa yang dulu Anda percayai sebelum berubah pikiran.
+* Bias kilas balik punya efek buruk terhadap evaluasi pembuat keputusan. Bias itu membuat pengamat menilai mutu suatu keputusan bukan berdasarkan benar tidak prosesnya, melainkan baik tidak hasilnya.
