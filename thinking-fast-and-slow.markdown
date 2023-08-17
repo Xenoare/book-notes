@@ -161,9 +161,19 @@ by Daniel Kahneman
 * Intuisi Anda akan memberikan prediksi yang terlalu ekstrim dan Anda akan cenderung terlalu percaya padanya.
 
 ### Bagian 3: Keyakinan Berlebihan
+### Chapter 19: Ilusi Pemahaman
 * Akal budi manusia tidak bagus dalam menghadapi peristiwa-peristiwa yang tidak terjadi. Kenyataan bahwa banyak peristiwa penting yang benar-benar terjadi itu melibatkan pilihan makin menggoda Anda unntuk membesar-besarkan peran keahlian dan meremehkan peran keberuntungan dalam hasil akhir.
 * Efek halo menambah sentuhan akhir, memberi aura tak terkalahkan kepada tokoh-tokoh dalam cerita.
 * Anda tidak bisa menganggap seluruh informasi yang tersedia sebagai semua informasi yang ada. Anda membangun cerita terbaik yang dimungkinkan dari bukti yang tersedia, dan jika ceritanya bagus, Anda percaya.
 * Keyakinan kita yang nyaman bahwa dunia bisa dimengerti bersandar pada dasar yang kuat: kemampuan nyaris tak terbatas kita untuk mengabaikan ketidaktahuan kita.
 * Satu keterbatasan umum akal manusia adalah kemampuannya yang tak sempurna untuk merekonstruksi keadaan pengathuan masa lalu, atau kepercayaan yan sudah berubah. Sekali Anda menerima pandangan dunia baru, Anda langsung kehilangan banyak kemampuan Anda mengingat apa yang dulu Anda percayai sebelum berubah pikiran.
 * Bias kilas balik punya efek buruk terhadap evaluasi pembuat keputusan. Bias itu membuat pengamat menilai mutu suatu keputusan bukan berdasarkan benar tidak prosesnya, melainkan baik tidak hasilnya.
+
+### Chapter 20: Ilusi Validitas
+* Kepercayaan yang tinggi dari individu memberitahukan bahwa ia telah membuat cerita yang koheren, namun cerita tersebut tidaklah benar.
+* Kegigihan perbedaan individu dalam prestasi adalah ukuran yang kita konfirmasikan adanya keterampilan pada seseorang.
+* Fakta yang menentang asumsi dasar, dan membahayakan bagi kehidupan dan harga diri orang, sama sekali tidak akan diterima. Akal budi tak mencernanya.
+* Ilusi validitas dan keahlian didorong oleh budaya profesionalisme yang kuat, orang bisa yakin tak tergoyahkan terhadap pernyataan apapaun, mau seabsurd apa pun, ketika mereka di kelilingi oleh orang-orang yang percaya hal yang sama.
+* Seseorang yang memperoleh lebih banyak pengetahuan mengembangkan ilusi keterampilan yang meningkat dan menjadi terlalu percaya diri secara tidak realistis. Mereka memiliki banyak alasan siap ketika terbukti salah.
+* Kenyataan yang muncul dari interaksi banyak pelaku dan kekuatan, termasuk keberuntungan belaka, sering kali menimbulkan hasil besar yang tak terduga.
+* Kesalahan prediksi tak bisa dihindari karena dunia tidak bisa diprediksi. Dan keyakinan subjektif yang tinggi tidak boleh dipercaya sebagai penanda akurasi.
