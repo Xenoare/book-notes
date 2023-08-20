@@ -177,3 +177,19 @@ by Daniel Kahneman
 * Seseorang yang memperoleh lebih banyak pengetahuan mengembangkan ilusi keterampilan yang meningkat dan menjadi terlalu percaya diri secara tidak realistis. Mereka memiliki banyak alasan siap ketika terbukti salah.
 * Kenyataan yang muncul dari interaksi banyak pelaku dan kekuatan, termasuk keberuntungan belaka, sering kali menimbulkan hasil besar yang tak terduga.
 * Kesalahan prediksi tak bisa dihindari karena dunia tidak bisa diprediksi. Dan keyakinan subjektif yang tinggi tidak boleh dipercaya sebagai penanda akurasi.
+
+### Chapter 21: Intuisi vs Formula
+* Sekitar 60% dari eksperimen menunjukan akurasi yang lebih baik untuk algoritma dibandingkan dengan prediksi klinis maupun prediksi statistik.
+* Salah satu alasan mengapa para pakar lebih inferior karena mereka mencoba untuk lebih pintar, mencoba berfikir di luar kotak dan mempertimbangkan kombinasi yang kompleks. Hal ini tentu mengurangi validitas.
+* Alasan lainnya adalah ketidak konsistensian ketika mengevaluasi informasi yang sama untuk kedua kalinya. Stimuli yang tidak terlihat dapat mempengaruhi sistem 1.
+* Keengganan terhadap algoritme untuk membuat keputusan berakar pada preferensi kuat yang dimiliki banyak orang terhadap yang alami daripada sintetis atau buatan.
+* Intuisi menambah nilai, tetapi hanya setelah pengumpulan informasi objektif yang disiplin dan penilaian yang disiplin terhadap ciri-ciri yang terpisah.
+* Ketika membuat formula untuk sebuah prosedur interview, pilihlah 6 dimensi independen paling banyak, dan beri nilai antara 1-5 untuk setiap dimensi.
+
+### Chapter 22: Intuisi Pakar: Kapan Kita Bisa Mempercayainya
+* Di dalam model _recognition-primed decision_, Sistem 1 memberikan sebuah rencana dan Sistem 2 mensimulasikan apakah rencana tersebut. Jika sukses, maka rencana itu akan dijalankan, sebaliknya rencana tersebut akan diperbaiki atau dibuang.
+* Pembelajaran emosional boleh jadi cepat, tapi yang kira anggap "kepakaran" biasanya butuh waktu lebih lama untuk dikembangkan.
+* Intuisi kepakaran di dapatkan melalui lingkungan yang cukup teratur sehingga bisa diprediksi dan kesempatan mempelajari keteraturan itu melalui latihan jangka panjang.
+* Pembelajaran manusia biasanya efisien. Jika ada isyarat prediksi yang kuat, pengamat manusia kemungkinan besar akan menemukannya, diberi kesempatan yang cukup untuk melakukannya.
+* Ketidaktahuan batas kepakaran menjelaskan mengapa para pakar cenderung terlalu percaya diri.
+
