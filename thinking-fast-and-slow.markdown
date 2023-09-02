@@ -193,3 +193,22 @@ by Daniel Kahneman
 * Pembelajaran manusia biasanya efisien. Jika ada isyarat prediksi yang kuat, pengamat manusia kemungkinan besar akan menemukannya, diberi kesempatan yang cukup untuk melakukannya.
 * Ketidaktahuan batas kepakaran menjelaskan mengapa para pakar cenderung terlalu percaya diri.
 
+### Chapter 23: Pandangan Dari Luar
+* Cara terbaik untuk mendapatkan informasi dari suatu kelompok bukan dengan diskusi umum, namun melainkan dengan mengumpulkan pertimbangan tiap orang secara rahasia.
+* Salah satu kenapa suatu proyek bisa gagal adalah tidak mempertimbangkannya faktor "ketidaktahuan yang tidak diketahui", kalian tidak bisa memperkirakan rangkaian peristiwa yang bakal menyebabkan suatu proyek berjalan begitu lambat. Dan walau kebanyakan terlalu kecil kemungkinannya untuk bisa di antisipasi, peluang *sesuatu* akan jadi tidak beres dalam satu proyek besar itu tinggi.
+* Terdapat dua pertimbangan mengenai persoalan yang sama dan mencapai jawaban yang berbeda. *Pandangan dari dalam* memusatkan perhatian ke keadaan khusus dan terbaik, yang tentu perkiraan tersebut berdasarkan informasi yang tersedia (WYSIATI). Sebaliknya, *pandangan dari luar* harusnya dibuat berdasarkan hal-hal umum.
+* Prakiraan terlalu optimistis terhadap hasil proyek ditemukan dimana-mana, sehingga istilah *sesat pikir perencanaan* digunakan untuk menjelaskan rencana yang terlalu dekat secara tak realistis dengan skenario terbaik serta dapat diperbaiki dengna mengetahui statistik kasus serupa.
+* Metode prakiraan *Flyvberg* untuk mengatasi pengabaian nilai dasar terdiri dari beberapa tahap. Kenali kelas rujukan yang sesuai (proyek renovasi dapur misalnya), lalu dapatkan statistik kelas rujukan (persentase pengeluaran yang melebihi anggaran), gunakan data tersebut untuk membuat prediksi nilai dasar, dan terakhir gunakan infromasi spesifik mengenai kasus untuk menyesuaikan prediksi nilai dasar.
+* Pandangan dari luar lebih mudah untuk diabaikan daripada berita buruk dalam usaha diri sendiri.
+
+### Chapter 24: Motor Kapitalisme
+* Orang yang mempunyai pengaruh yang besar terhadap kehidupan orang lain cenderung optimis dan terlalu percaya diri, dan mengambil resiko lebih dari yang mereka kira.
+* Hasil resiko yang diambil oleh para pengusaha baru berkontribusi terhadap dinamisme ekonomi di masyarakat, meskipun para pengusaha baru yang mengambil resiko tersebut mendapapat hasil yang mengecewakan.
+* Kita menilai diri kita sendiri di bawah rata-rata untuk tugas yang kita anggap susah, dan terlalu optimis terhadap tugas yang kita anggap cukup baik.
+* Para pengusaha membayangkan masa depan mereka dimana mereka membayangkan aksi mereka menentukan hasil yang didapat, dan bukannya dari kompetitor mereka. Hal ini disebabkan karena sedikit informasi yang diketahui mengenai kompetitor.
+* Optimisme dinilai tinggi, baik secara sosial maupun oleh pasar; sehingga orang memberi ganjaran lebih besar kepada pemberi informasi sesat berbahaya daripada menyatakan kebenaran.
+* Optimisme juga berkontribusi terhadap perlindungan citra diri seseorang, dimana kita menghargai sebuah keberhasilan dan namun tidak menyalahkan kegagalan.
+* *Premortem* adalah sebuah algoritma untuk menjinakan optimisme dan individu.
+* Prosedurnya sederhana, "bayangkan kita berada satu tahun ke depan, kita terapkan rencana seperti yang ada seperti sekarang, dan hasilnya bencana. Tolong tuliskan riwayat singkat bencana itu".
+* Hal ini mengatasi pemikiran kelompok (*groupthink*) dan melepas imajinasi orang-orang berpengetahuan ke arah yang diperlukan.
+
