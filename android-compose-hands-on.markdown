@@ -220,7 +220,14 @@ Kotlin provides four visibility modifier
 3. `protected`. Makes the declaration accessble in subclasess.
 4. `internal`. Makes the declaration accessible in the same module. The internal modifier is similar to private, but you can access internal properties and methods from outside the class as long it's being accessed in the same module.
 
+**Define property delegates**
 
+You can reuse the range-check code in setter with delegates. Instead of using field, and a getter and setter function to manage the value, the delegate manages it.
+
+The syntax to create a property delegates starts with the declaration of a variable followeb by the `by` keyword, and the delegate object handle the getter and seetter functions for the property.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/bf7607aa-7679-45f7-b859-f0f1d2f15bb5)
+
+**Function Types and Lambda Expression**
 
 ### Declarative Programming Paradigm
 With Views, the way to updating the UI is to walk the tree of UI widgets such as defining UI in XML, finding views from XML in code, and then calling the setter function (such as using function `findViewById()` and changes nodes by calling methods such as `button.setText(String)` to get UI like you want. 
