@@ -3,13 +3,14 @@
 ### Kotlin Fundamentals
 - [Nullability](#nullability)
 - [Class and Object](#class-and-object)
+- [Function and Lambda](#function-types-and-lambda-expression)
 
 ---
 ### Nullability
 > https://kotlinlang.org/docs/null-safety.html#what-s-next
 
 You can use `null` to indicate that there's no value assocated with the variable.
-```
+```kotlin
 fun main() {
     val favoriteActor = null
 }
@@ -27,7 +28,7 @@ A type is only nullable if you explicity let it hold `null`. As the error messag
 **Declaration Nullable Types**
 
 To declare nullable variables in Kotlin, you need to add a `?` operator to the end of the type. For example, a `String?` type can hold either string or `null`, whereas a `String` type can only hold a string.
-```
+```kotlin
 fun main() {
     var favoriteActor: String? = "Sandra Oh"
     favoriteActor = null
@@ -169,7 +170,7 @@ class SmartHome(
 **Override superclass methods from superclass**
 
 The `override` keyword informs that the kotlin runtime to execute the code enclosed in the method define in the subclasss. Let's say we have a super class `SmartDevice`
-```
+```kotlin
 open class SmartDevice {
     ...
     var deviceStatus = "online"
@@ -227,7 +228,78 @@ You can reuse the range-check code in setter with delegates. Instead of using fi
 The syntax to create a property delegates starts with the declaration of a variable followeb by the `by` keyword, and the delegate object handle the getter and seetter functions for the property.
 ![image](https://github.com/Xenoare/book-notes/assets/67181778/bf7607aa-7679-45f7-b859-f0f1d2f15bb5)
 
-**Function Types and Lambda Expression**
+### Function Types and Lambda Expression
+
+Lambda expression provide a consise syntax to define a function without the `fun` keyword. When you define a function with lambda expression, you have a variabel that refers to the function.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/224d1b04-baa9-4f81-a258-0612e674ac90)
+```kotlin
+fun main() {
+    val trickFunction = trick
+    // You can call the trick function
+    trick()
+    // or
+    trickFunction()
+}
+
+val trick = {
+    println("No treats!")
+}
+```
+
+***Use functions as a data type**
+
+Functions types consist of a set of parantheses that contain an optional parameter list, the `->` symbol, and a return type.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/249af317-638a-417b-a156-8d08816dc90f)
+
+The return type is `Unit` because the function doesn't return anything. If you have a function that took two `Int` parameters and returned an `Int`, the data type would be `(Int, Int) -> Int`.
+```kotlin
+val treat: () -> Unit = {
+    println("Have a treat!")
+}
+```
+
+**Use functions as a return type**
+
+A function is a data type, so you can use it like any other data type (You can even return functions from other functions).
+![image](https://github.com/Xenoare/book-notes/assets/67181778/3a910cd0-75d4-475c-b68e-9e77d164e9bf)
+```kotlin
+fun trickOrTreat(isTrick: Boolean): () -> Unit {
+// Trick / treate is a function that u call later 
+    if (isTrick) {
+        return trick
+    } else {
+        return treat
+    }
+}
+```
+
+**Pass a function to another function as an argument**
+
+![image](https://github.com/Xenoare/book-notes/assets/67181778/b544dda6-b359-45ff-b457-abf6df451509)
+```kotlin
+fun trickOrTreat(isTrick: Boolean, extraTreat: (Int) -> String): () -> Unit {
+    if (isTrick) {
+        return trick
+    } else {
+        println(extraTreat(5))
+        return treat
+    }
+}
+```
+The neat part of this, that a variable / function could be null. To declare function as nullable, surround the function type in parentheses followed by a `symbol` outside ending parentheses.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/fdedf867-ccbc-476d-8faa-ced90c671eb4)
+```kotlin
+fun trickOrTreat(isTrick: Boolean, extraTreat: ((Int) -> String)?): () -> Unit {
+```
+
+**Write lambda expression with shorthand**
+
+When function has a single parameter and you don't provide a name, Kotlin implicitly assign it the `it` name.
+```kotlin
+val coins: (Int) -> String = {
+    "$it quarters"
+}
+```
 
 ### Declarative Programming Paradigm
 With Views, the way to updating the UI is to walk the tree of UI widgets such as defining UI in XML, finding views from XML in code, and then calling the setter function (such as using function `findViewById()` and changes nodes by calling methods such as `button.setText(String)` to get UI like you want. 
