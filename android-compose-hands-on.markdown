@@ -108,8 +108,117 @@ Otherwisse, the immutable property has two differences:
 
 Kotlin properties use a backing field to hold a value in memory. A backing field is basically a class variable defined internally in the properties. A backing field is scoped to a property, which means that you can only access it through the get() or set() property functions.
 
+**Define a constructor**
 
+There are two main types of constructor in Kotlin:
+1. **Primary constructor**. A class can only have one primary constructor (which is defined as part of class header).
+2. **Secondary constructor**. A class can have multiple secondary constructor. The secondary constructor can initalize the class and has a body, which contain initialization logic.
 
+![image](https://github.com/Xenoare/book-notes/assets/67181778/d3ad46ec-5857-499b-9d54-289cccc021d7)
+
+For example if, you have and API that returns status code of `Int` `statusCode`. You can create a secondary constructor to convert `statusCode` parameter to string representation.
+```kotlin
+class SmartDevice(val name: String, val category: String){
+    val deviceStatus = "online"
+
+    constructor(name: String, category: String, statusCode: Int) : this(name, category){
+        deviceStatus = when (statusCode) {
+            0 -> "offline"
+            1 -> "online"
+            else -> "unknown"
+        }
+    } 
+}
+```
+
+**Relationship between classes**
+
+In Kotlin, all classes are final by default (which means you can't extand them, so you have to define the relationship between them).
+
+The `open` keyword informs that the class is extandable
+```kotlin
+open class SmartDevice(val name: String, val category: String) {}
+```
+and you can create a subclass that extends the superclass
+```kotlin
+class SmartTvDevice(deviceName: String, deviceCategory: String) :
+    SmartDevice(name = deviceName, category = deviceCategory) {}
+```
+Remember the `constructor` definition of `SmartTvDevice` doesn't specify whether the properties are mutable or immutable (which means that `deviceName` and `deviceCategory` parameters are literal `constructor` parameters intead of class properties). You won't be able to use them in class, but simply pass into the superclass constructor.
+
+When you use inheritance, you establish  a relationship between two classes called `IS-A` relationship (an objects that instance from the superclass). And also `HAS-A` relationship (an object can own an instance of another class without actually being an instance of that class itself).
+![image](https://github.com/Xenoare/book-notes/assets/67181778/9c3b538a-7379-4533-ab16-91ff0258d6bb)
+
+1. IS-A relationship
+When you specify an IS-A relationship between the SmartDevice superclass and SmartTvDevice subclass, it means that whatever the SmartDevice superclass can do, the SmartTvDevice subclass can do.
+```kotlin
+// Smart TV IS-A smart device.
+class SmartTvDevice : SmartDevice() {}
+```
+
+2. HAS-A relationship
+The HAS-A relationship between two classees is also referred to as composition. You can have a instance of another class (for example, home is contains a smart device or in other words, the home has a smart device)
+```kotlin
+// Smart Home HAS-A smart TV device and smart light.
+class SmartHome(
+    val smartTvDevice: SmartTvDevice,
+    val smartLightDevice: SmartLightDevice
+) {
+```
+
+**Override superclass methods from superclass**
+
+The `override` keyword informs that the kotlin runtime to execute the code enclosed in the method define in the subclasss. Let's say we have a super class `SmartDevice`
+```
+open class SmartDevice {
+    ...
+    var deviceStatus = "online"
+
+    open fun turnOn() {
+        // function body
+    }
+
+    open fun turnOff() {
+        // function body
+    }
+}
+```
+The subclass can access the `turnOn()` and `turnOff()` methods with `override` keyword and customize the function desired, this is an example of polymorphism where method on a variable and type are depending on what actual value of the variable is.
+
+**Reusing superclass code in subclasses with `super` keyword**
+To call the overriden method from the superclass, you need to use the `super` keyword. Instead of using a `.`. operator between the object and method, you need to use `super` keyword which informs the kotlin compiler to call on the superclass instad of the subclass.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/8e03ae6b-2206-4228-9e83-a961615e7f9b)
+```kotlin
+    override fun turnOn() {
+        super.turnOn()
+        println("Smart TV turned on. Speaker volume set to $speakerVolume.")
+    }
+```
+
+**Override superclass properties from subclasses**
+
+Property is being overridden with a new value in the Subclass, but it's not actually reassigning the property. Instead, it's shadowing the property from the superclass with a new value specific to the subclass.
+```kotlin
+open class Superclass {
+    open val property: String = "Superclass"
+}
+
+class Subclass : Superclass() {
+    override val property: String = "Subclass"
+}
+```
+
+**Visibility Modifier**
+
+Visibility modifier play an important role to achive encapsulation:
+- In a class, they let to hide properties and methods from unauthorized access outside the class.
+- In a package, they let you hide the classes and interfaces from unauthorized access outside the package.
+
+Kotlin provides four visibility modifier
+1. `public`. Default visibility modifier, makes the declaration accessible everywhare.
+2. `private`. Makes the declaration accessible in the same class or source file.
+3. `protected`. Makes the declaration accessble in subclasess.
+4. `internal`. Makes the declaration accessible in the same module. The internal modifier is similar to private, but you can access internal properties and methods from outside the class as long it's being accessed in the same module.
 
 
 
