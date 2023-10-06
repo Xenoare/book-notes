@@ -1,4 +1,7 @@
 ## Thinking in Compose
+Kotlin Core Training Centre
+> https://hyperskill.org/knowledge-map
+> https://hyperskill.org/tracks/18
 
 ### Kotlin Fundamentals
 - [Nullability](#nullability)
