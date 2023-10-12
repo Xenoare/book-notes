@@ -144,7 +144,6 @@ Each UI element is represented by an XML element in the XML file.
 ```
 
 2. Add Radio Buttons
----
 You can confirm that you can use a `RadioBUtton` UI element in your layout for each radio button you need. Furthermore, you also need to group the radio buttons within a `RadiGroup` because only one option can be selected at a time.
 ```kotlin
 <RadioGroup
