@@ -119,7 +119,7 @@ Each UI element is represented by an XML element in the XML file.
     tools:context=".MainActivity">
 
     <EditText
-        android:id="@+id/plain_text_input"
+        android:id="@+id/cost_of_service"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         // That's why the constraint uses "start", so that it can work with either LTR or RTL languages. Similarly, constraints use "end" instead of right
@@ -183,7 +183,7 @@ You can confirm that you can use a `RadioBUtton` UI element in your layout for e
 
 3. Adding Switch for rounding up the tip
 You cannot use `match_parent` for any view in a `ConstraintLayout`. Instead use `0dp` which means match constraints.
-```yaml
+```kotlin
 <Switch
     android:id="@+id/round_up_switch"
     android:layout_width="0dp"
@@ -207,3 +207,103 @@ You cannot use `match_parent` for any view in a `ConstraintLayout`. Instead use 
    app:layout_constraintEnd_toEndOf="parent" />
 ```
 
+5. Adding the tip result
+```kotlin
+<TextView
+    android:id ="@+id/tip_result"
+    android:width = "wrap_content"
+    android:height = "wrap_content"
+    app:layout_constraintEnd_toEndOf = "parent"
+    app:layout_constraintTop_toBottomOf = "@+id/calculate_button"
+    android:text = "Tip Amount"  />
+```
+
+
+### View Binding
+---
+> Ref: https://developer.android.com/topic/libraries/view-binding
+
+View banding is a feature that makes it easier to interacts with *views*. Once view binding is enable in module, it generates a binding class for each XML layout file present in the module. An instance of a binding class contains direct references to all views that have an ID to corresponding layout.
+
+**Setup**
+Firstly we can enable the view binding options via `build.gradle` file
+```kotlin
+buildFeatures {
+        viewBinding = true
+}
+```
+
+**Use View Binding in activities**
+To set up view binding for an activity, perform this following steps `onCreate()` method:
+1. Call the static `inflate()` method included in the generated binding class. This creates an instance of the binding class for the activity to use.
+2. Get a reference to the root view by either calling the `getRoot()` method or using [Kotlin property syntax](https://kotlinlang.org/docs/properties.html#declaring-properties)
+3. Pass the root view to `setContentView()` to make it active view on the screen.
+```kotlin
+private lateinit var binding: ResultProfileBinding
+
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    binding = ResultProfileBinding.inflate(layoutInflater)
+    val view = binding.root
+    setContentView(view)
+}
+```
+Using view binding is so much more concise that often didn't need to create a variable that hold the reference for a `view`. just use directly from the binding object.
+```kotlin
+// Old way with findViewById()
+val myButton: Button = findViewById(R.id.my_button)
+myButton.text = "A button"
+
+// Better way with view binding
+val myButton: Button = binding.myButton
+myButton.text = "A button"
+
+// Best way with view binding and no extra variable
+binding.myButton.text = "A button"
+```
+
+**Calculating the Tip**
+1. First thing first, we can setup an event listener for the button (when the button is clicked, we call some listener function `calculateTip()`
+```kotlin
+binding.calculateButton.setOnClickListener{ calculateTip() }
+```
+
+2. Get in depth on the `calculateTip()` function. First we must store the Cost of Service within `EditText` attribute into some variable `stringInTextField`.
+```kotln
+var stringInTextField = binding.costOfService.text
+```
+since `.text` is an attribute of an `EditText` that is `Editable` (text can be changed). We must converts this to string with `toString()` methods -> `toDouble` to get the double value
+
+3. Calculating the tip percentage, we get the `checkRadioButtonId` attribute of the `tipOptions` `RadioButton` and store in a variable. To know which radio is selected, we can use the id of each radio button (`R.id.option_twenty_percent, ...) and assign the variable
+```kotlin
+val selectedId = binding.tipOptions.checkRadioButtonId
+val tipPercentage = when (selectedId) {
+    R.id.option_twenty_percent -> 0.20
+    R.id.option_eighteen_percent -> 0.18
+    else -> 0.15
+}
+```
+
+4. Rounding up the tip, for the Switch element, we can check on the `isChecked` attribute to see whether the switch is "on" or not.
+```kotlin
+val roundUp = binding.roundUpSwitch.isChecked
+if (roundUp) {
+    tip = kotlin.math.ceil(tip)
+}
+```
+
+5. Formatting the tip. Android frameworks provides methods for formatting numbers as currency, the system automatically formats currency based on the language and other settings chosen on the phone. We can use a number formatter method for this.
+```kotlin
+val formattedTip = NumberFormat.getCurrencyInstance().format(tip)
+```
+
+6. Display the tip. The Android framework provides a mechanism for this called string parameters, so someone translating your app can change where the number appears if needed. Open the `strings.xml`
+```xml
+<string name="tip_amount">Tip Amount: %s</string>
+```
+The `%s` is where formatted currency will be inserted. Now set the text of the `tipResult`. Back in the `calculateTip()` method in `MainActivity.kt`, call `getString(R.string.tip_amount, formattedTip)` and assign that to the text attribute of the tip result `TextView`.
+```kotlin
+binding.tipResult.text = getString(R.string.tip_amount, formattedTip)
+```
+
+> Debug : https://developer.android.com/codelabs/basic-android-kotlin-training-tip-calculator?continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fandroid-basics-kotlin-unit-2-pathway-1%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fbasic-android-kotlin-training-tip-calculator#4
