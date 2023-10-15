@@ -1,4 +1,4 @@
-         ### Introduction to Activities
+![image](https://github.com/Xenoare/book-notes/assets/67181778/66bf3170-fc9d-4e33-ae68-d31390fbf352)### Introduction to Activities
 ---
 * > Kotlin Style Guide: https://developer.android.com/kotlin/style-guide
 
@@ -470,9 +470,207 @@ class Order(val orderNumber: Int) {
 }
 ```
 
+### Recycler View
+---
+To help you bulid apps with list, android provides with `RecyclerView`. `RecyclerView` is designed to be very efficient even with large list, by reusing, or recycling, the views that have *scrolled off* the screen.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/ce835bbd-3813-448f-872f-3bc36ff5de74)
+
+**1. Seting up the list data** 
+Firstly, we can setup the list data for our `RecyclerView` app, in `stirings.xml`
+```xml
+<resources>
+    <string name="app_name">Affirmations</string>
+    <string name="affirmation1">I am strong.</string>
+    <string name="affirmation2">I believe in myself.</string>
+    <string name="affirmation3">Each day is a new opportunity to grow and be a better version of myself.</string>
+    <string name="affirmation4">Every challenge in my life is an opportunity to learn from.</string>
+    <string name="affirmation5">I have so much to be grateful for.</string>
+    <string name="affirmation6">Good things are always coming into my life.</string>
+    <string name="affirmation7">New opportunities await me at every turn.</string>
+    <string name="affirmation8">I have the courage to follow my heart.</string>
+    <string name="affirmation9">Things will unfold at precisely the right time.</string>
+    <string name="affirmation10">I will be present in all the moments that this day brings.</string>
+</resources>
+```
+
+**2. Making a data class**
+We are making an object instance of `Affirmation` to represent one affirmation and contains the resource Id of the string with affirmation
+```kotlin
+// Affirmation.kt
+
+package com.example.affirmation.model
+
+data class Affirmation (val stringResourceId: Int)
+```
+When you create an instance of `Affirmation` you need to pass the resource ID for the affiirmation string.
+
+**3. Create a data source class**
+Data displayed in the app maybe come from different sources (such as from app project / internet). One way to do it is by making a new package and classes to take care for it (One can create a `data` package and `Datasource` class to take care of the list)
+```kotlin
+package com.example.affirmations.data
+
+import com.example.affirmations.R
+import com.example.affirmations.model.Affirmation
+
+class Datasource {
+
+    // The method is self return a list of Affirmation (an Instance of class Affirmation) from the strings.xml by passing the resource ID.
+    fun loadAffirmations(): List<Affirmation> {
+        return listOf<Affirmation>(
+            Affirmation(R.string.affirmation1),
+            Affirmation(R.string.affirmation2),
+            Affirmation(R.string.affirmation3),
+            Affirmation(R.string.affirmation4),
+            Affirmation(R.string.affirmation5),
+            Affirmation(R.string.affirmation6),
+            Affirmation(R.string.affirmation7),
+            Affirmation(R.string.affirmation8),
+            Affirmation(R.string.affirmation9),
+            Affirmation(R.string.affirmation10)
+        )
+    }
+}
+```
+
+**4. Adding the RecyclerView to the layout**
+There are a number of pices involved in creating a `RecyclerView`. The diagram below shows an overview.
+* item - One data item of the list to display. Represents one Affirmation object in your app.
+* Adapter - Takes data and prepares it for RecyclerView to display.
+* ViewHolders - A pool of views for RecyclerView to use and reuse to display affirmations.
+* RecyclerView - Views on screen
+![image](https://github.com/Xenoare/book-notes/assets/67181778/e1d3d1a0-f867-4ab1-b566-a1b27b7a0682)
+
+`RecyclerView` supports displaying items in different ways such as liniear list or a grid. Arraging the items is handled by a `LayoutManager`. Then, the final XML layout should like this
+```xml
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        // Take care of the scrolling and how app display the items
+        android:scrollbars="vertical"
+        app:layoutManager="LinearLayoutManager" />
+
+</FrameLayout>
+```
+
+**5. Implementing an Adapter**
+Your app needs a way to take the data from `Datasource` and format such that `Affirmation` can be displayed as an item in `RecyclerView`.
+
+Adapter is a design pattern that adapts the data into something that can be used by `RecyclerView`. In this case, you need an adapter that takes an `Affirmation` instance from the list returned by `loadAffirmations()`, and turns it into a list item view, so that it can be displayed in the `RecyclerView`.
+
+When you run the app, `RecyclerView` uses the adapter to figure out how to display your data on screen. `RecyclerView` asks the adapter to create a new list item view for the first data item in your list. Once it has the view, it asks the adapter to provide the data to draw the item. This process repeats until the `RecyclerView` doesn't need any more views to fill the screen. If only 3 list item views fit on the screen at once, the `RecyclerView` only asks the adapter to prepare those 3 list item views (instead of all 10 list item views).
+
+
+**Making a layout for items**
+Each item in the RecyclerView has its own layout, which you define in a separate layout file. Since you are only going to display a string, you can use a TextView for your item layout.
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+```
+
+**Creating an ItemAdapter class**
+You need to add a parameter to the constructor of `ItemAdapter`, so that you can pass the list of affirmations into the adapter.
+
+1. Add a parameter to the `ItemAdapter` constructor that is a val called dataset of type `List<Affirmation>`. Import Affirmation, if necessary.
+2. Since the dataset will be only used within this class, make it private.
+```kotlin
+import com.example.affirmation.model.Affirmation
+
+class ItemAdapter(private val dataset: List<Affirmation>) {}
+```
+The `ItemAdapter` needs information on how to resolve the string resources. This, and other information about the app, is stored in a `Context` object instance that you can pass into an ItemAdapter instance.
+```kotlin
+// Extend from the absract class RecyclerView.Adapter package
+class ItemAdapter(private val context: Context, private val dataset: List<Affirmation>) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder {}
+```
+
+**Creating a ViewHolder**.
+`RecyclerView` doesn't interact directly with item views, but deals with `ViewHolders` instead. A `ViewHolder` represents a single list item view in `RecyclerView`, and can be reused when possible. A `ViewHolder` instance holds references to the individual views within a list item layout (hence the name "view holder"). This makes it easier to update the list item view with new data. View holders also add information that `RecyclerView` uses to efficiently move views around the screen.
+```kotlin
+class ItemAdapter(
+    private val context: Context,
+    private val dataset: List<Affirmation>
+) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+
+    class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) { 
+        val textView: TextView = view.findViewById(R.id.item_title)
+    }
+}
+```
+
+Defaultly, the `ItemAdapter` needs to impelemnt 3 methods `getItemCount()`, `onCreateViewHolder()` and `onBindViewHolder()`.
+
+**Implement `getItemCount()`**. This methods needs to return the size of your dataset. Your app's data is in the `dataset` property that you are passing into `ItemAdapter` constructor, and get this size with attribute `size`.
+```kotlin
+override fun getItemCount(): Int {
+    return dataset.size
+}
+```
+
+**Implement `onCreateViewHolder()`**. The `onCreateViewHolder()` method is called by the layout manager to create new view holders for the `RecyclerView` (when there are no existing view holders that can be reused). Remember that a view holder represents a single list item view.
+- A `parent` parameter, which is the view group that the new list item view will be attached to as a child. The parent is the `RecyclerView`.
+- A `viewType` parameter which becomes important when there are multiple item view types in the same `RecyclerView`. If you have different list item layouts displayed within the `RecyclerView`, there are different item view types. You can only recycle views with the same item view type. In your case, there is only one list item layout and one item view type, so you don't have to worry about this parameter.
+1. In the `onCreateViewHolder()` method, obtain an instance of `LayoutInflater` from the provided context (`context` of the `parent`). The layout inflater knows how to inflate an XML layout into a hierarchy of view objects.
+2. Once you have a `LayoutInflater` object instance, add a period followed by another method call to inflate the actual list item view. Pass in the XML layout resource ID `R.layout.list_item` and the `parent` view group. The third boolean argument is `attachToRoot`. This argument needs to be `false`, because `RecyclerView` adds this item to the view hierarchy for you when it's time.
+3. In `onCreateViewHolder()`, return a new `ItemViewHolder` instance where the root view is adapterLayout.
+```kotlin
+override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+    // create a new view
+    val adapterLayout = LayoutInflater.from(parent.context)
+        .inflate(R.layout.list_item, parent, false)
+
+    return ItemViewHolder(adapterLayout)
+}
+```
+
+**Implement onBindViewHolder()**. This method is called by the layout manager in order to replace the contents of a list item view. The `onBindViewHolder()` method has two parameter, an `ItemViewHolder` that previously created by the `onCreateViewHolder()` and an `int` that represent the current position in th list.
+```kotlin
+override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+    val item = dataset[position]
+    holder.textView.text =  context.resources.getString(item.stringResourceId)
+}
+```
+
+**6. Modify the MainActivity to use a RecyclerView**
+```kotlin
+package com.example.affirmations
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
+import com.example.affirmations.adapter.ItemAdapter
+import com.example.affirmations.data.Datasource
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Initialize data.
+        val myDataset = Datasource().loadAffirmations()
+
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView.adapter = ItemAdapter(this, myDataset)
+
+        // Use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        recyclerView.setHasFixedSize(true)
+    }
+}
+```
 
 
 
 
 
- 
