@@ -1,4 +1,4 @@
-### Introduction to Activities
+         ### Introduction to Activities
 ---
 * > Kotlin Style Guide: https://developer.android.com/kotlin/style-guide
 
@@ -307,3 +307,172 @@ binding.tipResult.text = getString(R.string.tip_amount, formattedTip)
 ```
 
 > Debug : https://developer.android.com/codelabs/basic-android-kotlin-training-tip-calculator?continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fandroid-basics-kotlin-unit-2-pathway-1%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fbasic-android-kotlin-training-tip-calculator#4
+
+### Design and Color
+---
+**Material Design**
+
+[Material Design](https://material.io/design/introduction) is inspired by the physical world and its textures, including how objects reflect light and cast shadows. It provides guidelines on how to build your app UI in a readable, attractive, and consistent manner. [Material Theming](https://material.io/design/material-theming/overview.html#material-theming) allows you to adapt Material Design for your app, with guidance on customizing colors, typography, and shapes. Material Design comes with a built-in, baseline theme that can be used as-is. You can then customize it as little, or as much, as you like to make Material work for your app.
+
+**Defining a color**. A color can be represented as 3 hex numbers representing the red, green and blue (RGB) component.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/f1a93123-2ea7-468f-a782-3047c3e45a82)
+```xml
+<color name="black">#FF000000</color>
+<color name="white">#FFFFFFFF</color>
+```
+
+**More about theme colors**
+Different parts of the UI android apps use different colors. The theme system groups color into 12 named attributes related to color used in text, icon, and more.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/d0ddf4f5-1776-487f-a2f5-6d5445851bd8)
+
+The "On" colors are used for text and icons drawn on the different surfaces
+| #  | Name              | Theme Attribute       |
+|----|-------------------|-----------------------|
+| 1  | Primary           | colorPrimary          |
+| 2  | Primary Variant   | colorPrimaryVariant   |
+| 3  | Secondary         | colorSecondary        |
+| 4  | Secondary Variant | colorSecondaryVariant |
+| 5  | Background        | colorBackground       |
+| 6  | Surface           | colorSurface          |
+| 7  | Error             | colorError            |
+| 8  | On Primary        | colorOnPrimary        |
+| 9  | On Secondary      | colorOnSecondary      |
+| 10 | On Background     | colorOnBackground     |
+| 11 | On Surface        | colorOnSurface        |
+| 12 | On Error          | colorOnError          |
+
+We can defy our theme in Android studio
+```xml
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.TipTime" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+</resources>
+```
+and then defy the colors in the color resource
+```xml
+<?xml version="1.0" encoding="utf-8"/>
+<resources>
+    <color name="purple_500"> #FFBB86FC </color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
+```
+
+### Create more Polsihed user Experience    
+---
+[Material Components](https://material.io/components) are common UI widgets that make it easier to implement Material styling in your app. The documentation provides information for how to use and customize the Material Design Components. There are general Material Design guidelines for each component, and Android platform-specific guidance for the components that are available on Android. The labeled diagrams give you enough information to recreate a component if it happens to not exist on your chosen platform.
+
+#### Later more on the Styling user experiance
+
+### Using List in Kotlin
+---
+**Introduction to List**. A list is a collection of items in a specific order. There are two types of lists in kotlin.
+- Read-only list: `List` cannot be modified after you create it.
+- Mutable list: `MutableList` can be modifed after you create it.
+```kotlin
+val numbers = listOf(1, 2, 3, 4, 5, 6)
+```
+
+**Creating a mutable list**. When you create a `MutableList` or `List`, Kotlin tries to infer what type of list contains from the argument passed.
+```kotlin
+val entrees: MutableList<String> = mutableListOf()
+```
+
+### Study Case Using List
+---
+Cases: When it comes to ordering food at a local restaurant, there's multiple items within a single order. Using list for storing information is a really neat idea. Given a sample distribution code
+```kotlin
+open class Item(val name: String, val price: Int)
+
+class Noodles : Item("Noodles", 10)
+
+class Vegetables : Item("Vegetables", 5) 
+
+fun main() {
+    val noodles = Noodles()
+    val vegetables = Vegetables()
+    println(noodles)
+    println(vegetables)
+}
+```
+
+When you print an object instance to the output, the object `toString()` method is called (defaultly every class is automatically inherits `toString()` method)
+```kotlin
+class Noodles : Item("Noodles", 10) {
+   override fun toString(): String {
+       return name
+   }
+}
+```
+
+**Handling many arguments**. In case there many arguments passed. We can modified our `Vegetable` class
+```kotlin
+class Vegetables(vararg val toppings: String) : Item("Vegetables", 5) {
+    override fun toString(): String {
+        return name + " " + toppings.joinToString()
+    }
+}
+```
+The `vararg` modifier allows to pass a variable number of arguments of the same type into function or constructor.
+
+**Handling if there's no arguments passed out**. Update `toString()` method to return `Regular Vegetable` if there's no topping passed in.
+```kotlin
+class Vegetables(vararg val toppings: String) : Item("Vegetables", 5) {
+    override fun toString(): String {
+        if (toppings.isEmpty()) {
+            return "Regular $name"
+        } else {
+            return name + " " + toppings.joinToString()
+        }
+    }
+}
+```
+
+**Creating an Orders Item**. Encapsulate the login within an `Order` classs
+```kotlin
+class Order(val orderNumber: Int) {
+   private val itemList = mutableListOf<Item>()
+
+   // addItem takes a new Item and add into the itemList
+   fun addItem(newItem: Item) {
+    itemList.add(newItem)
+   }
+
+   fun addAll(newItems: List<Item>) {
+    itemList.addAll(newItems)
+   }
+
+   fun print() {
+    println("Order #${orderNumber}")
+    var total = 0
+    for (item in itemList) {
+        println("${item}: $${item.price}")
+        total += item.price
+    }
+    println("Total: $${total}")
+   }
+}
+```
+
+
+
+
+
+
+ 
