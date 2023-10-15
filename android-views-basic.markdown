@@ -1,4 +1,4 @@
-![image](https://github.com/Xenoare/book-notes/assets/67181778/66bf3170-fc9d-4e33-ae68-d31390fbf352)### Introduction to Activities
+### Introduction to Activities
 ---
 * > Kotlin Style Guide: https://developer.android.com/kotlin/style-guide
 
@@ -538,6 +538,7 @@ There are a number of pices involved in creating a `RecyclerView`. The diagram b
 * Adapter - Takes data and prepares it for RecyclerView to display.
 * ViewHolders - A pool of views for RecyclerView to use and reuse to display affirmations.
 * RecyclerView - Views on screen
+
 ![image](https://github.com/Xenoare/book-notes/assets/67181778/e1d3d1a0-f867-4ab1-b566-a1b27b7a0682)
 
 `RecyclerView` supports displaying items in different ways such as liniear list or a grid. Arraging the items is handled by a `LayoutManager`. Then, the final XML layout should like this
