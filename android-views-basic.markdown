@@ -671,7 +671,36 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
+### Displaying a list of image
+---
+First thing first, we download and insert an image into the `drawable` resources. Then open the data class `Afirmation`, remember that `Affirmation` data class is hold for a value for resources ID. Both `stringResourceId` and `imageResourceId` are integer values. To avoid accidentally pass arguments in wrong order, we can use `Resource annotation`. `Annotations` are useful because they add additional info to classes, methods, or parameters. Annotations are always declared with an @ symbol. In this case, add the @StringRes annotation to your string resource ID property and @DrawableRes annotation to your drawable resource ID property.
 
+Make sure to imports `androidx.annotations.DrawableRes` and `androidx.annotationsStringRes`
+```kotlin
+package com.example.affirmations.model
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 
+data class Affirmation(
+   @StringRes val stringResourceId: Int,
+   @DrawableRes val imageResourceId: Int
+)
+```
+Then in the `Datasource` class, we can modify the `loadAffirmations()` method
+```kotlin
+fun loadAffirmations(): List<Affirmation>{
+        return listOf<Affirmation> (
+            Affirmation(R.string.affirmation1, R.drawable.image1),
+            Affirmation(R.string.affirmation2, R.drawable.image2),
+            Affirmation(R.string.affirmation3, R.drawable.image3),
+            Affirmation(R.string.affirmation4, R.drawable.image4),
+            Affirmation(R.string.affirmation5, R.drawable.image5),
+            Affirmation(R.string.affirmation6, R.drawable.image6),
+            Affirmation(R.string.affirmation7, R.drawable.image7),
+            Affirmation(R.string.affirmation8, R.drawable.image8),
+            Affirmation(R.string.affirmation9, R.drawable.image9),
+            Affirmation(R.string.affirmation10, R.drawable.image10)
+        )
+} 
 
