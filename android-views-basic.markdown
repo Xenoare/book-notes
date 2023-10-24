@@ -703,4 +703,159 @@ fun loadAffirmations(): List<Affirmation>{
             Affirmation(R.string.affirmation10, R.drawable.image10)
         )
 } 
+```
 
+### Activities and Intents
+---
+There are two types of intent (**implicit** and **explicit**). An **explicit intent** is highly specific, where you know the exact activities to be launched, often as creen in your own app.
+
+Whereas **Implicit intent** is a bit more abstract, where you tell the system the type of action such as opening a link, composing an email, etc.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/960c3899-4b4d-4d87-9947-228439d87c79)
+
+* Set up Explicit Intent
+---
+Creating an intent take just a few steps
+1. Open `Adapter.kt` and navigate to `onBindViewHolder()` method and set the `onClickListener` for `holder.button`
+```kotlin
+holder.button.setOnClickListener {
+
+// Get a reference to the context
+val context = holder.itemView.context
+
+// Create an Intant, and passing in the context and class name of the destination activity
+val intent = Intent(context, Activity::class.java)
+
+// call putExtra method, passing "letter" as the first argument and the button text as the second argument.
+intent.putExtra("letter", holder.button.text.toString())
+
+// call the StartActivity method on the context object, passing an intent
+context.startActivity(intent)
+}
+```
+Remember that an intent is a simply set of instruction - there's no `instance of the destination activity just yet`. Instead, an extra is a `piece of data`, that `is given a name to be retrived later`.
+
+* Set up the Activity
+---
+In the `onCreate` method of the Activity, we can retrive the `letterId` passed in from the `intent`
+```kotlin
+val letterId = intent?.extras?.getString("letter").toString()
+```
+The extras poroperties is of type `Bundle` and this provides a way to access all extras passed into the intent.
+
+* Set up Implicit Intent
+---
+1. For this context, we will perform a Google search for the keyword. The first search result will be a dict definition of the word. Since a URL is used for every search, then it's a good idea to define as a `constant` in `companion object`.
+```kotlin
+companion object {
+   const val LETTER = "letter"
+   const val SEARCH_PREFIX = "https://www.google.com/search?q="
+}
+```
+2. Modifty the `WordAdapter` and creating an `Uri` foe the search query. When calling `parse()` to create a `Uri` from a string, we need to use string formatting so that word is appended to `SEARCH_PREFIX`.
+```kotlin
+holder.button.setOnClickListener {
+        val queryUrl: Uri = Uri.parse("${Activity.SEARCH_PREFIX}${item}")
+}
+```
+3. Init a new intent object
+```kotlin
+val intent = Intent(Intent.ACTION_VIEW, queryURL)
+```
+`ACTION_VIEW` is a generic intent that takes a URI (in your case is a web address). The system then knows how to process this intent by opening the URI in the user's web browser. There are few other intent types include:
+- `CATEGORY_APP_MAPS` – launching the maps app
+- `CATEGORY_APP_EMAIL` – launching the email app
+- `CATEGORY_APP_GALLERY` – launching the gallery (photos) app
+- `ACTION_SET_ALARM` – setting an alarm in the background
+- `ACTION_DIAL` – initiating a phone call
+
+* Set up Menu and Icons
+---
+We will create an app bar for this application
+1. First we need import two icon that represent grid and view list
+![image](https://github.com/Xenoare/book-notes/assets/67181778/9d727983-a79a-48c3-8cc2-4c421afcfd8e)
+2. Make an app bar layout. we can make this in the res folder `Menu` and add file `layout_menu.xml`
+```kotlin
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"> 
+   <item android:id="@+id/action_switch_layout" // To be referenced in the code
+       android:title="@string/action_switch_layout"
+       android:icon="@drawable/ic_linear_layout" // set the icon
+       app:showAsAction="always" />
+</menu>
+```
+
+* Implement menu button
+---
+1. First, we need a status to keep the layout button
+```kotlin
+private var isLinearLayoutManager = true
+```
+2. Then we can change our views by simply using layout manager
+```kotlin
+private fun chooseLayout() {
+    if (isLinearLayoutManager) {
+        recyclerView.layoutManager = LinearLayoutManager(this)
+    } else {
+        recyclerView.layoutManager = GridLayoutManager(this, 4)
+    }
+    recyclerView.adapter = LetterAdapter()
+}
+```
+3. Then we will change the icon based on the which layout is used
+```kotln
+private fun setIcon(menuItem: MenuItem?) {
+   if (menuItem == null)
+       return
+
+   // Set the drawable for the menu icon based on which LayoutManager is currently in use
+
+   // An if-clause can be used on the right side of an assignment if all paths return a value.
+   // The following code is equivalent to
+   // if (isLinearLayoutManager)
+   //     menu.icon = ContextCompat.getDrawable(this, R.drawable.ic_grid_layout)
+   // else menu.icon = ContextCompat.getDrawable(this, R.drawable.ic_linear_layout)
+   menuItem.icon =
+       if (isLinearLayoutManager)
+           ContextCompat.getDrawable(this, R.drawable.ic_grid_layout)
+       else ContextCompat.getDrawable(this, R.drawable.ic_linear_layout)
+}
+```
+
+For the app can actuallly use the menu. We need to override tow more methods
+* `onCreateOptionsMenu` where you inflate the options menu and performs any addiontal setup
+* `onOptionsItemSelected` where you'll actually call `chooseLayout()` when the button is selected.
+
+1. Overrie `onCreateOptionsMenu`
+```kotlin
+override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+   menuInflater.inflate(R.menu.layout_menu, menu)
+
+   val layoutButton = menu?.findItem(R.id.action_switch_layout)
+   // Calls code to set the icon based on the LinearLayoutManager of the RecyclerView
+   setIcon(layoutButton)
+
+   return true
+}
+```
+2. Implement `onOptionsItemSelected`
+```kotlin
+override fun onOptionsItemSelected(item: MenuItem): Boolean {
+   return when (item.itemId) {
+       R.id.action_switch_layout -> {
+           // Sets isLinearLayoutManager (a Boolean) to the opposite value
+           isLinearLayoutManager = !isLinearLayoutManager
+           // Sets layout and icon
+           chooseLayout()
+           setIcon(item)
+
+           return true
+       }
+       //  Otherwise, do nothing and use the core event handling
+
+       // when clauses require that all possible paths be accounted for explicitly,
+       //  for instance both the true and false cases if the value is a Boolean,
+       //  or an else to catch all unhandled cases.
+       else -> super.onOptionsItemSelected(item)
+   }
+}
+```
