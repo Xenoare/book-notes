@@ -993,3 +993,150 @@ overrride fun onOptionsItemSelected(item: MenuItem): Boolean {
 }
 ```
 Remember that [requireContext()](https://developer.android.com/reference/androidx/fragment/app/Fragment#requireContext()) returns the Context this fragments is currently associated with.
+
+
+* Jetpack Navigation Component
+---
+Android Jetpack provides the *Navigation component* to help handle any navigation implementation.
+
+Th navigation component has three key parts which you'll use to implement navigation.
+* Navigation Graph: The navigation graph is an XML file that provides a visual representation of navigation in your app. The file consists of destinations which correspond to individual activities and fragments as well as actions between them which can be used in code to navigate from one destination to another. Just like with layout files, Android Studio provides a visual editor to add destinations and actions to the navigation graph
+* `NavHost`: A `NavHost` is used to display destinations from a navigation graph within an activity. When you navigate between fragments, the destination shown in the `NavHost` is updated. You'll use a built-in implementation, called `NavHostFragment`, in your MainActivity.
+* `NavController`: The `NavController` object lets you control the navigation between destinations displayed in the `NavHost`. When working with intents, you had to call `startActivity` to navigate to a new screen. With the Navigation component, you can call the NavController's `navigate()` method to swap the fragment that's displayed. The NavController also helps you handle common tasks like responding to the system "up" button to navigate back to the previously displayed fragment.
+
+* Navigation Dependency
+---
+In the project-level `build.gradle` file. in **buildscript > ext** below `material_version`. Set the `nav_version` equal to `2.5.2`
+```kotlin
+buildscript {
+    ext {
+        appcompat_version = "1.5.1"
+        constraintlayout_version = "2.1.4"
+        core_ktx_version = "1.9.0"
+        kotlin_version = "1.7.10"
+        material_version = "1.7.0-alpha2"
+        nav_version = "2.5.2"
+    }
+
+    ...
+}
+```
+also add this dependencies
+```kotlin
+implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+```
+
+* Safe Args Plugin
+---
+Before you start implementing the Navigation component into the Words app, you'll also add something called `Safe Args`—a Gradle plugin that will assist you with type safety when passing data between fragments.
+1. In the top-level `build.gradle` file. add this classpath
+```kotlin
+classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+```
+2. in the app-level `build-gradle` file. within `plugins` at the top, add `android.navigation.safeargs.kotlin`
+```kotlin
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
+}
+```
+
+* Using Navigation Graph
+---
+The Navigation Graph (NavGraph) is a virtual mapping of your apps navigation. Each screen, of fragment in your case, become possible "destination" that can be navigated to. A `NavGraph` can be represented by XML file showing each destination relates to one another.
+
+Use FragmentContainerView in MainActivity
+---
+Because your layouts are now contained in `fragment_letter_list.xml` and `fragment_word_list.xml`, your `activity_main.xml` file no longer needs to contain the layout for the first screen in your app. Instead, you'll repurpose `MainActivity` to contain `FragmentContainerView` to act as the `NavHost` for your fragments.
+1. Replace the content of `FrameLayout` in **activity_main.xml** that is `androidx.recyclerview.widget.RecyclerView` with a `FragmentContainerView`. Give it an ID of nav_host_fragment and set its height and width to `match_parent` to fill the entire frame layout.
+```xml
+<androidx.fragment.app.FragmentContainerView
+   android:id="@+id/nav_host_fragment"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent" />
+```
+2. Below the id attribute, add a name attribute and set it to `androidx.navigation.fragment.NavHostFragment`. While you can specify a specific fragment for this attribute, setting it to `NavHostFragment` allows your `FragmentContainerView` to navigate between fragments.
+```xml
+android:name="androidx.navigation.fragment.NavHostFragment"
+```
+3. Below the `layout_height` and `layout_width` attributes, add an attribute called `app:defaultNavHost` and set it equal to `"true"`. This allows the fragment container to interact with the navigation hierarchy. For example, if the system back button is pressed, then the container will navigate back to the previously shown fragment, just like what happens when a new activity is presented.
+```xml
+app:defaultNavHost="true"
+```
+4. Add an attribute called `app:navGraph` and set it equal to `"@navigation/nav_graph"`. This points to an XML file that defines how your app's fragments can navigate to one another. For now, the Android studio will show you an unresolved symbol error. You will address this in the next task.
+```xml
+app:navGraph="@navigation/nav_graph"
+```
+5. Finally, because you added two attributes with the app namespace, be sure to add the `xmlns:app` attribute to the `FrameLayout`.
+```xml
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:tools="http://schemas.android.com/tools"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   tools:context=".MainActivity">
+```
+
+* Set Up Navigation Graph
+---
+Add a navigation graph file name `nav_graph.xml` as the name you set for the `app:navGraph` attribute under the `navigation` directory
+![image](https://github.com/Xenoare/book-notes/assets/67181778/d6a8f179-2b64-4827-9d18-cdffbc22a217)
+
+* Create a Navigation action
+---
+To create a navigation action between the `letterListFragment` to the `wordListFragment` destinations, hover your mouse over the `letterListFragment` destination and drag from the circle that appears on the right onto the wordListFragment destination.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/346a53e7-821e-462f-be23-739f5c4a2b9c)
+You should see an `action` arrows between those two fragments, and the name of this action is `action_letterListFragment_to_wordListFragment` that can be referenced.
+
+* Specify Arguments for WordListFragment
+---
+When navigating between activities using an intent, you specified an "extra" so that the selected letter could be passed to the `wordListFragment`. Navigation also supports passing parameters between destinations and plus does this in a type safe way.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/1db54d72-08b1-4020-877a-bfd91ba14400)
+
+* Perform the Navigation Action
+---
+1. Delete the contents of the button's `setOnClickListener()`. Instead, you need to retrieve the navigation action you just created. Add the following to the `setOnClickListener()`.
+```kotlin
+val action = LetterListFragmentDirections.actionLetterListFragmentToWordListFragment(letter = holder.button.text.toString())
+```
+`LetterListFragmentDirections` lets you refer to all possible navigation paths starting from the `letterListFragment`.
+
+Once you have a reference to your navigation action, simply get a reference to your NavController (an object that lets you perform navigation actions) and call navigate() passing in the action.
+```kotlin
+holder.view.findNavController().navigate(action)
+```
+
+* Configure MainActivity
+---
+1. Create a `navController` property that marked as `lateinit` since it will be set in `onCreate`
+```kotlin
+private lateinit var navController: NavController
+```
+2. Then, after the call to `setContentView()` in `onCreate()`, get a reference to the `nav_host_fragment` (this is the ID of your `FragmentContainerView`) and assign it to your `navController` property.
+```kotlin
+val navHostFragment = supportFragmentManager
+    .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+navController = navHostFragment.navController
+```
+3. Then in `onCreate()`, call `setupActionBarWithNavController()`, passing in `navController`. This ensures action bar (app bar) buttons, like the menu option in `LetterListFragment` are visible.
+```kotlin
+setupActionBarWithNavController(navController)
+```
+4. Finally, implement `onSupportNavigateUp()`. Along with setting `defaultNavHost` to true in the XML, this method allows you to handle the up button. However, your activity needs to provide the implementation.
+```kotlin
+override fun onSupportNavigateUp(): Boolean {
+   return navController.navigateUp() || super.onSupportNavigateUp()
+}
+```
+
+
+
+
+
+
+
+
+
