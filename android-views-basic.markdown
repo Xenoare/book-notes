@@ -1132,7 +1132,31 @@ override fun onSupportNavigateUp(): Boolean {
 }
 ```
 
+* Getting Arguments in WordListFragment
+---
+Accessing safe arguments is pretty straightforward, and you don't have to wait until `onViewCreated()` is called either.
+1. In `WordListFragment`, create a `letterId` property. You can mark this as lateinit so that you don't have to make it nullable
+```kotlin
+private lateinit var letterId: String
+```
+2. Then override `onCreate()` and add following:
+```kotlin
+override fun onCreate(savedInstances: Bundle?) {
+    super.onCreate()
 
+    arguments?.let {
+        letterId = it.getString(LETTER).toString()
+    }
+}
+```
+Because it's possible for **arguments** to be optinal, notice you call `let()` and pass in a lambda. If the arguments are null, then the lambda will not execute.
+
+What exactly is a `Bundle?` Think of it as a key-value pair used to pass data between classes, such as activities and fragments. Actually, you've already used a bundle when you called `intent?.extras?.getString()` when performing an intent in the first version of this app. Getting the string from arguments when working with fragments works exactly the same way.
+
+3. Finally, you can access the letterId when you set the recycler view's adapter. Replace `activity?.intent?.extras?.getString(LETTER).toString()` in` onViewCreated()` with `letterId`.
+```kotlin
+recyclerView.adapter = WordAdapter(letterId, requireContext())
+```
 
 
 
