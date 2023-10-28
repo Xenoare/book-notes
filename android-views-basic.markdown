@@ -1185,7 +1185,9 @@ For example, application data usually flows from data sources to the UI. User ev
 #### Store Data in ViewModel
 Model are components that are responsible for handling the data for an app. They're independent from the `Views` and app component. <br>
 The main classes or components in Android Architecture are UI Controller (`activity`/`fragment`), `ViewModel`, `LiveData` and `Room` (Livedata and Room later).
+
 ![image](https://github.com/Xenoare/book-notes/assets/67181778/2b54af9e-23ba-490b-81e0-50791ce4655d)
+
 1. UI Controller <br>
 Activities and Fragments are UI controllers. UI controllers control the UI by drawing views on the screen, and anything else related to the UI that user interects with (Data in the app or any decision-making logic about data should not be in the UI controller classes).
 2. ViewModel <br>
@@ -1246,15 +1248,75 @@ Inside the ViewModel, the data should be editable, so they should be private and
 
 * **The lifecycler of a ViewModel** <br>
 The framework keeps the `ViewModel` alive as long as the scope of the activity or fragment is alive. A `ViewModel` is not destroyed if its owner is destroyed for a configuration change, such as screen rotation. The new instance of the owner reconnects to the existing `ViewModel` instance.
-![image](https://github.com/Xenoare/book-notes/assets/67181778/daea78d2-5f9d-4c71-8718-27cd3c8900bf)
 
-    1. Understanding ViewModel lifecycle <br>
-    In `GameViewModel.kt`, add an `init` block with log statement
+  ![image](https://github.com/Xenoare/book-notes/assets/67181778/daea78d2-5f9d-4c71-8718-27cd3c8900bf)
 
+    * Understanding ViewModel lifecycle <br>
+    In `GameViewModel.kt`, add an `init` block with log statement.
+        ```kotlin
+        class GameViewModel : ViewModel() {
+           init {
+               Log.d("GameFragment", "GameViewModel created!")
+           }
+        
+           ...
+        }
+        ```
+    Kotlin provides the **initializer block** (also known as the `init` block) as a place for initial setup code needed during the initialization of an object instance. This block of code is run when the object instance is first created and initalized.<br>
+    In the `ViewModel` class, override the `onCleared()` method. The `ViewModel` is destroyed when the asoicated fragments is detached or when the activity is finished. <br>
+    Right before the ViewModel is destroyed, the `onCleared()` callback is called
+  ```kotlin
+  override fun onCleared() {
+      super.onCleared()  
+  }
+  ```
+    In `GameFragment`. override the `onDetach()` callback method, which will be called when the corresponding activity and fragments are destroyed.
+  ```kotlin
+  override fun onDetach() {
+    super.onDetach()
+  }
+  ```
 
+* **Poplate ViewModel** <br>
+`Late Initalization` is a concept where you declare a variable, you provide it with an *initial* value upfront. However, if you're not ready to assign a value yet, you can assign it later. <br>
+To late initialization a property in Kotlin, you have to use the keyword `lateinit`, which means late initalization. If you are guarantee that you will initalize the property before using it, you can declare the property with `lateinit`. Memory is not allocated to the variable until it is initialized. If you try to access the variable before initalizing it, thee app will crash.
+    1. In `GameViewModel`, add a new class of variable of type `MutableList<String>` called `wordList`, to hold list of words used in the game, to avaoid repetations. Also add calss variable `currentWord` to hold the word player is trying to *unscramble*.
+     ```kotlin
+     private var wordsList: MutableList<String> = mutableListOf()
+     private lateinit var currentWord: String
+     ```
+  2. Implement the `getNextWord()` method for your reference
+     ```kotlin
+         private fun getNextWord() {
+           currentWord = allWordsList.random()
+           val tempWord = currentWord.toCharArray()
+           tempWord.shuffle()
+        
+           while (String(tempWord).equals(currentWord, false)) {
+               tempWord.shuffle()
+           }
+           if (wordsList.contains(currentWord)) {
+               getNextWord()
+           } else {
+               _currentScrambledWord = String(tempWord)
+               ++currentWordCount
+               wordsList.add(currentWord)
+           }
+        }
+     ```
 
-
-
+Since that you've created the `getNextWord()` method, to get the next scramble word. You'll make a call when the `GameViewModel` is initialized for the first time. <br>
+We can use the `init` block to initialize `lateinit` properties in the class such as the current word. The result will be that the first word displayed on the screen will be sccrambled word instaed of **test**
+```kotlin
+init {
+    Log.d("GameFragment", "GameViewModel created!")
+    getNextWord()
+}
+```
+Now add the `lateinit` modifier onto the `_currentScrambleWord` property. Add an explicit mention of data type `String`.
+```kotlin
+private lateinit var _currentScrambleWord: String
+```
 
 
 
