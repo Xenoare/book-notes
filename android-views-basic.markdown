@@ -1215,6 +1215,45 @@ A delegate property is defined using `by` clause and delegate class instance:
     Then the app will lose the state of the `viewModel` *reference* when the device goes through a configuration change (For example, if you rotating the device, then the activity is **destroyed** and **created** again, and you'll have a new view model instance with the initial state again). <br>
     The `delegate` class creates the `viewModel` object for you on the first access, and retains its value through configuration changes and returns when requested.
 
+* **Move data to the ViewModel** <br>
+you can't make the visibility modifiers of the properties `public` —the data should not be editable by other classes. This is risky because an outside class could change the data in unexpected ways that don't follow the game rules specified in the view model. <br>
+Inside the ViewModel, the data should be editable, so they should be private and var. From outside the ViewModel, data should be readable, but not editable, so the data should be exposed as public and val. To achieve this behavior, Kotlin has a feature called a [backing property](https://kotlinlang.org/docs/reference/properties.html#backing-properties).
+
+  1. Backing property <br>
+    A backing property allows you to return something from a `getter` other than the object. For getter and setter methods, you could `override` one or both of these methods and **provide your own custom behavior**. To implement a `backing property`, you will override the getter method to return a read-only version of your data.
+        ```kotlin
+        // Declare private mutable variable that can only be modified
+        // within the class it is declared.
+        private var _count = 0 
+        
+        // Declare another public immutable field and override its getter method. 
+        // Return the private property's value in the getter method.
+        // When count is accessed, the get() function is called and
+        // the value of _count is returned. 
+        val count: Int
+           get() = _count
+        ```
+        Let's break the code.
+     * Inside the `ViewModel` class. The property _count is private and mutable. Hence, it is only accessible and editable within the ViewModel class. The convention is to prefix the private property with an underscore.
+     * Outside the `ViewModel` class. The default visibility modifier in Kotlin is `public`, so `count` is public and accessible from other classes like UI controllers. Since only the `get()` method is being **overridden**, this property is immutable and read-only. When an outside class accesses this property, it returns the value of `_count` and its value can't be modified. This **protects the app data** inside the `ViewModel` from unwanted and unsafe changes by external classes, but it allows external callers to safely access its value.
+    
+     in `GameViewMode` we can change the `currentScrambleWord` declaration to add a backing property. and then Now `_currentScrambleWord` is accessible and editbale only within `GameViewModel`. The UI controller, `GameFragment` can read its value using read-only property
+     ```kotlin
+     private var _currentScrambledWord = "test"
+     val currentScrambledWord: String
+         get() = _currentScrambledWord
+     ```
+
+* **The lifecycler of a ViewModel** <br>
+The framework keeps the `ViewModel` alive as long as the scope of the activity or fragment is alive. A `ViewModel` is not destroyed if its owner is destroyed for a configuration change, such as screen rotation. The new instance of the owner reconnects to the existing `ViewModel` instance.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/daea78d2-5f9d-4c71-8718-27cd3c8900bf)
+
+    1. Understanding ViewModel lifecycle <br>
+    In `GameViewModel.kt`, add an `init` block with log statement
+
+
+
+
 
 
 
