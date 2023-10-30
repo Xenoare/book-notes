@@ -398,7 +398,7 @@ You may have noticed the validation rules are duplicated with the `store` method
 
 ### Authorization
 ---
-By default, the `authorize` method will prevent *everyone* from being able to update the Chrip. So we can specify who is allowed to update it by creating a `Model Policy` with the following command:
+By default, the `authorize` method will prevent *everyone* from being able to update the Chrip. So we can specify who is allowed to update it by creating a [Model Policy](https://laravel.com/docs/authorization#creating-policies) with the following command:
 ```php
 php artisan make:policy ChirpPolicy --model=Chirp
 ```
@@ -415,10 +415,70 @@ class ChirpPolicy
 }
 ```
 
+### Routing to Delete Chirps
+---
+First, we can setup the route for deleting
+```php
+# routes/web.php
+Route::resource('chirps', ChirpController::class)
+    ->only(['index', 'store', 'edit', 'update', 'destroy'])
+    ->middleware(['auth', 'verified']);
+```
 
+### Updating the Controller
+---
+```php
+# app/Http/Controllers/ChirpController.php
 
+public function destroy(Chrip $chirp): RedirectResponse
+{
+  $this->authorize('delete', $chirp);
 
+  $chirp->delete();
 
+  return redirect(route('chirp.index'));
+}
+```
+
+### Setup the Authorization
+---
+Rather than repeating the same logic with the `update` method, we can reuse the same logic by calling the `update` method.
+```php
+# app/Policies/ChirpPolicy.php
+
+  /**
+   * Determine whether the user can update the model.
+   */
+  public function update(User $user, Chirp $chirp): bool
+  {
+      return $chirp->user()->is($user);
+  }
+
+  /**
+   * Determine whether the user can delete the model.
+   */
+  public function delete(User $user, Chirp $chirp): bool
+  {
+      return $this->update($user, $chirp);
+  }
+```
+
+### Updating View
+---
+```php
+<x-slot name="content">
+    <x-dropdown-link :href="route('chirps.edit', $chirp)">
+        {{ __('Edit') }}
+    </x-dropdown-link>
+    <form method="POST" action="{{ route('chirps.destroy', $chirp)}}">
+        @csrf
+        @method('delete')
+        <x-dropdown-link :href="route('chirps.destroy', $chirp)" onclick="event.preventDefault(); this.closest('form').submit();">
+            {{ __('Delete')}}
+        </x-dropdown-link>
+    </form>
+</x-slot>
+```
 
 
 
