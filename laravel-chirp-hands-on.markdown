@@ -480,6 +480,3 @@ Rather than repeating the same logic with the `update` method, we can reuse the 
 </x-slot>
 ```
 
-
-
-
