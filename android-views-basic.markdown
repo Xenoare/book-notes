@@ -1,4 +1,4 @@
-### Introduction to Activities
+ ### Introduction to Activities
 ---
 * > Kotlin Style Guide: https://developer.android.com/kotlin/style-guide
 
@@ -1317,6 +1317,59 @@ Now add the `lateinit` modifier onto the `_currentScrambleWord` property. Add an
 ```kotlin
 private lateinit var _currentScrambleWord: String
 ```
+
+* **Dialogs** <br>
+The anatomy of Alert Dialogs
+![image](https://github.com/Xenoare/book-notes/assets/67181778/ae4e5c95-b8d5-4b20-a390-d533568b86b7)
+1. Alert Dialog
+2. Title (optional)
+3. Message
+4. Text buttons
+
+The implementation of the final score are using the `MaterialAlertDialog` from the Material Design Components Library to add a dialog. <br>
+
+Since a dialog is UI related, the `GameFragment` will be responsible for creating and showing the final score dialog.
+1. First, add a backing property to the `score` variable. In `GameViewModel`, change the `score` variable declaration to the following
+    ```kotlin
+    private var _score = 0
+    val score: Int
+        get(): _score
+    ```
+2. In `GameFragment` add a private function called `showFinalScoreDialog()`. To create a `MaterialAlertDialog`, use [MaterialAlertDialogBuilder](https://developer.android.com/reference/com/google/android/material/dialog/MaterialAlertDialogBuilder) class to build up parts of the dialog step-by-step. The `MaterialAlertDialogBuilder` constructor passing the **context** in the content using the fragment's `requireContext()` method.
+    ```kotlin
+    private fun showFinalScoreDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+    }
+    ```
+    [Context](https://developer.android.com/reference/android/content/Context.html) will `refers` to the context of the `current` state of an application, activity or fragment. It is contains the information regarding the activity, fragment or application Usually used to get access to the `resources`, `databases`, and other system.
+3. Add code to set the title on the alert dialog, and use the string resourece from `strings.xml`
+    ```kotlin
+    MaterialAlertDialogBuilder(requireContext())
+        .setTitle(getString(R.string.congratulation))
+    ```
+4. Chain this method also to show the messsage the final score. You also can use the `read-only` version of the score variable (`viewModel.score`)
+   ```kotlin
+       .setMessage(getString(R.string.you_scored, viewModel.score))
+   ```
+5. Make your alert dialog not cancelable when the back key is pressed by using the `setCancelable()` method and passing false `false`.
+   ```kotlin
+       .setCancelable(false)
+   ```
+6. Add tow text buttons **EXIT** and **PLAY AGAIN** using the methods `setNegativeButton()` and `setPositiveButton()`. Call the `exitGame()` and `restartGame()` respectively from the lambdas.
+    ```kotlin
+        .setNegativeButton(getString(R.string.exit)) { _, _ ->
+        exitGame()
+    }
+    .setPositiveButton(getString(R.string.play_again)) { _, _ ->
+        restartGame()
+    }
+    ```
+    This syntax will takes in two _parameters_. A `String` and a function `DialogInterface.OnClickListener()` which can be expressed as a lambda. When the last argument being passed in is a function, you can express the lambda function outside the _parentheses_ (known as [trailing lambda syntax](https://kotlinlang.org/docs/reference/lambdas.html#passing-a-lambda-to-the-last-parameter).
+7. At the end, add `show()`, which creates and then display the alert dialog.
+```kotlin
+    .show()
+```
+           
 
 
 
