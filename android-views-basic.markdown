@@ -1366,10 +1366,63 @@ Since a dialog is UI related, the `GameFragment` will be responsible for creatin
     ```
     This syntax will takes in two _parameters_. A `String` and a function `DialogInterface.OnClickListener()` which can be expressed as a lambda. When the last argument being passed in is a function, you can express the lambda function outside the _parentheses_ (known as [trailing lambda syntax](https://kotlinlang.org/docs/reference/lambdas.html#passing-a-lambda-to-the-last-parameter).
 7. At the end, add `show()`, which creates and then display the alert dialog.
-```kotlin
-    .show()
-```
-           
+    ```kotlin
+        .show()
+    ```
+
+* **Implement `onClickListener` for submit button** <br>
+First thing first, we acan add a helper **method to validate player word** in `GameViewModel`, `increaseScore()` with no parameters and no return value. We can increase the `score` variable by `SCORE_INCREASE`.
+    ```kotlin
+    private fun increaseScore() {
+        _score += SCORE_INCREASE
+    }
+    ```
+also now implement `isUserWordCorrect()` to validate the player's word and increase the store if the guess is correct
+    ```kotlin
+    fun isUserWordCorrect(playerWord: String): Boolean {
+        if (playerWord.equals(currentWord, true) {
+            increaseScore()
+            return true
+        }
+        return false
+    }
+    ```
+
+* **Implement the Skip Button** <br>
+Similar to `onSubmitWord()`, add a condition in the `onSkipWord()` method. If `true`, then display the word on the screen. Otherwise show the alert dialog with the final score.
+    ```kotlin
+    private fun onSkipWord() {
+        if (viewModel.nextWord()) {
+            setErrorTextField(false)
+            updateNextWordOnScreen()
+        } else {
+            showFinalScoreDialog()
+        }
+    }
+    ```
+
+* **Update Game Restart Logic** <br>
+To reset the app data, in `GameViewModel` add a method called `reinitalizeData()` and set the score and word count to `0`. Clear the word list and call the `getNextWord()` method.
+    ```kotlin
+    /*
+    * Re-initializes the game data to restart the game.
+    */
+    fun reinitializeData() {
+       _score = 0
+       _currentWordCount = 0
+       wordsList.clear()
+       getNextWord()
+    }
+    ```
+In `GameFragment` at the top of the method `restartGame()`, make a call to the newly created method, `reinitalizeData()`.
+    ```kotlin
+    private fun restartGame() {
+        viewModel.reinitializeData()
+        setErrorTextField(false)
+        updateNextWordOnScreen()
+    }
+    ```
+    
 
 
 
