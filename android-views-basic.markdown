@@ -1158,12 +1158,18 @@ What exactly is a `Bundle?` Think of it as a key-value pair used to pass data be
 recyclerView.adapter = WordAdapter(letterId, requireContext())
 ```
 
-### Architecture Component
----
+## Architecture Component
 Notes: 
-* [Additional github project](https://github.com/google-developer-training/android-basics-kotlin-unscramble-app/tree/starter)
++ [Additional github project](https://github.com/google-developer-training/android-basics-kotlin-unscramble-app/tree/starter)
+
+Table of Contents 
++ [Common Architecture Principles](####common-architecture-principles)
++ [Store Data in ViewMode](####store-data-in-view-model)
++ [Setup ViewModel](####setup-viewmodel)
++ [Use LiveData with ViewModel](####use-livedata-with-viewmodel)
 
 #### Common Architectural Principles
+---
 > Ref. https://developer.android.com/topic/architecture
 
 An app architectue defines the boundaries between parts of the app and the responsibillites each part should have. In order to meet the needs mentioned above, you should design your app architecture to follow a few specific principles.
@@ -1183,6 +1189,7 @@ In Android, state or data usually flow the higher-scoped types of the hierarchy 
 For example, application data usually flows from data sources to the UI. User events such as button presses flow the UI to th SSOT where the application data is modified and exposed in an immmutable type.
 
 #### Store Data in ViewModel
+---
 Model are components that are responsible for handling the data for an app. They're independent from the `Views` and app component. <br>
 The main classes or components in Android Architecture are UI Controller (`activity`/`fragment`), `ViewModel`, `LiveData` and `Room` (Livedata and Room later).
 
@@ -1193,7 +1200,8 @@ Activities and Fragments are UI controllers. UI controllers control the UI by dr
 2. ViewModel <br>
 The `ViewModel` stores the app related data that isn't destroyed when activity or fragment is **destroyed** and **recreated** by Android framework. `ViewModel` objects are automatically retained (they are not destroyed like the activity or a fragment instance)
 
-### Setup a ViewModel
+#### Setup a ViewModel
+---
 To associate a `ViewModel` to a UI controller, create a `reference` (object) to the `ViewModel` inside the UI controller.
 ```kotlin
 // Fragment.kt
@@ -1305,79 +1313,80 @@ To late initialization a property in Kotlin, you have to use the keyword `latein
         }
      ```
 
-Since that you've created the `getNextWord()` method, to get the next scramble word. You'll make a call when the `GameViewModel` is initialized for the first time. <br>
-We can use the `init` block to initialize `lateinit` properties in the class such as the current word. The result will be that the first word displayed on the screen will be sccrambled word instaed of **test**
-```kotlin
-init {
-    Log.d("GameFragment", "GameViewModel created!")
-    getNextWord()
-}
-```
-Now add the `lateinit` modifier onto the `_currentScrambleWord` property. Add an explicit mention of data type `String`.
-```kotlin
-private lateinit var _currentScrambleWord: String
-```
+    Since that you've created the `getNextWord()` method, to get the next scramble word. You'll make a call when the `GameViewModel` is initialized for the first time. <br>
+    We can use the `init` block to initialize `lateinit` properties in the class such as the current word. The result will be that the first word displayed on the screen will be sccrambled word instaed of **test**
+    ```kotlin
+    init {
+        Log.d("GameFragment", "GameViewModel created!")
+        getNextWord()
+    }
+    ```
+    Now add the `lateinit` modifier onto the `_currentScrambleWord` property. Add an explicit mention of data type `String`.
+    ```kotlin
+    private lateinit var _currentScrambleWord: String
+    ```
 
 * **Dialogs** <br>
 The anatomy of Alert Dialogs
-![image](https://github.com/Xenoare/book-notes/assets/67181778/ae4e5c95-b8d5-4b20-a390-d533568b86b7)
-1. Alert Dialog
-2. Title (optional)
-3. Message
-4. Text buttons
 
-The implementation of the final score are using the `MaterialAlertDialog` from the Material Design Components Library to add a dialog. <br>
+    ![image](https://github.com/Xenoare/book-notes/assets/67181778/ae4e5c95-b8d5-4b20-a390-d533568b86b7)
+    1. Alert Dialog
+    2. Title (optional)
+    3. Message
+    4. Text buttons
 
-Since a dialog is UI related, the `GameFragment` will be responsible for creating and showing the final score dialog.
-1. First, add a backing property to the `score` variable. In `GameViewModel`, change the `score` variable declaration to the following
-    ```kotlin
-    private var _score = 0
-    val score: Int
-        get(): _score
-    ```
-2. In `GameFragment` add a private function called `showFinalScoreDialog()`. To create a `MaterialAlertDialog`, use [MaterialAlertDialogBuilder](https://developer.android.com/reference/com/google/android/material/dialog/MaterialAlertDialogBuilder) class to build up parts of the dialog step-by-step. The `MaterialAlertDialogBuilder` constructor passing the **context** in the content using the fragment's `requireContext()` method.
-    ```kotlin
-    private fun showFinalScoreDialog() {
+    The implementation of the final score are using the `MaterialAlertDialog` from the Material Design Components Library to add a dialog. <br>
+    
+    Since a dialog is UI related, the `GameFragment` will be responsible for creating and showing the final score dialog.
+    1. First, add a backing property to the `score` variable. In `GameViewModel`, change the `score` variable declaration to the following
+        ```kotlin
+        private var _score = 0
+        val score: Int
+            get(): _score
+        ```
+    2. In `GameFragment` add a private function called `showFinalScoreDialog()`. To create a `MaterialAlertDialog`, use [MaterialAlertDialogBuilder](https://developer.android.com/reference/com/google/android/material/dialog/MaterialAlertDialogBuilder) class to build up parts of the dialog step-by-step. The `MaterialAlertDialogBuilder` constructor passing the **context** in the content using the fragment's `requireContext()` method.
+        ```kotlin
+        private fun showFinalScoreDialog() {
+            MaterialAlertDialogBuilder(requireContext())
+        }
+        ```
+        [Context](https://developer.android.com/reference/android/content/Context.html) will `refers` to the context of the `current` state of an application, activity or fragment. It is contains the information regarding the activity, fragment or application Usually used to get access to the `resources`, `databases`, and other system.
+    3. Add code to set the title on the alert dialog, and use the string resourece from `strings.xml`
+        ```kotlin
         MaterialAlertDialogBuilder(requireContext())
-    }
-    ```
-    [Context](https://developer.android.com/reference/android/content/Context.html) will `refers` to the context of the `current` state of an application, activity or fragment. It is contains the information regarding the activity, fragment or application Usually used to get access to the `resources`, `databases`, and other system.
-3. Add code to set the title on the alert dialog, and use the string resourece from `strings.xml`
-    ```kotlin
-    MaterialAlertDialogBuilder(requireContext())
-        .setTitle(getString(R.string.congratulation))
-    ```
-4. Chain this method also to show the messsage the final score. You also can use the `read-only` version of the score variable (`viewModel.score`)
-   ```kotlin
-       .setMessage(getString(R.string.you_scored, viewModel.score))
-   ```
-5. Make your alert dialog not cancelable when the back key is pressed by using the `setCancelable()` method and passing false `false`.
-   ```kotlin
-       .setCancelable(false)
-   ```
-6. Add tow text buttons **EXIT** and **PLAY AGAIN** using the methods `setNegativeButton()` and `setPositiveButton()`. Call the `exitGame()` and `restartGame()` respectively from the lambdas.
-    ```kotlin
-        .setNegativeButton(getString(R.string.exit)) { _, _ ->
-        exitGame()
-    }
-    .setPositiveButton(getString(R.string.play_again)) { _, _ ->
-        restartGame()
-    }
-    ```
-    This syntax will takes in two _parameters_. A `String` and a function `DialogInterface.OnClickListener()` which can be expressed as a lambda. When the last argument being passed in is a function, you can express the lambda function outside the _parentheses_ (known as [trailing lambda syntax](https://kotlinlang.org/docs/reference/lambdas.html#passing-a-lambda-to-the-last-parameter).
-7. At the end, add `show()`, which creates and then display the alert dialog.
-    ```kotlin
-        .show()
-    ```
+            .setTitle(getString(R.string.congratulation))
+        ```
+    4. Chain this method also to show the messsage the final score. You also can use the `read-only` version of the score variable (`viewModel.score`)
+       ```kotlin
+           .setMessage(getString(R.string.you_scored, viewModel.score))
+       ```
+    5. Make your alert dialog not cancelable when the back key is pressed by using the `setCancelable()` method and passing false `false`.
+       ```kotlin
+           .setCancelable(false)
+       ```
+    6. Add tow text buttons **EXIT** and **PLAY AGAIN** using the methods `setNegativeButton()` and `setPositiveButton()`. Call the `exitGame()` and `restartGame()` respectively from the lambdas.
+        ```kotlin
+            .setNegativeButton(getString(R.string.exit)) { _, _ ->
+            exitGame()
+        }
+        .setPositiveButton(getString(R.string.play_again)) { _, _ ->
+            restartGame()
+        }
+        ```
+        This syntax will takes in two _parameters_. A `String` and a function `DialogInterface.OnClickListener()` which can be expressed as a lambda. When the last argument being passed in is a function, you can express the lambda function outside the _parentheses_ (known as [trailing lambda syntax](https://kotlinlang.org/docs/reference/lambdas.html#passing-a-lambda-to-the-last-parameter).
+    7. At the end, add `show()`, which creates and then display the alert dialog.
+        ```kotlin
+            .show()
+        ```
 
 * **Implement `onClickListener` for submit button** <br>
-First thing first, we acan add a helper **method to validate player word** in `GameViewModel`, `increaseScore()` with no parameters and no return value. We can increase the `score` variable by `SCORE_INCREASE`.
-    ```kotlin
-    private fun increaseScore() {
-        _score += SCORE_INCREASE
-    }
-    ```
-also now implement `isUserWordCorrect()` to validate the player's word and increase the store if the guess is correct
+    First thing first, we acan add a helper **method to validate player word** in `GameViewModel`, `increaseScore()` with no parameters and no return value. We can increase the `score` variable by `SCORE_INCREASE`.
+        ```kotlin
+        private fun increaseScore() {
+            _score += SCORE_INCREASE
+        }
+        ```
+    also now implement `isUserWordCorrect()` to validate the player's word and increase the store if the guess is correct
     ```kotlin
     fun isUserWordCorrect(playerWord: String): Boolean {
         if (playerWord.equals(currentWord, true) {
@@ -1389,7 +1398,7 @@ also now implement `isUserWordCorrect()` to validate the player's word and incre
     ```
 
 * **Implement the Skip Button** <br>
-Similar to `onSubmitWord()`, add a condition in the `onSkipWord()` method. If `true`, then display the word on the screen. Otherwise show the alert dialog with the final score.
+    Similar to `onSubmitWord()`, add a condition in the `onSkipWord()` method. If `true`, then display the word on the screen. Otherwise show the alert dialog with the final score.
     ```kotlin
     private fun onSkipWord() {
         if (viewModel.nextWord()) {
@@ -1402,7 +1411,7 @@ Similar to `onSubmitWord()`, add a condition in the `onSkipWord()` method. If `t
     ```
 
 * **Update Game Restart Logic** <br>
-To reset the app data, in `GameViewModel` add a method called `reinitalizeData()` and set the score and word count to `0`. Clear the word list and call the `getNextWord()` method.
+    To reset the app data, in `GameViewModel` add a method called `reinitalizeData()` and set the score and word count to `0`. Clear the word list and call the `getNextWord()` method.
     ```kotlin
     /*
     * Re-initializes the game data to restart the game.
@@ -1414,7 +1423,7 @@ To reset the app data, in `GameViewModel` add a method called `reinitalizeData()
        getNextWord()
     }
     ```
-In `GameFragment` at the top of the method `restartGame()`, make a call to the newly created method, `reinitalizeData()`.
+    In `GameFragment` at the top of the method `restartGame()`, make a call to the newly created method, `reinitalizeData()`.
     ```kotlin
     private fun restartGame() {
         viewModel.reinitializeData()
@@ -1423,13 +1432,13 @@ In `GameFragment` at the top of the method `restartGame()`, make a call to the n
     }
     ```
 
- ### Use LiveData with ViewModel
+ #### Use LiveData with ViewModel
  ---
  * **What is Livedata** <br>
  [LiveData](https://developer.android.com/topic/libraries/architecture/livedata) is an observable data holdre class that is lifecycler-aware. Here's some characteristics of `LiveData`
-+ `LiveData` holds data; `LiveData` is a wrapper that can be used with any type of data.
-+ `LiveData` is observable, which means that an observer is notified when the data held by the `LiveData` object changes.
-+ `LiveData` is lifecycle-aware, which means when you attach an observer to the `LiveData`. The observer is assocated with a [LivecyclerOwner](https://developer.android.com/topic/libraries/architecture/lifecycle#lco) (which usually an `acitity` or `fragment`). The `LiveData` only updates observers that are in active lifecycler state such as `STARTED` or `RESUMED`.
+    + `LiveData` holds data; `LiveData` is a wrapper that can be used with any type of data.
+    + `LiveData` is observable, which means that an observer is notified when the data held by the `LiveData` object changes.
+    + `LiveData` is lifecycle-aware, which means when you attach an observer to the `LiveData`. The observer is assocated with a [LivecyclerOwner](https://developer.android.com/topic/libraries/architecture/lifecycle#lco) (which usually an `acitity` or `fragment`). The `LiveData` only updates observers that are in active lifecycler state such as `STARTED` or `RESUMED`.
 
 * **Add LiveData to the current Scrambled Word**
 `MutableLiveData` is the mutable version of the `LiveData`, that is the value of the data stored within it can be changed.
@@ -1453,167 +1462,166 @@ In `GameFragment` at the top of the method `restartGame()`, make a call to the n
         ```
 
 * **Attach observer to the LiveData object (One Way to use LiveData)** <br> 
-The observer that will changes the app's data in `currentScrambleWord`. The `LiveData` if `lifecycle-aware`, which means that it only updates observer that are in an active lifecycler state. So the observer in the `GameFragment` will only be notified when the `GameFragment` is in `STARTED` or `RESUMED` states.
-1. Attach an observer for `currentScrabmbledWord` `LiveData`. In `GameFragment` at the end of the callback `onViewCreated()`, call the [observe](https://developer.android.com/reference/androidx/lifecycle/LiveData#observe(androidx.lifecycle.LifecycleOwner,%20androidx.lifecycle.Observer%3C?%20super%20T%3E)) method on `currentScrambleWord`.
-    ```kotlin
-    viewModel.currentScrambledWord.observe()
-    ```
-2. This will give a warning since `observe()` require some parameters to be passed on.
-3. Pass `viewLifecyclerOwner` as the first parameter, this represents the `Fragment's View` lifecycle. This helps the `LiveData` to be aware of the `GameFragment` lifecycle and notify the observer only when the `GameFragment` is in active states (`STARTED` or `RESUMED`)
-4. Also add a `lambda` expression as the second parameter.
-    ```kotlin
-    // Observe the scrambledCharArray LiveData, passing in the LifecycleOwner and the observer.
-    viewModel.currentScrambledWord.observe(viewLifecycleOwner,
-       { newWord ->
-           binding.textViewUnscrambledWord.text = newWord
-       })
-    ```
-
+    The observer that will changes the app's data in `currentScrambleWord`. The `LiveData` if `lifecycle-aware`, which means that it only updates observer that are in an active lifecycler state. So the observer in the `GameFragment` will only be notified when the `GameFragment` is in `STARTED` or `RESUMED` states.
+    1. Attach an observer for `currentScrabmbledWord` `LiveData`. In `GameFragment` at the end of the callback `onViewCreated()`, call the [observe](https://developer.android.com/reference/androidx/lifecycle/LiveData#observe(androidx.lifecycle.LifecycleOwner,%20androidx.lifecycle.Observer%3C?%20super%20T%3E)) method on `currentScrambleWord`.
+        ```kotlin
+        viewModel.currentScrambledWord.observe()
+        ```
+    2. This will give a warning since `observe()` require some parameters to be passed on.
+    3. Pass `viewLifecyclerOwner` as the first parameter, this represents the `Fragment's View` lifecycle. This helps the `LiveData` to be aware of the `GameFragment` lifecycle and notify the observer only when the `GameFragment` is in active states (`STARTED` or `RESUMED`)
+    4. Also add a `lambda` expression as the second parameter.
+        ```kotlin
+        // Observe the scrambledCharArray LiveData, passing in the LifecycleOwner and the observer.
+        viewModel.currentScrambledWord.observe(viewLifecycleOwner,
+           { newWord ->
+               binding.textViewUnscrambledWord.text = newWord
+           })
+        ```
+        
 * **Use LiveData with data Binding (Another method to using LiveData)** <br>
-Data binding binds the UI components in your layouts to data sources in your app using a declarative format. Here's the example using view binding in UI controller.
-```kotlin
-binding.textViewUnscrambledWord.text = viewModel.currentScrambledWord
-```
-And the using data binding in layout file
-```xml
-android:text="@{gameViewModel.currentScrambleWord}"
-```
-The main advantage of using data binding is, it lets you remove many UI framework calls in your activites, such that making simpler and easier to maintain.
-1. Configure the gradle files. enable the `dataBinding` property under the `buildFeatures` section
-   ```xml
-   buildFeatures {
-    viewBinding = true
-   }
-   ```
-2. Also apply the `kotlin-kapt` plugin.
-   ```xml
-   plugins {
-       id 'com.android.application'
-       id 'kotlin-android'
-       id 'kotlin-kapt'
-   }    
-   ```
-3. Data binding layout files are slightly diff and start with a root tag of `<layout>` folllowed by an optional `<data>` element and a `view` root element.<br>
-To convert the layout to a Data Binding layout, wrap the root element in a     `<layout>` tag. You'll also have to move the namespace definitions (the attributes that start with `xmlns`:) to the new root element. Add `<data></data>` tags inside `<layout>` tag above the root element. Android Studio offers a handy way to do this automatically: Right-click the root element (`ScrollView`), select Show Context Actions > Convert to data binding layout.
-![image](https://github.com/Xenoare/book-notes/assets/67181778/4a40c94d-edd1-496a-907d-77348a040ff3)
-
-4. The new layout should look like this
+    Data binding binds the UI components in your layouts to data sources in your app using a declarative format. Here's the example using view binding in UI controller.
     ```kotlin
-    <layout xmlns:android="http://schemas.android.com/apk/res/android"
-       xmlns:app="http://schemas.android.com/apk/res-auto"
-       xmlns:tools="http://schemas.android.com/tools">
-    
-       <data>
-    
-       </data>
-    
-       <ScrollView
-           android:layout_width="match_parent"
-           android:layout_height="match_parent">
-    
-           <androidx.constraintlayout.widget.ConstraintLayout
-             ...
-           </androidx.constraintlayout.widget.ConstraintLayout>
-       </ScrollView>
-    </layout>
+    binding.textViewUnscrambledWord.text = viewModel.currentScrambledWord
     ```
-5. Change the instantiation of the binding variable of the `onCreateView()` method. Replace
-   ```kotlin
-   binding = GameFragmentBinding.inflate(inflater, container, false)
+    And the using data binding in layout file
+    ```xml
+    android:text="@{gameViewModel.currentScrambleWord}"
     ```
-    With
-   ```kotlin
-   binding = DataBindingUtil.inflate(inflater, R.layout.game_fragment, container, false)
-    ```
+    The main advantage of using data binding is, it lets you remove many UI framework calls in your activites, such that making simpler and easier to maintain.
+    1. Configure the gradle files. enable the `dataBinding` property under the `buildFeatures` section
+       ```xml
+       buildFeatures {
+        viewBinding = true
+       }
+       ```
+    2. Also apply the `kotlin-kapt` plugin.
+       ```xml
+       plugins {
+           id 'com.android.application'
+           id 'kotlin-android'
+           id 'kotlin-kapt'
+       }    
+       ```
+    3. Data binding layout files are slightly diff and start with a root tag of `<layout>` folllowed by an optional `<data>` element and a `view` root element.<br> To convert the layout to a Data Binding layout, wrap the root element in a     `<layout>` tag. You'll also have to move the namespace definitions (the attributes that start with `xmlns`:) to the new root element. Add `<data></data>` tags inside `<layout>` tag above the root element. Android Studio offers a handy way to do this automatically: Right-click the root element (`ScrollView`), select Show Context Actions > Convert to data binding layout.
+    ![image](https://github.com/Xenoare/book-notes/assets/67181778/4a40c94d-edd1-496a-907d-77348a040ff3)
+
+    4. The new layout should look like this
+        ```kotlin
+        <layout xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:app="http://schemas.android.com/apk/res-auto"
+           xmlns:tools="http://schemas.android.com/tools">
+        
+           <data>
+        
+           </data>
+        
+           <ScrollView
+               android:layout_width="match_parent"
+               android:layout_height="match_parent">
+        
+               <androidx.constraintlayout.widget.ConstraintLayout
+                 ...
+               </androidx.constraintlayout.widget.ConstraintLayout>
+           </ScrollView>
+        </layout>
+        ```
+    5. Change the instantiation of the binding variable of the `onCreateView()` method. Replace
+       ```kotlin
+       binding = GameFragmentBinding.inflate(inflater, container, false)
+        ```
+        With
+       ```kotlin
+       binding = DataBindingUtil.inflate(inflater, R.layout.game_fragment, container, false)
+        ```
 
 * **Add data binding variables** <br>
-1. In `game_fragment.xml`, inside the <data> tag add a child tag called `<variable>`, declare a property called `gameViewModel` and of the type `GameViewModel`. you will use this to bind the data in `ViewModel` to the layout.
-    ```xml
-    <data>
-       <variable
-           name="gameViewModel"
-           type="com.example.android.unscramble.ui.game.GameViewModel" />
-    </data>
-    ```
-    Notice that the type of `gameViewModel` contains the package name. make sure to matches with the package name in the app.
-2. Add another inside `<data>` tag with type of `Integer` and name `maxNoOfWords`, You will use this bind to the variable in the `ViewModel` to store the number of words per game.
-   ```xml
-   <data>
-   ...
-       <variable
-           name="maxNoOfWords"
-           typa="int" />
-   </data>
-    ```
-3. In `GameFragment` at the beginning of `onViewCreated()` method, init the layout variables `gameViewModel` and `maxNoOfWords`.
-    ```kotlin
-    overrride fun onViewCreated(view: View, savedInstancesState: Bundle?) {
-        super.onViewCreated(view, savedInstancState)
-
-        binding.gameViewModel = viewModel
-
-        bindng.maxNoOfWords = MAX_NO_OF_WORDS
-    }
-    ```
-4. The `LiveData` is lifecycle-aware observable, so you have to pass the lifecycler owner to the layout. In the `GameFragment`, inside the `onViewCreated()` method, add this line
-   ```kotlin
-    // Specify the fragment view as the lifecycle owner of the binding.
-    // This is used so that the binding can observe LiveData updates
-    binding.lifecycleOwner = viewLifecycleOwner
-   ```
+    1. In `game_fragment.xml`, inside the <data> tag add a child tag called `<variable>`, declare a property called `gameViewModel` and of the type `GameViewModel`. you will use this to bind the data in `ViewModel` to the layout.
+        ```xml
+        <data>
+           <variable
+               name="gameViewModel"
+               type="com.example.android.unscramble.ui.game.GameViewModel" />
+        </data>
+        ```
+        Notice that the type of `gameViewModel` contains the package name. make sure to matches with the package name in the app.
+    2. Add another inside `<data>` tag with type of `Integer` and name `maxNoOfWords`, You will use this bind to the variable in the `ViewModel` to store the number of words per game.
+       ```xml
+       <data>
+       ...
+           <variable
+               name="maxNoOfWords"
+               typa="int" />
+       </data>
+        ```
+    3. In `GameFragment` at the beginning of `onViewCreated()` method, init the layout variables `gameViewModel` and `maxNoOfWords`.
+        ```kotlin
+        overrride fun onViewCreated(view: View, savedInstancesState: Bundle?) {
+            super.onViewCreated(view, savedInstancState)
+    
+            binding.gameViewModel = viewModel
+    
+            bindng.maxNoOfWords = MAX_NO_OF_WORDS
+        }
+        ```
+    4. The `LiveData` is lifecycle-aware observable, so you have to pass the lifecycler owner to the layout. In the `GameFragment`, inside the `onViewCreated()` method, add this line
+       ```kotlin
+        // Specify the fragment view as the lifecycle owner of the binding.
+        // This is used so that the binding can observe LiveData updates
+        binding.lifecycleOwner = viewLifecycleOwner
+       ```
 
 * **Use Binding Expression** <br>
-Binding expressions are written within the layout in the attribute properties (such as `android:text`) referencing the layout properties. Layout properties are declared at the top of the data binding layout file, via the `<variable>` tag.
+    Binding expressions are written within the layout in the attribute properties (such as `android:text`) referencing the layout properties. Layout properties are declared at the top of the data binding layout file, via the `<variable>` tag.
 
-**Syntax for binding expressions** <br>
-Binding expressions start with an `@` symbol and are wrapped inside the curly braces `{}`.
-```xml
-<TextView android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@{user.firstName}" />
-```
-
-1. Add binding expression to the current word <br>
-    + in `game_fragment.xml` add a `text` attribute to the `android:id`. Use the new layout variable, `gameViewModel` and assign `@{gameViewModel.currentScrambleWord}` to the `text` attribute.
-   ```xml
-    <TextView
-       android:id="@+id/textView_unscrambled_word"
-
-       android:text="@{gameViewModel.currentScrambleWord}"
-   ```
-
-2. Add binding expression to the score and the word count
-    + Resourece in data binding expressions
-      A data binding can reference app resources with the following syntax.
-      ```xml
-      android:padding="@{@dimen/largePadding}"
-      ```
-      You also can pass layout properties as resources parameters.
-      ```xml
-      android:text="@{@string/example_resource(user.lastName)}"
-      ```
-      ```xml
-      # strings.xml
-      <string name="example_resource">Last Name: %s</string>
-      ```
-
-In this step, you will add binding expressions to the score and word count text views, passsing in the resources parameters.
-1. In `game_fragment.xml`, update the `text` attribute for `word_count` text view with the following binding expression. Use `word_count` string resource and pass in `gameViewModel.currentWordCount`, and `maxNoOfWords` as resource parameters.
+    **Syntax for binding expressions** <br>
+    Binding expressions start with an `@` symbol and are wrapped inside the curly braces `{}`.
     ```xml
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@{user.firstName}" />
+    ```
+
+    1. Add binding expression to the current word <br>
+        + in `game_fragment.xml` add a `text` attribute to the `android:id`. Use the new layout variable, `gameViewModel` and assign `@{gameViewModel.currentScrambleWord}` to the `text` attribute.
+       ```xml
         <TextView
-       android:id="@+id/word_count"
+           android:id="@+id/textView_unscrambled_word"
+    
+           android:text="@{gameViewModel.currentScrambleWord}"
+       ```
+
+    2. Add binding expression to the score and the word count
+        + Resourece in data binding expressions
+          A data binding can reference app resources with the following syntax.
+          ```xml
+          android:padding="@{@dimen/largePadding}"
+          ```
+          You also can pass layout properties as resources parameters.
+          ```xml
+          android:text="@{@string/example_resource(user.lastName)}"
+          ```
+          ```xml
+          # strings.xml
+          <string name="example_resource">Last Name: %s</string>
+          ```
+
+    In this step, you will add binding expressions to the score and word count text views, passsing in the resources parameters.
+    1. In `game_fragment.xml`, update the `text` attribute for `word_count` text view with the following binding expression. Use `word_count` string resource and pass in `gameViewModel.currentWordCount`, and `maxNoOfWords` as resource parameters.
+        ```xml
+            <TextView
+           android:id="@+id/word_count"
+           ...
+           android:text="@{@string/word_count(gameViewModel.currentWordCount, maxNoOfWords)}"
+           .../>
+        ```
+    2. Update the `text` attribute for `score` text view with the following binding expression.
+        ```xml
+        <TextView
+       android:id="@+id/score"
        ...
-       android:text="@{@string/word_count(gameViewModel.currentWordCount, maxNoOfWords)}"
-       .../>
-    ```
-2. Update the `text` attribute for `score` text view with the following binding expression.
-    ```xml
-    <TextView
-   android:id="@+id/score"
-   ...
-   android:text="@{@string/score(gameViewModel.score)}"
-   ... />
-    ```
+       android:text="@{@string/score(gameViewModel.score)}"
+       ... />
+        ```
 
 
 
