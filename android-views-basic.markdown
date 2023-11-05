@@ -1717,11 +1717,11 @@ To use the shared view model in `StartFragment` you will init the `OrderViewMode
 4. Inside the `OrderCupcake` method, after setting the quantity, set the default flavor as Vanila if no flavor is set, before navigating to the flavor fragment.
    ```kotlin
    fun orderCupcake(quantity: Int) {
-   sharedViewModel.setQuantity(quantity)
-   if (sharedViewModel.hasNoFlavorSet()) {
-    sharedViewMode.setFlavors(getString(R.string.vanilla))
-   }
-   findNavController().navigate(R.id.action_startFragment_to_flavorFragment)
+       sharedViewModel.setQuantity(quantity)
+       if (sharedViewModel.hasNoFlavorSet()) {
+        sharedViewMode.setFlavors(getString(R.string.vanilla))
+       }
+       findNavController().navigate(R.id.action_startFragment_to_flavorFragment)
    }
    ```
 
@@ -1805,3 +1805,283 @@ Listener bindings are `lambda` expression that run when an event happens, such a
     ...
     ```
 
+* **Update pickup and summary fragment to use View model** <br>
+**Date Formatter** <br>
+The android framework provides a class called [SimpleDateFormat](https://developer.android.com/reference/java/text/SimpleDateFormat), which is a class for formatting and parsing dates in locale-sensitive manner. <br>
+You can create an instance of `SimpleDateFormat` by passing in a pattern string and a locale.
+    ```kotlin
+    SimpleDateFormat("E MMM d", Locale.getDefault())
+    ```
+    A pattern string like "`E MMM d`" is a representation of Date and Time formats. Letters from '`A`' to '`Z`' and from '`a`' to '`z`' are interpreted as pattern letters representing the components of a date or time string. For example, `d` represents day in a month, `y` for year and `M` for month. If the date is `January 4 in 2018`, the pattern string "`EEE, MMM d`" parses to "Wed, Jul 4". For a complete list of pattern letters, please see the documentation. <br>
+    A [Locale](https://developer.android.com/reference/java/util/Locale) object represents a specific geographical, political, or cultural region. It represents a language/country/variant combination. Locales are used to alter the presentation of information such as numbers or dates to suit the conventions in the region. Date and time are locale-sensitive, because they are written differently in different parts of the world. You will use the method `Locale.getDefault()` to retrieve the locale information set on the user's device and pass it into the `SimpleDateFormat` constructor.
+
+Now using `SimpleDateFormat` and `Locale` to determine the available pickup dates for the app.
+1. In `OrderViewModel` create a method `getPickupOptions()` to create and return the list of pickup dates.
+    ```kotlin
+    private fun getPickupOptions(): List<String> {
+        val options = mutableListOf<String>()
+    }
+    ```
+2. Create a formatter string using `SimpleDateFormat` passing patter string `"E MMM d"`, and the locale. In the patter string, `E` stands for the day name in week and it parses to "Tue Dec 10"
+    ```kotlin
+    val formatter = SimpleDateFormat("E MMM d", Locale.getDefault())
+    ```
+3. Get a `Calendar` instance and assigned it to a new variable. Make it `val`. This variable will contain the current date and time.
+   ```kotlin
+   val calendar = Calendar.getInstance()
+   ```
+4. Build up a list of dates starting with the current date and following three dates. You'll need [repeat](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/repeat.html) block to repeat the format date, add into the list and increament the date by 1 day
+   ```kotlin
+   repeat(4) {
+       options.add(formatter.format(calendar.time))
+       calendar.add(Calendar.DATE, 1)     
+   }
+   return options
+   ```
+5. In `OrderViewModel` class, add a class property called `dateOptions` that's a `val`.
+   ```kotlin
+   val dateOptions = getPickupDate()
+   ```
+
+* **Update the Layout to Display Pickup Options** <br>
+Since we have 4 available pickup dates, update the `fragment_pickup.xml` layout to dipslay these dates (use data binding to display the checked status of each radio button and to update the date in the view model when diff radio button is selected).
+    ```xml
+    <RadioButton
+        android:id="@+id/option0"
+
+        android:checked="@{viewModel.date.equals(viewModel.dateOptions[0])}"
+        android:onClick="@{() -> viewModel.setDate(viewModel.dateOptions[0])}"
+        android:text="@{viewModel.dateOptions[0]}" />
+        ...
+        # Do this for other 3 date options
+    ```
+    1. Within the `OrderViewModel` class, create a function called `resetOrder()`, to reset the `MutableLiveDate` properties in the view model.
+    ```kotlin
+    fun resetOrder() {
+        _quantity.value = 0
+        _flavor.value = ""
+        _date.value = dateOptions[0]
+        _price.value = 0.0
+    }
+    ``` 
+    2. Add an `init` block to the calss and call the `resetOrder()` from inside
+    ```kotlin
+        resetOrder()
+    ```
+
+* **Update Summary Fragment to Use View Model** <br>
+The order summary fragment is intended to show a summary of order details by using the advantage of Shared View Model.
+1. In `fragment_summary.xml`, read from the viewModel to update the screen with the order summary details. Update the quantity, flavor and date `TextViews` by adding the following text attributes.
+    ```xml
+        <TextView
+            android:id="@+id/quantity"
+            ...
+            android:text="@{viewModel.quantity.toString()}" />
+        <TextView
+            android:id="@+id/flavor"
+            ...
+            android:text="@{viewModel.flavor.toString()}" />
+        <TextView
+            android:id="@+id/date"
+            ...
+            android:text="@{viewModel.date.toString()}" />
+    ```
+
+* **Calculate price from order details** <br>
+So here's the rules for the cupcake shop
++ Each cupcake is $2.00 each
++ Same day pickup adds an extra $3.00 to the order.
+
+To update the price in view model, Firstly we can tackle the price per cupcake first and ignore the same day pickup cost.
+1. Open the `OrderViewModel` and store the price per cupcake in a variable. `Declare` it as a `top-level private constant` at the top of the file.
+    ```kotlin
+    private const val PRICE_PER_CUPCAKE = 2.00
+
+    class OrderViewModel : ViewModel() {}
+    ```
+2. Now create a helper method (`updatePrice()`) to calculate the price.
+   ```kotlin
+   private fun updatePrice() {
+       _price.value = (quantity.value ?: 0) * PRICE_PER_CUPCAKE
+   }
+   ```
+3. In the same `OrderViewModel` class, update the price variable when the quantity is set. make a call to the new function in the `setQuantity()` function.
+   ```kotlin
+   fun setQuantity(numberCupcakes: Int) {
+       _quantity.value = numberCupcakes
+       updatePrice()
+   }
+   ```
+
+    **Bind the price to the UI** <br>
+    Update the TextView of price for each fragments layout.
+        ```xml
+        <TextView
+            android:id="@+id/subtotal"
+            android:text="@{@string/subtotal_price(viewHolder.price))}"
+            />
+        ```
+
+* **Charge extra for same day pickup** <br>
+We will implement the second rule for same day pick up that add extra $3.00.
+1. First thing first, we need to setup the const for this
+    ```kotlin
+    private const val PRICE_FOR_SAME_DAY_PICKUP = 3.00
+    ```
+2. In `UpdatePrice()`, check if the user selected the same day options, by checking the view model (`_date.value`) is the same as the first day in `dateOptions`
+   ```kotlin
+   private fun updatePrice() {
+       var calculatedPrice = (quantity.value ?: 0) * PRICE_PER_CUPCAKE
+       if (dateOptions[0] == _date.value) {
+           calculatedPrice += PRICE_FOR_SAME_DAY_PICKUP
+       }
+        _price.value = calculatedPrice
+   }
+   ```
+3. Call `updatePrice()` helper method from `setDate()` method
+    ```kotlin
+    fun setDate(pickupDate: String) {
+        _date.value = pickupDate
+        updatePrice()
+    }
+    ```
+
+* **Set Lifecycle Owner to observe LiveData** <br>
+[LifecyclerOwner](https://developer.android.com/reference/androidx/lifecycle/LifecycleO wner) is a class that has an Android Lifecycle, such as an activity or a fragment. The `LiveData` observers are the binding expressions in layout files with observable data like price. With Data Binding, when an observable value changes, the UI elements it's bound to are updated automatically. <br>
+Example of binding expression
+`android:text="@{@string/subtotal_price(viewModel.price}"`
+
+For the UI element automatically update, you'll have to associate `binding.lifecycleOnwer`
+1. in the 4 fragments classes, inside the `onViewCreated()` method, set the lifecycle owner on the binding object.
+    ```kotlin
+    binding?.apply {
+        lifecycleOwner = viewLifecyclerOwner
+        ...
+    }
+    ```
+
+* **Format price with LiveData Transformation** <br>
+The `LiveData` transformation method provides a way to perform data manipulations on the source `LiveData` and return a resultin `LiveData` object. In simple terms, it transforms the value of `LiveData` into another value. These transformations aren't **calculated unless an observer is observing the `LiveData` object**. <br>
+The [Transformations.map()](https://developer.android.com/reference/androidx/lifecycle/Transformations.html#map(androidx.lifecycle.LiveData%3CX%3E,%20androidx.arch.core.util.Function%3CX,%20Y%3E)) is one of the transformation functions, this method takes the source `LiveData` and a function as parameters. The function manipulates the source `LiveData` and returns an updated value which is also observable. <br>
+Some real-time examples where you may use a LiveData transformation:
++ Format date, time strings for display
++ Sorting a list of items
++ Filtering or grouping the items
++ Calculate the result from a list like sum of all the items, number of items, return the last item, and so on.
+
+In this task, we will use `Transformations.map()` method to format the price to use the local currency. You'll transform the original price as a decimal value (`LiveData<Double>`) into a value (`LiveData<String>`).
+1. In `OrderViewModel` class, change the backing property type to `LiveData<String>` instead of `LiveData<Double>`. The formatted price will be a string with a currency symbol such as `$`.
+   ```kotlin
+   private val _price = MutableLiveData<Double>()
+   val price: LiveData<String>
+   ```
+2. Use `Transformations.map()` to init the new variable, pass in the `_price` and a lambda function. Use `getCurrencyInstance()` method in the [NumberFormat](https://developer.android.com/reference/kotlin/android/icu/text/NumberFormat) class to convert the price to local currency format.
+   ```kotlin
+   private val _price = MutableLiveData<Double>()
+   val price: LiveData<String> = Transformations.map(_price) {
+       NumberFormat.getCurrencyInstance().format(it)
+   }
+   ```
+
+* **Setup click listener using listener binding** <br>
+Use the listener binding to bind the button click listener in the fragment classes.
+1. In the `fragment_start.xml`, add a data variable called `startPackage` with type URL to fragment.
+   ```kotlin
+   <layout ...>
+
+    <data>
+        <variable
+            name="startFragment"
+            type="com.example.cupcake.StartFragment" />
+    </data>
+    ... 
+    <ScrollView ...>
+   ```
+2. In `StartFragment`, in `onViewCreated()` method, bind the new data variable to the fragment instance. You can access the fragment instance inside the fragment using `this` keyword. Remove the `binding?.apply` block.
+   ```kotlin
+   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding?.startFragment = this
+    }
+   ```
+4. In `fragment_start.xml` add event listener binnding to the `onClick` attribute.
+   ```xml
+   <Button
+    android:id="@+id/order_one_cupcake"
+    android:onClick="@{() -> startFragment.orderCupcake(1)}" 
+    ... />
+
+    <Button
+        android:id="@+id/order_six_cupcakes"
+        android:onClick="@{() -> startFragment.orderCupcake(6)}" 
+        ... />
+    
+    <Button
+        android:id="@+id/order_twelve_cupcakes"
+        android:onClick="@{() -> startFragment.orderCupcake(12)}" 
+        ... />
+    ```
+5. Do this also to bind another fragment instance.
+   ```xml
+   # fragment_flavor.xml
+   <data>
+        <variable
+            ... />
+
+        <variable
+            name="flavorFragment"
+            type="com.example.cupcake.FlavorFragment" />
+    </data>
+
+   # fragment_pickup.xml
+   <data>
+        <variable
+            ... />
+
+        <variable
+            name="pickupFragment"
+            type="com.example.cupcake.PickupFragment" />
+    </data>
+
+    # fragment_summary.xml
+   <data>
+        <variable
+            ... />
+
+        <variable
+            name="summaryFragment"
+            type="com.example.cupcake.SummaryFragment" />
+    </data>
+    ```
+6. In the rest of the fragment classes, in `onViewCreated()` methods, delete the code that manually sets the click listener on the buttons.
+7. In the `onViewCreated()` methods bind the fragment data variable with the fragment instance. You will use `this` keyword differently here, because inside the `binding?.apply` block, the keyword this refers to the binding instance, not the fragment instance. Use `@` and explicitly specify the fragment class name, for example this@FlavorFragment.
+   ```kotlin
+    // FragmentFlavor
+    binding?.apply {
+        lifecycleOwner = viewLifecycleOwner
+        viewModel = sharedViewModel
+        flavorFragment = this@FlavorFragment
+    }
+
+   // PickupFragment
+    binding?.apply {
+       lifecycleOwner = viewLifecycleOwner
+       viewModel = sharedViewModel
+       pickupFragment = this@PickupFragment
+    }
+
+    // SummaryFragment
+    binding?.apply {
+       lifecycleOwner = viewLifecycleOwner
+       viewModel = sharedViewModel
+       summaryFragment = this@SummaryFragment
+    }
+   ```
+8. Add a listener binding to the `onClick` atribute on the layout fragments
+   
+
+
+
+
+
+   
