@@ -1,4 +1,4 @@
-f ### Introduction to Activities
+### Introduction to Activities
 ---
 * > Kotlin Style Guide: https://developer.android.com/kotlin/style-guide
 
@@ -1623,9 +1623,69 @@ The anatomy of Alert Dialogs
        ... />
         ```
 
+## Advanced Navigation App
+Notes: 
++ [Additionals github Project](https://github.com/google-developer-training/android-basics-kotlin-cupcake-app/tree/starter)
 
+Table of Contents:
++ [Setup a Shared ViewModels](#setup-a-shared-viewmodels)
 
+#### Setup a Shared ViewModels
+* **Complete the Navigation Graph** <br>
+Given the starter code, connect destinations in navigation graph (**res > navigation > nav_graph.xml**
+    ![image](https://github.com/Xenoare/book-notes/assets/67181778/01a16cec-ec94-49c7-a991-d61a92e50b5b)
 
+* **Navigate from start to other fragments** <br>
+Navigate between **startFragment** to **flavorFragment** by tapping the buttons in the first fragments by using the `findNavController` method in the `onViewCreated()` method.
+    ```kotlin
+    fun orderCupcake(quantity: Int) {
+        findNavController().navigate(R.id.action_startFragment_to_flavorFragment)
+    }
+    ```
+    do this also for other fragments.
+
+* **Update the title in app bar** <br>
+    1. Override the `onCreate()` method to set up thee navigation controller. Get an instance of `NavController` from the `NavHostFragment`.
+    2. Make a call to `setupActionBarWithNavController(navController)` by passing the instance of `navController`. This will do the following: Show a titile in the app based off the destination's label.
+        ```kotlin
+        class MainActivity : AppCompatActivity(R.layout.activity_main) {
+    
+            override fun onCreate(savedInstanceState: Bundle?) {
+                super.onCreate(savedInstanceState)
+        
+                val navHostFragment = supportFragmentManager
+                        .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                val navController = navHostFragment.navController
+        
+                setupActionBarWithNavController(navController)
+            }
+        }
+        ```
+    3. Open the `navigation/nav_graph.xml` and modify the `android:label` atribute for each fragment distribution.
+
+* **Create a Shared ViewModel** <br>
+Recall that the app data is saed within the `ViewModel` during configuration changes.
+**Follow `ViewModel` Best Practices** <br>
+In a `ViewModel`, it is a recommended practice to not expose view model data as `public variables`. Otherwise the app data can be modifier in _unexpected ways_ by the external classes and create edge cases your app didn't expeact to handle. <br>
+Instead, make these mutable properties `private`, and implementing a backing property, and expose the `public` immutable version of each property, if needed. <br>
+We're going to create a properties and methods for this `ViewModel` such that
+    + Order quantity (`Integer`)
+    + Cupcake flavor (`String`)
+    + Pickup date (`String`)
+    + Price (`Double`)
+    + `setQuantity(numberCupcakes: Int)`
+    + `setFlavor(desiredFlavor: String)`
+    + `setDate(pickupDate: String)`
+
+    We don't need a setter function for the price because it will be calculated within the `OrderViewModel` using another properties.
+    ```kotlin
+    private val _quantity = MutableLiveData<Int>(0)
+    val quantity: LiveData<Int> = _quantity
+    ...
+    fun setQuantity(numberCupcakes: Int) {
+        _quantity.value = numberCupcakes
+    }
+    ```
 
 
 
