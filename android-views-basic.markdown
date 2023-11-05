@@ -1,4 +1,4 @@
- ### Introduction to Activities
+f ### Introduction to Activities
 ---
 * > Kotlin Style Guide: https://developer.android.com/kotlin/style-guide
 
@@ -1163,9 +1163,9 @@ Notes:
 + [Additional github project](https://github.com/google-developer-training/android-basics-kotlin-unscramble-app/tree/starter)
 
 Table of Contents 
-+ [Common Architecture Principles](#common-architecture-principles)
-+ [Store Data in ViewMode](#store-data-in-view-model)
-+ [Setup ViewModel](#setup-viewmodel)
++ [Common Architecture Principles](#common-architectural-principles)
++ [Store Data in ViewMode](#store-data-in-viewmodel)
++ [Setup ViewModel](#setup-a-viewmodel)
 + [Use LiveData with ViewModel](#use-livedata-with-viewmodel)
 
 #### Common Architectural Principles
