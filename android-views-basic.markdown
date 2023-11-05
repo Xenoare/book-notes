@@ -1220,7 +1220,7 @@ A delegate property is defined using `by` clause and delegate class instance:
     ```
   *Let's* say that if the initialization of view model using default             `GameViewModel` constructor as below. 
     ```kotlin
-    private val viewModel = GameViewMoel()
+    private val viewModel = GameViewModel()
     ```
     Then the app will lose the state of the `viewModel` *reference* when the device goes through a configuration change (For example, if you rotating the device, then the activity is **destroyed** and **created** again, and you'll have a new view model instance with the initial state again). <br>
     The `delegate` class creates the `viewModel` object for you on the first access, and retains its value through configuration changes and returns when requested.
@@ -1687,10 +1687,121 @@ We're going to create a properties and methods for this `ViewModel` such that
     }
     ```
 
+* **Use the ViewModel to update the UI** <br>
+To use the shared view model in `StartFragment` you will init the `OrderViewModel` using `acitivityViewModels()` instead of `viewModels()` delegate classs.
+    + `viewModels()` gives you the `ViewModel` instance scoped to the current fragment. This will be diff. for diff. fragments.
+    + `activityViewModels()` gives you the `ViewModel` instance scoped to the current activity. Therefore the **instance will remain the same accross multiple fragments in the same activity**.
 
+**Using Kotlin Property Delegate** <br>
+1. In `StartFragment` class, get a reference to the shared view model as a class variable.
+    ```kotlin
+    import androidx.fragment.app.activityViewModel
+    import com.example.cupcake.mmodel.OrderViewModel
+    
+    private val sharedViewModel: OrderViewModel by activityViewModel()
+    ```
+2. Use the `sharedViewModel` instance before navigating in each fragments
+   ```kotlin
+    fun orderCupcake(quantity: Int) {
+        sharedViewModel.setQuantity(quantity)
+        findNavController().navigate(R.id.action_startFragment_to_flavorFragment)
+    }
+   ```
+3. Within the `OrderViewModel` class, add the following method to check if the flavor for the order has been set or not.
+    ```kotlin
+    # OrderViewModel.kt
+    fun hasNoFlavorSet(): Boolean {
+        return _flavor.value.isNullOrEmpty()
+    }
+    ```
+4. Inside the `OrderCupcake` method, after setting the quantity, set the default flavor as Vanila if no flavor is set, before navigating to the flavor fragment.
+   ```kotlin
+   fun orderCupcake(quantity: Int) {
+   sharedViewModel.setQuantity(quantity)
+   if (sharedViewModel.hasNoFlavorSet()) {
+    sharedViewMode.setFlavors(getString(R.string.vanilla))
+   }
+   findNavController().navigate(R.id.action_startFragment_to_flavorFragment)
+   }
+   ```
 
+* **Use ViewModel with Data Binding** <br>
+Data binding is binding data (from code) to views + view binding (binding views to code). By setting up these bindings and having updates be automatic, this helps you reduce the chance for errors if you forget to manually update the UI from your code.
+1. In `layout/fragment_flavor.xml`, add a `<data>` tag inside the root `<layout>` tag. Then add a layout variable called `viewModel` with type of package URL. Also add for another layout.
+    ```kotlin
+    <layout>
+        <data>
+            <variable
+                name="viewModel"
+                type="com.example.cupcake.model.OrderViewModel" />
+        </data>
+        ...
+    </layout>
+    ```
+2. In the `FlavorFragment` class, inside the `onViewCreated()`, **bind the view model instance** with the shared view model instance in the layout. Do it also for another fragments.
+   ```kotlin
+   binding?.apply {
+       viewModel = sharedViewModel
+       ...
+   }
 
+**Apply scope function** <br>
+[`Apply`](https://kotlinlang.org/docs/reference/scope-functions.html) is a scope function that executes a block of code within the context of an object. It forms a temporary scope, and in that scope, you can access the object without its name.
+```kotlin
+clark.apply {
+    firstName = "Clark"
+    lastName = "James"
+    age = 18
+}
 
+// The equivalent code without apply scope function would look like the following.
 
+clark.firstName = "Clark"
+clark.lastName = "James"
+clark.age = 18
+```
 
-   
+3. In `fragment_flavor.xml`, use the new layout variable, `viewModel` to set the `checked` attribute of the radio buttons based on the flavor value in the view model. If the flavor represented by a radio button is the same as the flavor that's saved in the view model, then display the radio button as selected (`checked` = true). <br>
+Essentially, this is comparing the `viewModel.flavor` property with the corresponding resource using the [equals](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html) function. <br>
+**Note: Remember that binding expressions start with an @ symbol and are wrapped inside curly braces {}. **
+    ```xml
+    # fragment_flavor.xml
+    <RadioButton
+        android:id="@+id/vanilla"
+        ...
+        android:checked="@{viewModel.flavor.equals(@string/vanilla)}"
+        />
+    
+    <RadioButton
+        android:id="@+id/chocolate"
+        ...
+        android:checked="@{viewModel.flavor.equals(@string/chocolate)}"
+        />
+
+    <RadioButton
+        android:id="@+id/red_valvet"
+        ...
+        android:checked="@{viewModel.flavor.equals(@string/red_valvet)}"
+        />
+    ...
+    ```
+
+* **Listener Bindings** <br>
+Listener bindings are `lambda` expression that run when an event happens, such as `onClick` event. They are similar to method references such as `textview.setOnClickListener(clickListener)` but listener bindings let you run arbitrary data binding expressions.
+
+4. In `fragment_flavor.xml`, add event listener to the radio buttons using listener bindings and lambda expression.
+    ```kotlin
+    <RadioButton
+        android:id="@+id/vanila"
+        android:onClick="@{() -> viewModel.setFlavor(@string/vanila}" />
+
+    <RadioButton
+        android:id="@+id/chocolate"
+        android:onClick="@{() -> viewModel.setFlavor(@string/chocolate}" />
+
+    <RadioButton
+        android:id="@+id/red_valvet"
+        android:onClick="@{() -> viewModel.setFlavor(@string/red_valvet}" />
+    ...
+    ```
+
