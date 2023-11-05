@@ -1629,6 +1629,8 @@ Notes:
 
 Table of Contents:
 + [Setup a Shared ViewModels](#setup-a-shared-viewmodels)
++ [Navigaion and back stack](#navigation-and-back-stack)
++ [Task and Back Stack](#task-and-back-stack)
 
 #### Setup a Shared ViewModels
 * **Complete the Navigation Graph** <br>
@@ -2079,6 +2081,37 @@ Use the listener binding to bind the button click listener in the fragment class
    ```
 8. Add a listener binding to the `onClick` atribute on the layout fragments
    
+#### Navigation And Back Stack
+* **Implement Up Button Behavior** <br>
+In the **Cupcake** app, the app bar shows an arrow to return to the previous screen (this is known as the `Up` button). We need to configure this so it can be used.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/b61fc7b5-8d14-4879-8800-c586b0ea3df8)
+
+1. In the `MainAcitivity`, you should already have code to setup the app bar (also known as action bar) with nav controller. Make `navController` a class variable so you can use it in another method.
+   ```kotlin
+   class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+            private lateinit var navController: NavController
+        
+            override fun onCreate(savedInstanceState: Bundle?) {
+                super.onCreate(savedInstanceState)
+        
+                val navHostFragment = supportFragmentManager
+                        .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                navController = navHostFragment.navController
+        
+                setupActionBarWithNavController(navController)
+            }
+        }
+   ```
+2. Override the `onSupportNavigateUp()` method. This code will ask the `navController` to handle navigating up in the app. Otherwise, fall back to the superclass implementation (in `AppCompactActivity`) of handling the **Up** button.
+    ```kotlin
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+    ```
+
+#### Task and Back Stack
+Now we are going to implement **Cancel**
 
 
 
