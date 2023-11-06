@@ -1626,6 +1626,10 @@ The anatomy of Alert Dialogs
 ## Advanced Navigation App
 Notes: 
 + [Additionals github Project](https://github.com/google-developer-training/android-basics-kotlin-cupcake-app/tree/starter)
++ [String Res](https://developer.android.com/guide/topics/resources/string-resource#Plurals)
++ [Intent Action](https://developer.android.com/guide/components/intents-common#Email)
++ [Scope Function](https://kotlinlang.org/docs/reference/scope-functions.html)
++ [Talkbacl](https://developer.android.com/guide/topics/ui/accessibility/testing#explore_your_app_with_talkback)
 
 Table of Contents:
 + [Setup a Shared ViewModels](#setup-a-shared-viewmodels)
@@ -2111,7 +2115,189 @@ In the **Cupcake** app, the app bar shows an arrow to return to the previous scr
     ```
 
 #### Task and Back Stack
-Now we are going to implement **Cancel**
+Now we are going to implement **Cancel** button within the order flow of the app. Cancelling an order at any point sends the user back to `StartFragment`.
+
+**Tasks** <br>
+**Activities** in Android exist within tasks. When you open an app for the first time from the launcher icon, **Android creates a new task with your main activity**. A task is a collection of activities that the user interacts with when performing a certain job (i.e. checking email, creating a cupcake order, taking a photo). <br>
+Activities are arranged in a stack, known as a back stack, where each new activity the user visits gets pushed onto the back stack for the task. You can think of it as a stack of pancakes, where each new pancake is added on top of the stack. The activity on the top of the stack is the current activity the user is interacting with.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/3831d167-6bf1-4386-8986-237ba0bc51cd)
+
+When you first lunch the app, the `MainActivity` opens and is addes to the task's back stack.
+    ![image](https://github.com/Xenoare/book-notes/assets/67181778/908eb1b6-59ab-4ec7-9664-e378dcf28dd7)
+    
+When you click on a letter, the `DetailActivity` is launched and pushed onto the backstack. This means the `DetailActivity` has been _created, started, and resumed_ so the user can interact with it. The `MainActivity` is put into the background, and shown with the gray background color in the diagram.
+    ![image](https://github.com/Xenoare/book-notes/assets/67181778/de2aa0a6-8ed2-4281-97f5-900e6604a1cd)
+    
+If you tap the **Back** button, the `DetailActivity` is popped off the back stack and the `DetailActivity` instance is destroyed and finished.
+    ![image](https://github.com/Xenoare/book-notes/assets/67181778/099eb3bb-39e7-445c-95c9-4a5d3cada723)
+    
+Then the next item on top of the back stack (the `MainActivity`) is brought to the foreground.
+    ![image](https://github.com/Xenoare/book-notes/assets/67181778/8724a7e4-951a-40d2-ac19-f75c924d2c1d)
+
+* **Modify the back stack in the Cupcake app** <br>
+First, modify the `FlavorFragment`, `PickupFragment` and `SummaryFragment` class and layout files in navigation action.
+1. Open the Navigation action (`res > navigation > nav_graph.xml`) and make a new action to `StartFragment`
+   ![image](https://github.com/Xenoare/book-notes/assets/67181778/fd72fd4a-40ee-441d-a9d1-d4f2e54ff710)
+   
+    Implement a cancel button to layout, except for the `StartFragment`, There may be a diffrent implementation in styling for those fragments. But it still share the same purpose
+   ```xml
+       ...
+    
+    <TextView
+        android:id="@+id/subtotal" ... />
+    
+    <Button
+        android:id="@+id/cancel_button"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/side_margin"
+        android:text="@string/cancel"
+        app:layout_constraintEnd_toStartOf="@id/next_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/next_button" />
+    
+    <Button
+        android:id="@+id/next_button" ... />
+    
+    ...
+   ```
+3. Add a cancel button listener <br>
+   Within each fragment class (except `StartFragment`), add a helper method that handles when the **Cancel** button is clicked.
+   + Add this `cancelOrder()` method inside all `FlavorFragment`, `PickupFragment` and `SummaryFragment`. If the user decides to cancel their order, then clear out the view model by calling the `sharedViewModel.resetOrder()`. Then navigate back to `StartFragment` using navigation action with ID `R.id.action_flavorFragment_to_startFragment`.
+     ```kotlin
+     fun cancelOrder() {
+        sharedViewMode.resetOrder()
+         findNavController().navigate(R.id.action_flavorFragment_to_startFragment)
+     }
+     ```
+   + Use listener binding to setup the `Cancel` button in the both fragments
+     ```xml
+     # fragment_flavor.xml
+     <Button
+        android:id="@+id/cancel_button"
+        android:onClick="@{() -> flavorFragment.cancelOrder()}"
+         ....
+     />
+     ```
+   + Repeat the same proces for the rest of the fragments.
+
+But there's a bug that when a **Back** button is clicked, then it bounce back to order summary screen with 0 cupcakes and no flavor.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/88a11627-d1d1-4f6b-85d1-bd14737ec7e5)
+
+The user likely does not want to go back through the order flow. Plus, all the order data in the view model has been cleared out, so this information is not useful. Instead, tapping the `Back` button from the `StartFragment` should leave the `Cupcake app`. <br>
+From the `SummaryFragment`, when cancelled an order. Android added another instance of `StartFragment` as a new destination on the back stack.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/6e7921bf-1fa3-43d1-9c9a-193514155a5e)
+
+That is why when you tapped the `Back` button from the `StartFragment`, the app ended up showing the `SummaryFragment` again (with blank order information).
+
+* **Pop Additionals Destination off the back stack** <br>
+Introduding **Navigation action: popUpTo attribute** by an including `app:popUpTo` attribute on the navigation action in the navigation graph, more than one dest can be popped off the back stack until that specified dest. is reached. If you specify `app:popUpTo="@id/startFragment"`, then destinations in the back stack will get popped off until you reach `StartFragment`, which will remain on the stack. <br>
+When you add this change to your code and run the app, you'll find that when you cancel an order, you return to the `StartFragment`. But this time, when you tap the `Back` button from the `StartFragment`, you see `StartFragment` again (**instead of exiting the app**). This is also not the desired behavior. As mentioned earlier, **since you are navigating to StartFragment, Android actually adds StartFragment as a new destination on the back stack**, so now you have 2 instances of StartFragment on the back stack. Hence, you need to tap the Back button twice to exit the app.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/4200038a-656e-4097-9f35-0b3af95caf12)
+
+* **Navigation actoin: popUpToInclusive attirbute** <br>
+Do this by specifying `app:popUpTo="@id/startFragment"` and `app:popUpToInclusive="true"` on the appropriate navigation actions. That way, you will only have the one new instance of `StartFragment` in the back stack. Then tapping the `Back` button once from the `StartFragment` will exit the app.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/d567e589-5982-43fe-90c0-2c9827607da9)
+
+1. Modify the navigation actions <br>
+   + First, navigate through **Navigation Editor** by opening up the **res > navigation > nav_graph.xml**
+   + Select the action that goes from `summaryFragment` to the `startFragment`
+     ![image](https://github.com/Xenoare/book-notes/assets/67181778/4eeaa7c3-3d08-4ab3-9c46-06e611116362)
+     
+   + From the dropdown options, set `popUpTo` to be `startFragment`. This means all the destinations in the back stack will be popped off (starting from the top of the stack and moving downwards), up to the `startFragment`.
+   + Then click on the checkbox for `popUpToInclusive` until it shows a checkmark and label `true`. This indicates that you want to pop off destinations up to and including the instance of `startFragment` that's already in the back stack. Then you won't have two instances of `startFragment` in the back stack.
+     ![image](https://github.com/Xenoare/book-notes/assets/67181778/af11b35c-125c-4c2e-b30c-11810fd4af9a)
+   + Repeat this also for another fragments
+
+* **Send the Order** <br>
+It would be a more useful experience if the order could be sent out from the app. Take advantage of what you learned in earlier codelabs about using an implicit intent to share information from your app to another app. That way, the user can share the cupcake order information with an email app on the device, allowing the order to be emailed to the cupcake shop.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/2f96993f-628d-4fad-8bc2-8c9aec717aea)
+To implement tihs feature, take a look a how eamil subject and email body are structured in the above screenshot, Look the this **resource** in `strings.xml`
+```xml
+<string name="new_cupcake_order">New Cupcake Order</string>
+<string name="order_details">Quantity: %1$s cupcakes \n Flavor: %2$s \nPickup date: %3$s \n Total: %4$s \n\n Thank you!</string>
+```
+`order_details` is a string res. with 4 diff format arguments in it, which are placeholder for the actual quantity of `cupcakes`, `desired flavor`, `pickup date` and `total price`. <br>
+The arguments are numbered from 1 to 4 with the syntax `%1` to `%4`. The type of argument is also specified (`$s` means a string is expected here). <br>
+In Kotlin code, you will be able to call `getString()` on `R.string.order_details` followed by the 4 arguments (order matters!). As an example, calling `getString(R.string.order_details, "12", "Chocolate", "Sat Dec 12", "$24.00")` creates the following string, which is exactly the email body you want.
+```xml
+Quantity: 12 cupcakes
+Flavor: Chocolate
+Pickup date: Sat Dec 12
+Total: $24.00
+
+Thank you!
+```
+1. In `SummaryFragment`, modifty the `sendOrder()` method. Construct a order summary text. Create a formatted `order_details` string by getting the order quantity, flavor, date, and price from the shared view model.
+    ```kotlin
+    val orderSummary = getString(
+        R.string.order_details,
+        sharedViewModel.quantity.value.toString(),
+        sharedViewModel.flavor.value.toString(),
+        sharedViewModel.date.value.toString(),
+        sharedViewModel.price.value.toString()
+    )
+    ```
+2. Still witihin the `sendOrder()` method, create an implicit intent for sharing the oder to another app. See the [docs](https://developer.android.com/guide/components/intents-common#Email) for how to create an email intent. Specify `Intent.ACTION_SEND` for the intent action, set type to `"text/plain"` and include the intent extras for the email subject (`Intent.EXTRA_SUBJECT`) and email body (`Intent.EXTRA_TEXT`).
+    ```kotlin
+    val intent = Intent(Intent.ACTION_SEND)
+        .setType("text/plain")
+        .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.new_cupcake_order))
+        .putExtra(Intent.EXTRA_TEXT, orderSummary)
+    ```
+3. Since this is an implicit intent, you don't need to know ahead of time which specific component or app will handle this intent. The user will decide which app they want to use to fulfill the intent. However, before launching an activity with this intent, check to see if there's an app that could even handle it. This check will prevent the Cupcake app from crashing if there's no app to handle the intent, making your code safer.
+    ```kotlin
+    if (activity?.packageManager?.resolveActivity(intent, 0) != null) {
+        startActivity(intent)
+    }
+    ```
+Perform this check by accessing the [PackageManager](https://developer.android.com/reference/android/content/pm/PackageManager), which has information about what app packages are installed on the device. The `PackageManager` can be accessed via the fragment's activity, as long as the `activity` and `packageManager` are not null. Call the PackageManager's `resolveActivity()` method with the intent you created. **If the result is not null, then it is safe to call startActivity() with your intent**.
+5. Run the app
+
+But, note that in the testing scenarios. You may notice a bug that if you only have 1 cupcake, the Order summary says **1 cupcakes**, this is a grammatically incorrect.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/593010da-d81a-4b41-9811-516c676f7149)
+If you want to choose whether the word cupcake or cupcakes is used based on the quantity value, then you can use something called [quantity strings](https://developer.android.com/guide/topics/resources/string-resource#Plurals) in Android. By declaring a `plurals` resource, you can specify different string resources to use based on what the quantity is, for example in the singular or plural case.
+6. Add a plural resource in `strings.xml`
+```xml
+<plurals name="cupcakes">
+    <item quantity="one">%d cupcake</item>
+    <item quantity="other">%d cupcakes</item>
+</plurals>
+```
+In the singular case (`quantity="one"`), the singular string will be used. In all other cases (`quantity="other"`), the plural string will be used. Note that instead of `%s` which expects a string argument, `%d` expects an integer argument, which you will pass in when you format the string.
+7. Update the `order_details` string res so that the plural versoin of **Cupcakes** is no longer hardcoded
+```xml
+<string name="order_details">Quantity: %1$s \n Flavor: %2$s \n Pickup date: %3$s \n Total: %4$s \n\n Thank You! </string>
+```
+8. Update the  `SummaryFragment` class method `sendOrder()` to use the new quantity string, and then formt the `order_details` string. But, instead of passing in the `numberOfCupcakes` as the quantity argument direcly, create a formatted cupcakes with `resources.getQuantityString(R.plurals.cupcakes, numberOfCupcakes, numberOfCupcakes)`
+```kotlin
+    fun sendOrder() {
+        val numberOfCupcakes = sharedViewModel.quantity.value ?: 0
+        val orderSummary = getString(
+            R.string.order_details,
+            resources.getQuantityString(R.plurals.cupcakes, numberOfCupcakes, numberOfCupcakes),
+            sharedViewModel.flavor.value.toString(),
+            sharedViewModel.date.value.toString(),
+            sharedViewModel.price.value.toString()
+        )
+    
+        val intent = Intent(Intent.ACTION_SEND)
+            .setType("text/plain")
+            .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.new_cupcake_order))
+            .putExtra(Intent.EXTRA_TEXT, orderSummary)
+        
+        if (activity?.packageManager?.resolveActivity(intent, 0) != null) {
+            startActivity(intent)
+        }
+    }
+```
+
+
+
+
+
+
 
 
 
