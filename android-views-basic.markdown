@@ -2293,14 +2293,151 @@ In the singular case (`quantity="one"`), the singular string will be used. In al
     }
 ```
 
+## Adaptive Layouts (Later since the android studio seems not working)
+
+## Coroutines
+
+Notes: 
++ [Coroutine Apps](https://developer.android.com/kotlin/coroutines)
+  
+* **Multithreading and Concurrency** <br>
+Concurrency allows multiple units of code to be execute out of order or parallel permitting more efficient use of resources. The operating system can use characteristics of the system, programming language and concurrency unit to manage mmultitasking.
+
+![image](https://github.com/Xenoare/book-notes/assets/67181778/fe31edda-61c6-4da1-b7c8-337731dfcbf9)
+
+**Thread** is the smallest unit of code that can be scheduled and run in the confines of a program. You can craete a simple thread by providing a lambda.
+    ```kotlin
+    fun main() {
+        val thread = Thread {
+            println("${Thread.currentThread()} has run.")
+        }
+        thread.start()
+    }
+    ```
+The thread isn't executed until the function reaches the `start()` function call. The output either should look like tihs
+    ```yaml
+    Thread[Thread-0, 5, main' has run
+    ```
+Note that `currentThread()` returns a `Thread` instance which is converted to its string representation which returns the thread's name, priority, and thread group. The output above might be slightly different.
+
+* **Coroutines in Kotlin** <br>
+Coroutines enable multitasking, but provide another level of abstraction over simply working with threads. <br>
+Onne key feature of coroutines is the ability to `store state`, so that they can be `halted` and `resumed`. A `coroutine` may or maynot execute. <br>
+
+The state, represented by _continuations_, allows portions of code to signal when they need to hand over control or wait for another coroutine to complete its work before resuming. This flow is called cooperative multitasking. Kotlin's implementation of coroutines adds a number of features to assist multitasking. <br>
+in additions to continuations, creating a coroutine encompasses that work in a `Job`, a cancelable unit of work with a lifecycle, inside a `CoroutineScope`. <br>
+A `CoroutineScope` is a context that enforces cancellation and other rules to its children and their children recursively. A `Dispatcher` manages which backing thread the coroutine will use for its execution, removing the responsibility of when and where to use a new thread from the developer.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/d5ca2aa8-fa97-41a4-ac9e-85401dba9fd5)
+
+Let's look at the examples of using coroutines:
+```kotlin
+import kotlinx.coroutines.*
+
+fun main() {
+    repeat(3) {
+        GlobalScope.launch {
+            println("Hi from ${Thread.currentThread()}")
+        }
+    }
+}   
+```
+```xml
+Hi from Thread[DefaultDispatcher-worker-2@coroutine#2,5,main]
+Hi from Thread[DefaultDispatcher-worker-1@coroutine#1,5,main]
+Hi from Thread[DefaultDispatcher-worker-1@coroutine#3`,5,main]
+```
+The snippet above creates three coroutines in the Global Scope using the default Dispacther. The `GlobalScope` allows any coroutines in it to **run as long as the app is running**.<br>
+For the reasons we talked about concerning the main thread, this is not recommended outside example code. When you use coroutines in your apps, we will use other scopes. <br>
+The `launch()` function creates a coroutine from the enclosed code wrapped in a cancelable Job object. `launch()` is used when a return value is not needed outside the confines of the coroutine.
+
+* **A word about runBlocking** <br>
+`runBlocking()` as the name suggest, implies the starts of a new coroutine blocks and the current thread until completion. It is mainly used to bridge between blocking and non-blocking code in main function and test. Given the code
+    ```kotlin
+    import kotlinx.coroutines.*
+    import java.time.LocalDateTime
+    import java.time.format.DateTimeFormatter
+    
+    val formatter = DateTimeFormatter.ISO_LOCAL_TIME
+    val time = { formatter.format(LocalDateTime.now()) }
+    
+    suspend fun getValue(): Double {
+        println("entering getValue() at ${time()}")
+        delay(3000)
+        println("leaving getValue() at ${time()}")
+        return Math.random()
+    }
+    
+    fun main() {
+        runBlocking {
+            val num1 = getValue()
+            val num2 = getValue()
+            println("result of num1 + num2 is ${num1 + num2}")
+        }
+    }
+    ```
+    Now the `getValue()` returns a random number after a set delay time. Look at the output return
+  ```kotlin
+  entering getValue() at 17:44:52.311
+    leaving getValue() at 17:44:55.319
+    entering getValue() at 17:44:55.32
+    leaving getValue() at 17:44:58.32
+    result of num1 + num2 is 1.4320332550421415
+  ```
+  Replace the `main` method with the following
+  ```
+  fun main() {
+    runBlocking {
+        val num1 = async { getValue() }
+        val num2 = async { getValue() }
+        println("result of num1 + num2 is ${num1.await() + num2.await()}")
+        }
+    }
+  ```
+  The `async()` function returns a value of type `Deferred`. A `Deffered` is a cancelable `Job` that can hold a reference to a future value. By using a `Deferred`, you can still call a function as if it immediately returns a value - a `Deferred` just **serves as a placeholder**, since you can't certain when an asyncrhonous task will return. <br>
+  A `Deferred` (also known as Promise or Future in other languages) **guarantees that a value will be returned to this object at a later time**. <br>
+  An asynchronous task, on the other hand, will not block or wait for execution by default. To initiate that the current line of code needs to wait for the output of a `Deferred`, you can call `await()` on it. It will return the raw value.
 
 
+## Get Data From Internet
+* **Web Services and Retrofit** <br>
+Mars photos data is stored on a web server. To get this data, you need to establish a connection and communicate with the server on the internet.
 
+![image](https://github.com/Xenoare/book-notes/assets/67181778/377645ae-59a2-4fe8-b049-e15e597a7c51)
 
+![image](https://github.com/Xenoare/book-notes/assets/67181778/099b7c53-8825-468b-bbed-5efcad7f8f39)
 
+Request are made to RESTful web services in a standardized way via `URI (Uniform Resource Identifier). An URI **identifies a resource in the server by name, without implying its location or how to access it**. <br>
+A Unifrom Resource Locator (URL) is an URI that specifies the means of acting upon or obtaining the representation of a resourece, i.e. specifying both its primary access mechanism and network location.
 
+**Web services Request** <br>
+Each web service contains a URI, and is transferred to the server using the same HTTP protocol. Common HTTP operations include:
++ GET for retrieving server data
++ POST or PUT for add/create/update the server with the new data
++ DELETE for deleting the data from server
 
+The response from a web service is commonly formatted in one of the common web formats like `XML` or `JSON` - formats for representing structured data in key-value pairs.
 
+**External Libraries**
+Retrofit library will communicate with the backend. It creates URI's for the web service based on the parameters we pass to it. You will see more on this in later sections.
 
+![image](https://github.com/Xenoare/book-notes/assets/67181778/31d4523d-0e4e-4631-8203-672d52a96b40)
 
-   
+* **Setup Retroit Dependencies** <br>
+Android Gradle allows you to add external libraries to your project. In addition to the library dependency, you should also include the repository where the library is hosted. The Google libraries such as `ViewModel` and `LiveData` from the Jetpack library are hosted in the Google repository. The majority of community libraries like Retrofit are hosted on Google and MavenCentral repositories.
+    1. Open the `build.gradle(Project: MarsPhotos)` file and add `google()` and `mavenCentral()` repo
+       ```kotlin
+       repositories {
+           google()
+           mavenCentral()
+       }
+       ```
+    2. Add the Retrofit libraries in the `dependencies section`
+       ```kotlin
+        // Retrofit 
+        implementation "com.squareup.retrofit2:retrofit:2.9.0"
+        // Retrofit with Scalar Converter
+        implementation "com.squareup.retrofit2:converter-scalars:2.9.0"
+       ```
+
+* **Connecting to the Internet** <br>
+Retrofit creates a network API for the app based on the content from the web services.
