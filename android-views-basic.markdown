@@ -1,4 +1,4 @@
-### Introduction to Activities
+![image](https://github.com/Xenoare/book-notes/assets/67181778/f7ac0018-0f2b-4827-a237-9e15f7ccd252)### Introduction to Activities
 ---
 * > Kotlin Style Guide: https://developer.android.com/kotlin/style-guide
 
@@ -2401,6 +2401,13 @@ The `launch()` function creates a coroutine from the enclosed code wrapped in a 
 ## Get Data From Internet
 Notes :
 + [Android Permission](https://developer.android.com/guide/topics/permissions/overview)
++ [Moshi with Retrofit](https://proandroiddev.com/moshi-with-retrofit-in-kotlin-%EF%B8%8F-a69c2621708b)
++ [Coil](https://coil-kt.github.io/coil/)
+
+Table of Contents
++ [Connecting to the Internet](#connecting-to-the-internet)
++ [Load and display an image from internet](#load-and-display-an-image-from-internet)
++ [Display a Grid of Images with RecyclerView](#display-a-grid-of-images-with-recyclerview)
 
 * **Web Services and Retrofit** <br>
 Mars photos data is stored on a web server. To get this data, you need to establish a connection and communicate with the server on the internet.
@@ -2442,7 +2449,7 @@ Android Gradle allows you to add external libraries to your project. In addition
         implementation "com.squareup.retrofit2:converter-scalars:2.9.0"
        ```
 
-* **Connecting to the Internet** <br>
+### Connecting to the Internet
 Retrofit creates a network API for the app based on the content from the web services. It fetches data from the web service and routes it through a seperate converter library that knows how to decode the data and return it in the form of objects like `String` (`JSON` format).
 ![image](https://github.com/Xenoare/book-notes/assets/67181778/f42ab187-e3cb-4758-a251-181e192d68f6)
 
@@ -2683,9 +2690,334 @@ You will replace `ScalarsConverterFactory` with the `KotlinJsonAdapterFactory` t
    _status.value = "Success: ${listResult.size} Mars photos retrieved"
     ```
 
+### Load and display an Image from internet
+In order to display a photo from web URL. The image has to be downloaded, internally stored and decoded from its compressed format to an image that Android can use. <br>
+Fortunately, you can use a community-developed library called [Coil](https://coil-kt.github.io/coil/) to download, buffer, decode and cache your images. <br>
+Coil basically needs two things:
++ The URL of the image you want to load and display.
++ An `ImageView` object to actually display that image.
 
+**Add Coil dependancy**
+1. In the `dependencies` `build.gradle (Module: app)`, add this Coil library
+    ```xml
+        // Coil
+        implementation "io.coil-kt:coil:2.2.2"
+    ```
+2. Coil library is hosted and available on the `mavenCentral()` repo. In `build.gradle (Project: MarsPhotos)` add `mavenCentral()` in the top repositories block.
+   ```xml
+   repositories {
+       google()
+       mavenCentral()
+    }
+   ```
 
+**Update the ViewModel** <br>
+In this step, you will add a `LiveData` property to the `OverviewViewModel` class to store the Kotlin object received, MarsPhoto.
+1. Open `overview/OverviewViewModel`. add a new mutable property called `_photos` of the type `MutableLiveData` that can store a single `MarsPhoto` object
+   ```kotlin
+   privat val _photo = MutableLiveData<MarsPhoto>
+   ```
+2. Add a `backing field` called `photos` of the type `LiveData<MarsPhoto>`
+   ```kotlin
+   val photos: LiveData<MarsPhoto>
+    get() = _photos
+   ```
+3. In the `getMarsPhotos()` method, inside the `try{}` block. Assign the first Mars photo retrieved to the new variable `_photos`. Assign the first photos url at the index `0`. This will throw an error that you will fix later.
+    ```kotlin
+    try {
+        _photos.value = MarsApi.retrofitService.getPhotos()[0]
+    }
+    ```
+4. In the next line, update the `status.value` to display the first image URL from the photo List.
+    ```kotlin
+    try {
+        _photos.value = Mars.retrofitService.getPhotos()[0]
+        _status.value = "First Mars image URL : ${_photos.value!!.imgSrcUrl}
+    }
+    ```
 
+* **Use Binding Adapters** <br>
+Binding adapters are annotated method thah used to create a custom setters for custom properties of your view. <br>
+Usually when you set an attribute in your XML using the code: `android:text="Sample Text"`. The Android system automatically looks for a setter with the same name as the `text` attribute, which is set by the `setText(String: text)` method. The `setText(String: text)` method is a setter method for some views provided by the Android Framework. <br>
+**Example of a Binding Adapter**
+```kotlin
+@BindingAdapter("imageUrl")
+fun bindImage(imgView: ImageView, imgUrl: String?) {
+    imgUrl?.let {
+        // Load the image in the background using Coil.
+        }
+    }
+}
+```
++ The `@BindingAdapter` annotation takes the attribute name as its parameter.
++ In the `bindImage` method, the first method parameter is the type of the target View and the second is the value being set to the attribute.
++ Inside the method, the Coil library loads the image off the UI thread and sets it into the `ImageView`.
 
+* **Create a binding adapter and use Coil** <br>
+1. Create a kotlin file inside the `com.example.android.marsphotos` package called `BindingAdapters`. This file will hold the binding adapters that you use throughput the app.
+2. In `BindingAdapter`, create a method `bindImage()` function as a `top-level function` (not inside a class) that takes an `ImageView` and a `String` as parameters.
+   ```kotlin
+   fun bindImage(imgView: ImageView, imgUrl: String?) { }
+   ```
+3. Annotate the function with `@BindingAdapter`. The `@BindingAdapter` annotation tells `data binding` to execute this binding adapter when a `View item` has the imageUrl attribute.
+   ```kotlin
+   @BindingAdapter("imageUrl")
+   fun bindImage(imgView: ImageView, imgUrl: String?) {}
+   ```
 
+**Let Scope function** <br>
+`let` is one the Kotlin's sccope function which lets you execute a code block within the context of an object.
++ `let` is used to invoke one or more unctions on results of call chains.
++ The `let` function along with the safe call operator (`?.` is used to perform a null safe operation on the object.
 
+4. add a `let{}` block to tthe `imgUrl` argument with safe call operator. Add the following line to convert the URL string to a `Uri` object using the `toUri()` method. To use the HTTPS schme, append `buildUpon.scheme("https") to the `toUri` builder. Call `bulid()` to build the object.
+    ```kotlin
+    val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
+    ```
+5. After `imgUri` declaration, use the `load()` to load the image from the `imgUri` object into the `imgView`
+   ```kotlin
+   imgView.load(imgUri) {}
+   ```
+6. Here's the complete code
+   ```kotlin
+   @BindingAdapter("imageUrl")
+    fun bindImage(imgView: ImageView, imgUrl: String?) {
+        imgUrl?.let {
+            val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
+            imgView.load(imgUri) 
+        }
+    }
+   ```
+
+* **Update the layout and fragments** <br>
+1. Update the `<ImageView>` element in `grid_view_item.xml`. Add data element for data binding and bind to the `OverviewViewModel` class.
+    ```xml
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.android.marsphotos.overview.OverviewViewwModel" />
+    </data>
+    ```
+2. Add an `app:imageUrl` attribute to the `ImageView` element to use the new image loading from binding adapter. <br>
+    Remember that the `photos` contain a list of `MarsPhotos` retrieved from the server. Assign the first entry `URL` to the `imageUrl` attribute.
+   ```xml
+       <ImageView
+        android:id="@+id/mars_image"
+        ...
+        app:imageUrl="@{viewModel.photos.imgSrcUrl}"
+        ... />
+   ```
+3. Open the `OverviewFragment`, in the `onCreateView()` comment the lines that inflate the `FragmentOverviewBindning` class and change with `GridViewItemBindin` class instead.
+   ```kotlin
+   //val binding = FragmentOverviewBinding.inflate(inflater)
+   
+    val binding = GridViewItemBinding.inflate(inflater)
+   ```
+
+* **Add loading and error images** <br>
+Using Coil can improve the user exprerience by showing a placeholder image while loading the image and an error image if the loading fails. 
+1. In the `bindImage()` method, update the call to `imgView.load(imgUri)` to add a trailing lambdas. This code sets the placeholder loading image to use while loading (the `loading_animation` drawbale). This code also sets an image to use if image loading fails (the `broken_image` drawable)
+   ```kotlin
+   @BindingAddapter("imageUrl")
+   fun bindImage(imgView: ImageView, imgUrl: String?) {
+       imgUrl?.set {
+           val imgUrl = imgUrl.toUri().buildUpon().schme("https").build()
+           imgView.load(imgUri) {
+               placeholder(R.drawable.loading.animation)
+               error(R.drawable.ic_broken_image)
+           }
+       }
+   }
+
+### Display a Grid of Images with RecyclerView
+* **Update the View Model** <br>
+In prev task, in the `OverviewViewModel`, you've added an `LiveData` object called `_photos` that holds one `MarsPhoto` object - _the first one in the response_ list from the web service. Now, we will change this `LiveData` to hold the entire list of `MarsPhoto` objects.
+1. in the `OverviewViewModel`, change the `_photos` type to be list of `MarsPhoto` objects, also don't forget to replace the backing property of `photos`
+    ```kotlin
+    private val _photos = MutableLiveData<List<MarsPhoto>>()
+    val photos: LiveData<List<MarsPhoto>> = _photos
+    ```
+2. Change the `_photos.value` and _status.value so it returns list of `MarsPhoto` objects
+   ```kotlin
+    try {
+        _photos.value = MarsApi.retrofitService.getPhotos()
+        _status.value = "Success: Mars properties retrieved"
+    } catch (e: Exception) {
+        _status.value = "Failure: ${e.message}"
+    }
+   ```
+
+* **Grid Layout** <br>
+Grid layout arranges items in a grid of rows and columns. Assuming vertical scrolling, by default, each item in a row takes up one "span." An item can occupy multiple spans. In the case below, one span is equivalent to the width of one column that is 3.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/313a1e53-75df-4f9b-bb1f-d771f7c44b3d)
+
+* **Add RecyclerView** <br>
+1. Open `grid_view_item.xml` and change the `<data>` content tags
+    ```xml
+    <data>
+       <variable
+           name="photo"
+           type="com.example.android.marsphotos.network.MarsPhoto" />
+    </data>
+    ```
+2. Also in `<ImageView>`, change the `app:imageUrl` attribute to refer to the image URL in the `MarsPhoto` objects.
+    ```xml
+    app:imageUrl="@{photo.imgSrcUrl}"
+    ```
+3. Now open the `fragment_overview.xml`. Delete the entire `<TextView>` element. and add the following `<RecyclerView>` element instead. <br>
+    Set the Id to `photos_grid`, `widht` and `height` attributes are `0dp`, so it fills the parent `ConstraintLayout`. <br>
+    Since you'll be using GridLayout, so set the `layoutManager` attribute to be `androidx.recyclerview.widget.GridLayoutManager`. Set a `spanCount` to `2` so you'll have 2 columns.
+    ```xml
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/photos_grid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layoutManager=
+           "androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:spanCount="2" />
+    ```
+4. To see a preview of what the above code looks like in the `Design` view, use tools:itemCount to set the number of items displayed in our layout to `16`. The itemCount attribute specifies the number of items the layout editor should render in the Preview window. Set the layout of list items to grid_view_item using tools:listitem.
+    ```xml
+    <androidx.recyclerview.widget.RecyclerView
+            ...
+            tools:itemCount="16"
+            tools:listitem="@layout/grid_view_item" />
+    ```
+5. According to the [Material design guidelines](https://material.io/components/image-lists#anatomy), you should hae `8dp` of space at the `top, bottom and sides` of thes list, and `4dp` of space between the items. You can achive this with a combination of padding in `fragment_overview.xml` layout and in `grid_view_item.xml` layout.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/42d7dcec-440d-4c3e-8341-a8a6955ac57f)
+
+6. Since we're already got `2dp` paddings in `gridview_item.xml`, we'll need an additoinal `6dp` of padding on the outside edges to match the deisng guidelines. Here's the complete layout
+    ```xml
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/photos_grid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="6dp"
+        app:layoutManager=
+            "androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:spanCount="2"
+        tools:itemCount="16"
+        tools:listitem="@layout/grid_view_item"  />
+    ```
+
+* **ListAdapter** <br>
+[List Adapter](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter) is a subclass of the [RecyclerView.Adapter](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.Adapter) class for presenting List data in a `RecycleView`, including computing diff between Lists on a background thread. <br>
+We're also will use the `DiffUtil` implementation in the `ListAdapter`. The advantage of using `DiffUtil` is every time some item in the `RecyclerView` is added, removed or changed, the whole list doesn't get refreshed. Only the items that have been changed are refreshed.
+1. Add a Kotlin class called `PhotoGridAdapter` and extend the `PhotoGridAdapter` class from `ListAdapter`.
+    ```kotlin
+    class PhotoGridAdapter : ListAdapter<MarsPhoto,
+        PhotoGridAdapter.MarsPhotoViewHolder>(DiffCallback) {
+    }
+    ```
+2. Implement `onCreateViewHolder`, `onBindViewHolder` and `MarsPhotoViewHolder`. Inside the `PhotoGridAdapter`. Add an inner class definition for `MarsPhotoViewHolder` which extands `RecyclerView.ViewHolder`. You need the `GridViewItemBinding` variable for binding the `MarsPhoto` to the layout, so pass the variable into the `MarsPhotoViewHolder`. The base `ViewHolder` class requires a view in its contructor, you pass it the binding root view.
+    ```kotlin
+    class MarsPhotoViewHolder(private var binding: GridViewItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+    }
+    ```
+3. In `MarsPhotoViewHolder`, create a `bind()` method that takes a MarsPhoto object as an argument and sets `binding.property` to that object. Call `executePendingBindings()` after setting the property, which causes the update to execute immediately.
+    ```kotlin
+        /**
+     * The MarsPhotosViewHolder constructor takes the binding variable from the associated
+     * GridViewItem, which nicely gives it access to the full [MarsPhoto] information.
+     */
+    class MarsPhotosViewHolder(
+        private var binding: GridViewItemBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(marsPhoto: MarsPhoto) {
+            binding.photo = marsPhoto
+            // This is important, because it forces the data binding to execute immediately,
+            // which allows the RecyclerView to make the correct view size measurements
+            binding.executePendingBindings()
+        }
+    }
+    ```
+4. In `onCreateViewHolder()` neeeds to return a new `MarsPhotoViewHolder`, craeted by inflating the `GridViewItemBinding` and using the `LayoutInflater` from your parent `ViewGroup` context.
+    ```kotlin
+        /**
+     * Create new [RecyclerView] item views (invoked by the layout manager)
+     */
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoGridAdapter.MarsPhotoViewHolder {
+        return MarsPhotoViewHolder(GridViewItemBinding.inflate(LayoutInfalter. from(parent.context)))
+    }
+    ```
+5. In `onBindViewHolder` method, we call `getItem()` to get the `MarsPhoto` object associated with the current `RecyclerView` position, and then pass that property to the `bind()` method in the `MarsPhotoViewHolder`.
+   ```kotlin
+       /**
+     * Replaces the contents of a view (invoked by the layout manager)
+     */
+   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoGridAdapter.MarsPhotoViewHolder {
+        val marsPhoto = getItem(position)
+        holder.bind(marsPhoto)
+    }
+   ```
+6. Inside the `PhotoGridAdapter`, add a companion object definition for `Diffcallback`. <br>
+The `DiffCallback` object extends `DiffUtil.ItemCallback` with the generic type of object you want to compare—`MarsPhoto`. You will compare two Mars photo objects inside this implementation.  
+    ```kotlin
+    companion object DiffCallback : DiffUtil.ItemCallback<MarsPhoto>() {
+    }
+    ```
+7. This is will create a `comparator methods` for the `DiffCallback` object, which are `areItemsTheSame()` and `areContentsTheSame()`.
+    ```kotlin
+    override fun areItemsTheSame(oldItem: MarsPhoto, newItem: MarsPhoto): Boolean {
+       TODO("Not yet implemented") 
+    }
+
+    override fun areContentsTheSame(oldItem: MarsPhoto, newItem: MarsPhoto): Boolean {
+   TODO("Not yet implemented") 
+   }
+   ```
+8. In the `areItemsTheSame()` methods, this methods is called by `DiffUtil` to decide whether two objects represents the same Item. <br>
+    `DiffUtil` uses this method to figure out if the new `MarsPhoto` objects is the same as the old `MarsPhoto` objects. The `ID` of every item (`MarsPhoto` object) is unique. Compare the IDs of `oldItem` and `newItem`
+   ```kotlin
+   override fun areItemsTheSame(oldItem: MarsPhoto, newItem: MarsPhoto): Boolean {
+       return oldItem.id == newItem.id
+    }
+    ```
+9. In `areContentsTheSame()`, this methods is called by `DiffUtil` when it wants to check whether two items have the same data. The imporatnt data in the `MarsPhoto` is the `image URL`. Compare the URLs of `oldItem` and `newItem` and return the result.
+    ```kotlin
+    override fun areContentsTheSame(oldItem: MarsPhoto, newItem: MarsPhoto): Boolean {
+       return oldItem.imgSrcUrl == newItem.imgSrcUrl
+    }
+    ```
+
+* **Add the binding adapter and connect the parts** <br>
+In this step we will use a `BindingAdapter` to init the `PhotoGridAdapter` with the list of `MarsPhoto` objects. Using `BindingAdapter` to set the `RecyclerView` data causes data binding to automatically observer the `LiveData` for the list of `MarsPhoto` objects. Then the binding adapter is called automatically when the `MarsPhoto` list changes.
+1. Open `BindingAdapters` and add a `bindRecyclerView()` methods that takes a `RecyclerView` and a list of `MarsPhoto` objects as argumetns. Annotate that method with a `@BindingAdapter` with `listData` attribute
+    ```kotlin
+    @BindingAdapter("listData")
+    fun bindRecyclerView(recyclerView: RecyclerView, data: List<MarsPhoto>?) {
+    }
+    ```
+2. Inside the `bindRecyclerView()` function, cast `recyclerView.adapter` to `PhotoGridAdapter` and assign it to a new `val` property `adapter`.
+3. And at the end of this method, call `adapter.submitList()` with the Mars photos list data. This tells the `RecyclerView` when a new list is available
+    ```kotlin
+    @BindingAdapter("listData")
+    fun bindRecyclerView(recyclerView: RecyclerView,
+                        data: List<MarsPhoto>?) {
+       val adapter = recyclerView.adapter as PhotoGridAdapter
+       adapter.submitList(data)
+    
+    }
+    ```
+4. To connect everything together, in `fragment_overview.xml`. Add the `app:listData` attribute to the `RecyclerView` elemnt and set it to `viewModel.photos` using data binding.
+   ```
+   # fragment_overview.xml
+
+   <androidx.recyclerview.widget.RecyclerView
+        app:listData="@{viewModel.photos}"
+        ...
+       />
+    ```
+5. Open `OverviewFragment`. In `onCreateView()`, just before the `return` statement. Init the `RecyclerView` adapter in `binding.photosGrid` to a new `PhotoGridAdapter` object.
+    ```kotlin
+    binding.photosGrid.adapter = PhotoGridAdapter()
+    ```
