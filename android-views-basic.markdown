@@ -2399,6 +2399,9 @@ The `launch()` function creates a coroutine from the enclosed code wrapped in a 
 
 
 ## Get Data From Internet
+Notes :
++ [Android Permission](https://developer.android.com/guide/topics/permissions/overview)
+
 * **Web Services and Retrofit** <br>
 Mars photos data is stored on a web server. To get this data, you need to establish a connection and communicate with the server on the internet.
 
@@ -2440,4 +2443,249 @@ Android Gradle allows you to add external libraries to your project. In addition
        ```
 
 * **Connecting to the Internet** <br>
-Retrofit creates a network API for the app based on the content from the web services.
+Retrofit creates a network API for the app based on the content from the web services. It fetches data from the web service and routes it through a seperate converter library that knows how to decode the data and return it in the form of objects like `String` (`JSON` format).
+![image](https://github.com/Xenoare/book-notes/assets/67181778/f42ab187-e3cb-4758-a251-181e192d68f6)
+
+You will impelement the Retrofit service API, with the following steps.
++ Create a network layer, the `MarsApiService` class.
++ Create a Retrofit object with the base URL and the converter factory.
++ Create an interfacce that explains how Retrofit talks to our web server.
++ Create a Retrofit service and expose the instance to the api service to the  rest of the app.
+
+The implementations are below:
+1. Create a new pakcage `network` and create a new Kotlin file named `MarsApiSevice`.
+2. In `MarsApiService` add the following constant to the base URL
+   ```kotlin
+   private const val BASE_URL =
+      "https://android-kotlin-fun-mars-server.appspot.com"
+   ```
+3. Add a Retrofit builder and create a Retrofit object.
+    ```kotlin
+    private val retroit = Retrofit.Builder()
+    ```
+4. Retrofit needs the base URI for the web service, and a converter factory to bulid a web service API. The converter tells Retrofit what to do with the data it gets back from the service. In this case, you want Retrofit to fetch JSON response from the web service, and return it as a `String`. <br>
+    Retrofit has a `ScalarsConverter` that supports strings and other primitive types, so you call `addConverterFactory()` on the builder with an instance of `ScalarsConverterFactory`.
+   ```kotlin
+   private val retrofit = Retrofit.Builder()
+       .addConverterFactory(ScalarsConverterFactory.create())
+   ```
+5. Add the base URL for the web service using `baseUrl()` and call `build()` to create the **Retrofit Object**
+    ```kotlin
+    private val retrofit = Retrofit.Builder()
+   .addConverterFactory(ScalarsConverterFactory.create())
+   .baseUrl(BASE_URL)
+   .build()
+    ```
+6. Below the Retrofit builder, define an interface called `MarsApiService`, that defines how Retrofit talks to the web service using HTTP request. and add a function called `getPhotos()` to get the response string from the web service.
+    ```kotlin
+    interface MarsApiService {
+        fun getPhotos()
+    }
+    ```
+7. Use the `@GET` annotation to tell Retrofit that this is `GET` request, and specify an endpoint, for that website service method. in this case is called `photos`, and specify the type of function to `String`
+    ```kotlin
+    interface MarsApiService {
+        @GET("photos")
+        fun getPhotos() : String
+    }
+    ```
+
+**Object Declaration** <br>
+In kotlin, [object declarations](https://kotlinlang.org/docs/reference/object-declarations.html#object-declarations) are used to declare singleton objects. [Singleton pattern](https://en.wikipedia.org/wiki/Singleton_pattern) ensures that one, and only one, instance of an object is created, has one global point of access to that object. Object declaration's initialization is thread-safe and done at first access. <br>
+Kotlin makes it easy to declare singletons. Following is an example of an object declaration and its access. Object declaration always has a name following the `object` keyword.
+```kotlin
+// Object Declaration
+object DataProviderManager {
+    fun registerDataProvider(provider: DataProvider) {
+        // ...
+    }
+​
+    val allDataProviders: Collection<DataProvider>
+        get() = // ...
+}
+
+// To refer to the object, use its name directly.
+DataProviderManager.registerDataProvider(...)
+```
+The call to `create()` function on a `Retrofit` object is expensive and the app needs only one instance of Retrofit API service. <br>
+So, you expose the service to the reset of the app using _objecct declaration_.
+1. Outside the `MarsApiService` interface declaration, define a public object called `MarsApi` to initialize the Retrofit service. This is the public singleton object that can be accessed from the rest of the app.
+   ```kotlin
+   object MarsApi {}
+   ```
+2. Inside the `MarsApi` object declaration, add a lazily initialized retrofit object property named `retrofitService` of the type `MarsApiService`. You make this lazy initialization, to make sure it is initialized at its first usage. Init the `retrofitService` variable using `retrofit.create()` method with the `MarsApiService` interface.
+   ```kotlin
+   object MarsApi {
+        val retrofitService : MarsApiService by lazy {
+               retrofit.create(MarsApiService::class.java)
+           }
+    }
+   ```
+    The Retrofit setup is done! Each time your app calls `MarsApi.retrofitService`, the caller will access the same singleton Retrofit object that implements `MarsApiService` which is created on the first access. In the next task, you will use the Retrofit object you have implemented.
+
+* **Call the web service in OverViewModel** <br>
+A [ViewModelScope](https://developer.android.com/topic/libraries/architecture/coroutines#viewmodelscope) is the built-in coroutine scope that defined for each `ViewModel` in your app. Any coroutine launched in this scope is **automatically canceled** if the `ViewModel` is clered. <br>
+In this context, we are going to use `ViewModelScope` to launch the coroutine and make the Retrofit network call in the background.
+4. In `MarsApiService`, make `getPhotos()` a suspend function. **So you can call this method from within a coroutine**.
+    ```kotlin
+    @GET("photos")
+    suspend fun getPhotos(): String
+    ```
+5. Open the `overview/OverViewModel`. and in `getMarsPhotos()` method, launch the coroutine using `viewModelScope.launch`
+   ```kotlin
+   private fun getMarsPhotos() {
+        viewModelScope.launch {
+       }
+   }
+6. Inside the `viewModelScope`. Use the singleton object `MarsApi`, to call the `getPhotos()` method from the `retrofitService` interface. Save the returned response in a `val` called `listResult`. And assign the result from the server into the `_status.value`.
+   ```kotlin
+   viewModelScope.launch {
+       val listResult = MarsApi.retrofitService.getPhotos()
+       _status.value = listResult
+   }
+   ```
+
+* **Add Internet Permission and Exception Handling** <br>
+The purpose of permission on Android is to protect the privacy of an Android user. Android apps must declare or request permission to access **sensitive user data such as contacts, call logs and certain system**. <br>
+To learn more about Android permissions and its types [here](https://developer.android.com/guide/topics/permissions/overview).
+1. Open the `manifest/AndroidManifest.xml` add this line beore `<application>` tag.
+   ```xml
+    <uses-permission android:name="android.permission.INTERNET" />
+   ```
+
+**Exception Handling** <br>
+[Exception](https://developer.android.com/reference/java/lang/Exception) are errors that can occour during the runtime and terminate the app abruptly without notifying the user. Exception handling is a mehcanism by which you preveent the app from terminating abruptly and handle it in a user friendly way. <br>
+The examples of potential issues while connection to a server:
++ The URL or URI used in the API is incorrect.
++ The server is unavailable and the app could not connect to it.
++ Network latency issue.
++ Poor or no internet connection on the device.
+
+You can use `try-catch` block to handle the exception in the runtime. Inside the `try` block you will perform the code where you anticipate an exception. 
+1. Open `overview/OverViewModel`, and inside the `getMarsPhotos()` method. add a `try` block around `MarsApi` to handle exceptions.
+   ```kotlin
+   viewModelScope.launch {
+       try {
+           val listResult = MarsApi.retrofitService.getPhotos()
+           _status.value = listResult
+       } catch (e: Exception) {}
+   }
+   ```
+2. Inside the `catch` block, handle the failure response by displaying the error message.
+    ```kotlin
+    catch (e: Exception) {
+       _status.value = "Failure: ${e.message}"
+    }
+    ```
+
+* **Parsing the JSON response with Moshi** <br>
+The requested data is typically formatted in one of the common data formats like XML or JSON. Each call returns structured data and your app needs to know what's structure in order to read the data from the response. <br>
+From given the data in URL, you will see the structure of the JSON format.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/d496dd0b-20ee-4861-8f62-587eb170977e)
++ JSON response is an array, indicated by the square brackets. The array contains JSON objects.
++ The JSON objects are surrounded by `{}`
++ Each JSON objects contain a set of name-value pairs seperated by a comma.
++ The name and avlue in a pair are seperated by a colon.
++ Names are surrounded by quotes.
++ Values can be numbers, strings, a boolean, an array, an objects (JSON objects) or null
+
+There's a external library called [Moshi](https://github.com/square/moshi), which is an Android JSON parser that converts JSON string into Kotlin objets. Retrofit also have these converter that works with Moshi also.
+
+* **Moshi Library Dependencies** <br>
+1. Open the `build.gradle (Module: app)`
+2. In the dependecies section, add the code shown below to include the Moshi dependency. This dependency adds supports for the Moshi JSON library with Kotlin support.
+    ```xml
+    // Moshi
+    implementation 'com.squareup.moshi:moshi-kotlin:1.9.3'
+    ```
+3. Replace the Retrofit dependencies
+   ```xml
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    // Retrofit with scalar Converter
+    implementation "com.squareup.retrofit2:converter-scalars:2.9.0"
+   ```
+   with this
+   ```xml
+   // Retrofit with Moshi Converter
+   implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
+   ```
+
+* **Implement the Mars Photos data Class** <br>
+A sample entry of the JSON response you get from the web service looks like this
+```xml
+[{
+    "id":"424906",
+    "img_src":"http://mars.jpl.nasa.gov/msl-raw-images/msss/01000/mcam/1000ML0044631300305227E03_DXXX.jpg"
+},
+...]
+```
+In the example above, notice that each Mars photo entry has these JSON key and value pairs:
++ `id`: the ID of the property, as a string. Since it is wrapped in `" "` it is of the type `String` not Integer.
++ `img_src`: The image's URL as a string.
+
+Moshi parses this JSON data and converts it into Kotlin objects. To do this, Moshi needs to have a Kotlin data class to store the parsed results, so in this step you will create the data class, `MarsPhoto`.
+1. Make a new data class `MarsPhoto` under the `network package` and add these following class defintion
+   ```kotlin
+   data class MarsPhoto (
+       val id: String, val img_src: String
+   )
+   ```
+Notice that each of the variable in the `MarsPhoto` class represents the `key name` in `JSON` objects. <br>
+When Moshi parses the JSON, it matches the keys by name and fills the data objects with appropriate values.
+
+**@JSON Annotation**
+Sometimes the key names in a JSON response can make confusing Kotlin properties, or may not match recommended coding style—for example, in the JSON file the `img_src` key uses an underscore, whereas Kotlin convention for properties use upper and lowercase letters ("camel case").
+
+To use variable names in your data class that differ from the key names in the JSON response, use the `@Json` annotation. In this example, the name of the variable in the data class is `imgSrcUrl`. The variable can be mapped to the JSON attribute img_src using @Json(`name = "img_src"`).
+5. Replace the line of `img_src` key with this
+```kotlin
+@Json(name = "img_src")
+val imgSrcUrl: String
+```
+
+* **Update the MarsApiService and OverviewViewModel** <br>
+You will replace `ScalarsConverterFactory` with the `KotlinJsonAdapterFactory` to let `Retrofit` know it can use `Moshi` to convert the `JSON` response into Kotlin objects. You will then update the network API and `ViewModel` to use the Moshi object.
+1. Open `network/MarsApiService`. Notice that the `ScalarsConverterFactory` is unresolve reference error becuase we change the `Retrofit Dependency`.
+2. At the top of the, file, just before the Retrofit bulder, add the following code to create the Moshi object, simillar to the Retrofit object.
+    ```kotlin
+    private val moshi = Moshi.Builder()
+    ```
+3. For `Moshi` annotations to work properly with Kotlin, in the Moshi Builder, add the `KotlinJsonAdapterFactory` and then call build().
+    ```kotlin
+    private val moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
+    ```
+4. In the `retrofit` object declaration change for the `Retrofit` builder to use the `MoshiConverterFactory` intead of the `ScalarConverterFactory`, and pass in the `moshi` instance you just created.
+    ```kotlin
+    private val moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory()
+        .build()
+    ```
+5. In the `retrofit` object declaration change the Retrofit builder to use the `MoshiConverterFactory` instead of the `ScalarConverterFactory` and pass the `moshi` instance that just been created.
+    ```kotlin
+    private val retrofit = Retrofit.Builder()
+       .addConverterFactory(MoshiConverterFactory.create(moshi))
+       .baseUrl(BASE_URL)
+       .build()
+    ```
+6. Now that you have `MoshiConverterFactory` in place, you can ask Retrofit to return a list of `MarsPhoto` objeccts from JSON array instead of returning a JSON string. Update the `MarsApiService` interface to have Retrofit return a lsit of `MarsPhoto` objects, instead of `String`.
+   ```kotlin
+   interface MarsApiSerice {
+       @GET("photos")
+       suspend fun getPhotos(): List<MarsPhotos>
+   }
+   ```
+7. Do similar changes to the `viewModel`. open `OverviewViewModel` in the `getMarsPhotos()` method, `listResult` is a `List<MarsPhotos>` not a `String` anymore. <br>
+    The size of that list is the number of photos that were reeived and parsed. To print the number of photos retrieved update `_status.value` as follows
+   ```kotlin
+   _status.value = "Success: ${listResult.size} Mars photos retrieved"
+    ```
+
+
+
+
+
+
+
