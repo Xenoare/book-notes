@@ -1,4 +1,4 @@
-![image](https://github.com/Xenoare/book-notes/assets/67181778/f7ac0018-0f2b-4827-a237-9e15f7ccd252)### Introduction to Activities
+### Introduction to Activities
 ---
 * > Kotlin Style Guide: https://developer.android.com/kotlin/style-guide
 
@@ -2403,6 +2403,7 @@ Notes :
 + [Android Permission](https://developer.android.com/guide/topics/permissions/overview)
 + [Moshi with Retrofit](https://proandroiddev.com/moshi-with-retrofit-in-kotlin-%EF%B8%8F-a69c2621708b)
 + [Coil](https://coil-kt.github.io/coil/)
++ [Binding Adapter](https://medium.com/android-news/binding-adapters-with-kotlin-part-1-78b957ad6b8b)
 
 Table of Contents
 + [Connecting to the Internet](#connecting-to-the-internet)
@@ -3021,3 +3022,101 @@ In this step we will use a `BindingAdapter` to init the `PhotoGridAdapter` with 
     ```kotlin
     binding.photosGrid.adapter = PhotoGridAdapter()
     ```
+    ![image](https://github.com/Xenoare/book-notes/assets/67181778/40a8bae3-635a-43ef-bf26-3d78c02c20bd)
+
+* **Add error handling in RecyclerView** <br>
+In this time, we will add a basic error handling, to give the user a better idea of what's happening. <br>
+In this task, you will create a property in the `OverviewViewModel` to represent the status of the web request. There are three states to consider—loading, success, and failure. The loading state happens while you're waiting for data. The success status is when we retrieve data successfully from the webservice. The failure status indicates any network or connection errors.
+
+**Enum Classes** <br>
+In Kotlin, an `enum` is a data type that can hold a set of constants. They are defined by adding the keyword `enum` in front of a class definition as shown below. Enum constants are separated with commas.
+```kotlin
+enum class Direction {
+    NORTH, SOUTH, WEST, EAST
+}
+```
+Usage
+```kotlin
+var direction: Direction = Direction.NORTH
+```
+1. Create a `enum` class that represents the available status.
+   ```kotlin
+   enum class MarsApiStatus {LOADING, ERROR, DONE}
+   ```
+2. Create a definition of status properties in `OverviewViewModel`
+   ```kotlin
+   private val _status = MutableLiveData<MarsApiStatus>()
+
+   val status: LiveData<MarsApiStatus> = _status
+   ```
+3. Setup the mechanism getting `_status.value` in `getMarsPhotos()` to the `MarsApiStatus` enum states
+   ```kotlin
+   private fun getMarsPhotos() {
+       viewModelScope.launch {
+            _status.value = MarsApiStatus.LOADING
+            try {
+               _photos.value = MarsApi.retrofitService.getPhotos()
+               _status.value = MarsApiStatus.DONE
+            } catch (e: Exception) {
+               _status.value = MarsApiStatus.ERROR
+               _photos.value = listOf()
+            }
+        }
+    }
+   ```
+You have defined enum states for the status and set the loading state at the beginning of the coroutine, set done when your app is finished retrieving the data from the web server, and set error when there is an exception. In the next task you will use a binding adapter to display the corresponding icons.
+
+* **Add a binding adapter** <br>
+Let's make this appear in the app. We will use Binding Adapter for an `ImageView` to display icons for the **loading and error states**.
+1. Open `BindingAdapters` and add a new binding adapter called `bindStatus()` that takes an `ImageView` and `MarsApiStatus` value as arguments. Annotate `@BindingAdapter` passing in the custom attribute `marsApiStatus` as parameter.
+    ```kotlin
+    @BindingAdapter("marsApiStatus")
+    fun bindStatus(statusImageView: ImageView, 
+          status: MarsApiStatus?) {
+    }
+    ```
+2. Add a `when {}` block inside the `bindStatus()` method to swtich between the diffrent states. In case for loading state (`MarsApiStatus.LOADING`), for this state, set the `ImageView` to visible and assign it the loading animation. This is same animation drawable you could use or Coil
+    ```kotlin
+    when (status) {
+        MarsApiStatus.LOADING -> {
+            statusImageView.visibility = View.VISIBLE
+            statusImageView.setImageResource(R.drawable.ic_connection_error)
+        }
+    }
+    ```
+3. Add a case for the error state, which is `MarsApiStatus.ERROR`. Similarly to what you did for the `LOADING` state, set the status ImageView to visible and use the connection-error drawable.
+   ```kotlin
+   MarsApiStatus.ERROR -> {
+       statusImageView.visibility = View.VISIBLE
+       statusImageView.setImageResource(R.drawable.ic_connection_error)
+   }
+   ```
+4. Add a case for the done state, which is `MarsApiStatus.DONE`. Here you have a successful response, so set the visibility of the status ImageView to View.GONE to hide it.
+    ```kotlin
+        MarsApiStatus.DONE -> {
+       statusImageView.visibility = View.GONE
+    }
+    ```
+5. Add the status ImageView in the `fragment_overview.xml`. Add the `ImageView` below the `RecyclerView` element
+    ```xml
+    <ImageView
+   android:id="@+id/status_image"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:marsApiStatus="@{viewModel.status}" />
+    ```
+    The above `ImageView` has the same constraints as the `RecyclerView`. However, the width and height use `wrap_content` to center the image rather than stretch the image to fill the view. Also notice the `app:marsApiStatus` attribute set to `viewModel.status`, which calls your `BindingAdapter` when the `status` property in the `ViewModel` changes.
+   ![image](https://github.com/Xenoare/book-notes/assets/67181778/da266d23-5208-4fd2-9397-4067ead1d677)
+
+
+
+    
+
+
+
+
+
