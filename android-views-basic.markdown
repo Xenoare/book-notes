@@ -3118,6 +3118,10 @@ Notes:
 + [Bus Schedule](https://github.com/google-developer-training/android-basics-kotlin-bus-schedule-app/tree/starter)
 + [Aggregate functions](https://www.codecademy.com/learn/learn-sql/modules/learn-sql-aggregate-functions/cheatsheet)
 + [Joins](https://www.w3schools.com/sql/sql_join.asp)
++ [ViewModelProvider.Factory](https://developer.android.com/reference/androidx/lifecycle/ViewModelProvider.Factory)
++ [@Volatile annotation](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-volatile/)
++ [AsyncListDiffer](https://developer.android.com/reference/androidx/recyclerview/widget/AsyncListDiffer)
++ [RoomDatabase](https://developer.android.com/reference/android/arch/persistence/room/RoomDatabase)
 
 Table of Contents:
 + [Relational Database](#relational-database)
@@ -3192,4 +3196,280 @@ data class Schedule(
 
 * **Define the DAO** <br>
 DAO stands or Data Access Objects and is a Kotlin class that provides access to the data. <br>
-Specifically, the DAO is where would you include 
+Specifically, the DAO is where would you include functions for reading and manipulating data.
+1. Add a DAO class for the Schedule entitiy. In the `database.schedule` package, create a new file called `ScheduleDao` and define an interface called `ScheduleDao`.
+    ```kotlin
+    @Dao
+    interface ScheduleDao {}
+    ```
+2. These are two screen in the app each will need a different query. The first screen shows all the bus stops in ascending order by arrival time. In this use, the query just needs to get all collumns and include an appropriate `ORDER BY` clause. The query is speciied as a string passed into `@Query` annotation. Define a function `getAll()` that returns a List of `Schedule` obejcts including the `@Quary` annotations.
+   ```kotlin
+   @Query("SELECT * FROM schdule ORDER BY arrival_time ASC")
+   fun getAll(): List<Schedule>
+   ```
+3. For the second query, select all columns from the schedule table. You can reference Kotlin values from the query by preceding it with a colo (`:`) (e.g. `:stopName` from the function parameter). Define a `getBYStopName()` function that takes a `String` parameter called `stopName` and returns a `List` of `Schedule` objects with `@Query` annotation
+    ```kotlin
+    @Query("SELECT * FROM schedule WHERE stop_name = :stopName ORDER BY arrival_time ASC")
+    fun getByStopName(stopName: String): List<Schedule>
+    ```
+
+ * **Define the ViewModel** <br>
+ While `ScheduleDeo` is relatively simple, it's easy to see how this can get out of hand when working with two or more different screens. For example, DAO might look like this.
+    ```kotlin
+    @Dao
+    interface ScheduleDao {
+        
+        @Query(...)
+        getForScreenOne() ...
+    
+        @Query(...)
+        getForScreenTwo() ...
+    
+        @Query(...)
+        getForScreenThree()
+    
+    }
+    ```
+It's considered best practice to seperate the part of the DAO you expose to the view into a seperate class called a _view model_. This is a common architectural pattern in mobile apps.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/c5815b20-553b-45df-abac-9eb5faa9ed6f)
+
+By using a view model, you can take the advantage of the `ViewModel` class. The `ViewModel` class is used to store data related to an app's UI, and is also lifecycle aware, meaning that it responds to lifecycle events much like an activity or fragment does. If lifecycle events such as screen rotation cause an activity or fragment to be destroyed and recreated, the associated `ViewModel` won't need to be recreated.
+1. Create a new file called `BusScheduleViewModel` inside new package `viewmodels`. Define a class or the view model that takes a single parameter of type `ScheduleDao`.
+    ```kotlin
+    class BusScheduleViewModel(private val scheduleDao: ScheduleDao): ViewModel() {
+    ```
+2. Since this view model will be used with both screens, you'll need to add a method to get the full schedule as well as a filtered schedule by stop name. You can do this by calling the corresponding methods from `ScheduleDao`.
+   ```kotlin
+   fun fullSchedule(): List<Schedule> = scheduleDao.getAll()
+
+   fun scheduleForStopName(name: String): List<Schedule> = scheduleDao.getByStopName(name)
+   ```
+    As the ViewModel class is meant to be lifecycle aware, it should be instantiated by an object that can respond to lifecycle events. <br>
+    If you instantiate it directly in one of your fragments, then your fragment object will have to handle everything, including all the memory management, which is beyond the scope of what your app's code should do. Instead, you can create a class, called a factory, that will instantiate view model objects for you.
+1. To create a factory, below the view model class, create a new class `BusScheduleViewModelFactory`, that inherit from `ViewModelProvider.Factory`.
+    ```kotlin
+    class BusScheduleViewModelFactory(
+       private val scheduleDao: ScheduleDao
+    ) : ViewModelProvider.Factory {
+    }
+    ```
+2. You'll just need a bit of boilerplate code to correctly instantiate a view model. Instead of initializing the class directly, you'll override a method called `create()` that returns a `BusScheduleViewModelFactory` with some error checking. Implement the `create()` inside the `BusScheduleViewModelFactory` class as follows.
+   ```kotlin
+   override fun <T : ViewModel> create(modelClass: Class<T>): T {
+       if (modelClass.isAssignableFrom(BusScheduleViewModel::class.java)) {
+           @Suppress("UNCHECKED_CAST")
+           return BusScheduleViewModel(scheduleDao) as T
+       }
+       throw IllegalArgumentException("Unknown ViewModel class")
+   }
+   ```
+    You can now instantiate a BusScheduleViewModelFactory object with BusScheduleViewModelFactory.create(), so that your view model can be lifecycle aware without your fragment having to handle this directly.
+
+* **Create database class and pre-populate database** <br>
+Now that you've defined the models, DAO, and a view model for fragments to access the DAO, you still need to tell Room what to do with all of these classes. That's where the `AppDatabase` class comes in. An Android app using Room, such as yours, subclasses the `RoomDatabase` class and has a few key responsibilities. In your app, the AppDatabase needs to
+1. Specify which entities are defined in the database.
+2. Provide access to a single instance of each DAO class.
+3. Perform any additional setup, such as pre-populating the database.
+The `AppDatabase` class gives you complete control over your models, DAO classes and any database setup
+    1. To add an `AppDatabase` class, in the `database` package, create a new file called `AppDatabase`, and define a new `abstract class AppDatabase` that inherits from `RoomDatabase`.
+       ```kotlin
+        abstract class AppDatabase: RoomDatabase() {}
+       ```
+   2. The database class allows other classes easy access to the DAO classes. Add an abstract function that returns a `ScheduleDao`.
+      ```kotlin
+      abstract fun scheduleDao(): ScheduleDao
+      ```
+   3. When using an `AppDatabase` class, you want to ensure that only one instance of the database exists to prevent race conditions or other potential issues. The instance is stored in the companion object, and you'll also need a method that either returns the existing instance, or creates the database for the first time. This is defined in the `companion object`. Add the following companion object just below the `scheduleDao()` function.
+      ```kotlin
+      companion object {}
+      ```
+    In the `companion object` add a property called `INSTANCE` of type `AppDatabase`. This value is initially set to `null`. This is also marked with a `@Volatile` annotation.
+   ```kotlin
+   @Volatile
+   private var INSTANCE: AppDatabase? = null
+   ```
+   Below the `INSTANCE` property, define a function to return the `AppDatabase` instance:
+   ```kotlin
+   fun getDatabase(context: Context): AppDatabase {
+        return INSTANCE ?: synchronized(this) {
+            val instance = Room.databaseBuilder(
+                context,
+                AppDatabase::class.java,
+                "app_database")
+                .createFromAsset("database/bus_schedule.db")
+                .build()
+            INSTANCE = instance
+    
+            instance
+        }
+    }
+   ```
+   In the implementation for `getDatabase()`, you use the Elvis operator to either return the existing instance of the database (if it already exists) or create the database for the first time if needed. In this app, since the data is prepopulated. You also call `createFromAsset()` to load the existing data. The `bus_schedule.db` file can be found in the assets.database package in your project.
+   4. Just like the model classes and DAO, the database class requires an annotation providing some specific information. All the entity types (you access the type itself using `ClassName::class`) are listed in an array. The database is also given a version number, which you'll set to 1. Add the @Database annotation as follows.
+      ```kotlin
+      @Database(entities = arrayOf(Schedule::class), version = 1)
+      ```
+      The version number is incremented each time you make a schema change. The app checks this version with the one in the database to determine if and how a migration should be performed.
+    5. In the `com.example.busschedule` package, add a new file called `BusScheduleApplication`, and create a `BusScheduleApplication` class that inherits from `Application`.
+       ```kotlin
+       class BusScheduleApplication : Application() {}
+       ```
+   6. Add a database property of type `AppDatabase`. The property should be lazy and return the result of calling `getDatabase()` on your `AppDatabase` class.
+      ```kotlin
+      class BusScheduleApplication : Application() {
+       val database: AppDatabase by lazy { AppDatabase.getDatabase(this) }
+      ```
+   7. Finally, to make sure that `BusScheduleApplication` class is used (instead of the default base class `Application`), you need to make a small change to the manifest. In `AndroidMainifest.xml`, set the `android:name` property to `com.example.busschedule.BusScheduleApplication`.
+
+* **Create the ListAdapter** <br>
+Alternate for a dynamically changing list is called `ListAdapter`. `ListAdapter` uses [AsyncListDiffer](https://developer.android.com/reference/androidx/recyclerview/widget/AsyncListDiffer) to determine the diff between old list data and thew new list.
+![image](https://github.com/Xenoare/book-notes/assets/67181778/8a7fb37e-4cf5-4616-9c92-ee9c361bc753)
+1. Create a new file `BusStopAdapter`. The class extends a generic `ListAdapter` that takes a list of `Schedule` objects and a `BusStopViewHolder` class for the UI. The `BusStopAdapter` class itself also takes a parameter, `onItemClicked()`. The function will be used to handle navigation when an item is selected on the first screen, but for the second screen, you'll just pass in an empty function.
+    ```kotlin
+    class BusStopAdapter(private val onItemClicked: (Schedule) -> Unit) : ListAdapter<Schedule, BusStopAdapter.BusStopViewHolder>(DiffCallback) {}
+    ```
+2. Similar to view adapter, you need a view holder so that you can access views created from your layout file in code. The layout for the cells is already created. Simply, a `BusStopViewHolder` class as shown and implement the `bind()` function to set `stopNameTextView` text to the stop name and the `arrivalTimeTextView`.
+    ```kotlin
+    class BusStopViewHolder(private var binding: BusStopItemBinding): RecyclerView.ViewHolder(binding.root) {
+    @Suppress("SimpleDateFormat")
+        fun bind(schedule: Schedule) {
+            binding.stopNameTextView.text = schedule.stopName
+            binding.arrivalTimeTextView.text = SimpleDateFormat("h:mm a").format(Date(schedule.arrivalTime.toLong() * 1000)
+        }
+    }
+    ```
+3. Override and implement `onCreateViewHolder()` and inflate the layout and set the `onClickListener()` to call `onItemClicked()` for the item at the current position.
+   ```kotlin
+   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BusStopViewHolder {
+       val viewHolder = BusStopViewHolder(
+           BusStopItemBinding.inflate(
+               LayoutInflater.from( parent.context),
+               parent,
+               false
+           )
+       )
+       viewHolder.itemView.setOnClickListener {
+           val position = viewHolder.adapterPosition
+           onItemClicked(getItem(position))
+       }
+       return viewHolder
+    }
+   ```
+4. Override and implement `onBindViewHolder()` and to bind the view at the specified position.
+   ```kotlin
+   override fun onBindViewHolder(holder: BusStopViewHolder, position: Int) {
+       holder.bind(getItem(position))
+    }
+   ```
+5. An companion object and implement `DiffCallback`.
+   ```kotlin
+   companion object {
+       private val DiffCallback = object : DiffUtil.ItemCallback<Schedule>() {
+           override fun areItemsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
+               return oldItem.id == newItem.id
+           }
+    
+           override fun areContentsTheSame(oldItem: Schedule, newItem: Schedule): Boolean {
+               return oldItem == newItem
+           }
+       }
+    }
+   ```
+
+Now, setup the Fragment
+1. First, in `FullScheduleFragment`, you need to get a reference to the view model.
+   ```kotlin
+   private val viewModel: BusScheduleViewModel by activityViewModels {
+       BusScheduleViewModelFactory(
+           (activity?.application as BusScheduleApplication).database.scheduleDao()
+       )
+    }
+   ```
+2. Then in `onViewCreated()`, setup the recycler view and assign its layout manager.
+   ```kotlin
+   recyclerView = binding.recyclerView
+   recyclerView.layoutManager = LinearLayoutManager(requireContext())
+   val busStopAdapter = BusStopAdapter({
+   val action = FullScheduleFragmentDirections.actionFullScheduleFragmentToStopScheduleFragment(
+       stopName = it.stopName
+   )
+   view.findNavController().navigate(action)
+    })
+    recyclerView.adapter = busStopAdapter
+    ```
+3. Update a list view, call `submitList()`, passing in the list of bus stops from the view model.
+    ```kotlin
+    // submitList() is a call that accesses the database. To prevent the
+    // call from potentially locking the UI, you should use a
+    // coroutine scope to launch the function. Using GlobalScope is not
+    // best practice, and in the next step we'll see how to improve this.
+    GlobalScope.launch(Dispatchers.IO) {
+       busStopAdapter.submitList(viewModel.fullSchedule())
+    }
+    ```
+4. Do the same in `StopScheduleFragment` model.
+
+
+* **Respond to data changes using Flow** <br>
+While your list view is set up to efficiently handle data changes whenever `submitList()` is called, your app won't be able to handle dynamic updates just yet. To see for yourself, try opening the Database Inspector and running the following query to insert a new item into the schedule table.
+    ```kotlin
+    INSERT INTO schedule
+    VALUES (null, 'Winding Way', 1617202500)
+    ```
+The problem is that the `List<Schedule>` is returned from each of the DAO functions only once. Even if the underlying data is updated, `submitList()` won't be called to update the UI, and from the user's perspective, it will look like nothing has changed. <br>
+You can take the advantage of a Kotlin _asynchronous flow_ (often called _flow_) that will allow the DAO to continously emit data from the database. If an item is inserted, updated or deleted, the result will be sent back to the fragment. <br>
+Using a function called `collect()`, you `submitList()` using the new value emitted from the flow so that your `ListAdapter` can update the UI based on the new data. 
+1. To use flow in Bus Schedule. To convert DAO functions to return a `Flow`, simply change the return type of the `getAll()` function to `Flow<List<Schedule>>`
+   ```kotlin
+   fun getAll(): Flow<List<Schedule>>
+   ```
+2. Likewise, update the return value of the `getByStopName`
+    ```kotlin
+    fun getByStopName(stopName: String): Flow<List<Schedule>>
+    ```
+3. The functions in the view model that access the DAO also need to be updated. Update the return values to `Flow<List<Schedule>>` for both fullSchedule() and `scheduleForStopName()`.
+    ```kotlin
+    class BusScheduleViewModel(private val scheduleDao: ScheduleDao): ViewModel() {
+
+       fun fullSchedule(): Flow<List<Schedule>> = scheduleDao.getAll()
+    
+       fun scheduleForStopName(name: String): Flow<List<Schedule>> = scheduleDao.getByStopName(name)
+    }
+    ```
+4. Finally, in `FullScheduleFragment`, the `busStopAdapter` should be updated when you call `collect()` on the query results. Because `fullSchedule()` is a suspend function, it needs to be called from a coroutine. Replace the line.
+   ```kotlin
+   busStopAdapter.submitList(viewModel.fullSchedule())
+   ```
+   With the code that uses the flow returned from the `fullSchedule()`
+    ```kotlin
+    lifecycle.coroutineScope.launch {
+       viewModel.fullSchedule().collect() {
+           busStopAdapter.submitList(it)
+       }
+    }
+    ```
+5. Do the same in `StopScheduleFragment`, but replace the call to `scheduleForStopName()`, with the following.
+    ```kotlin
+    lifecycle.coroutineScope.launch {
+       viewModel.scheduleForStopName(stopName).collect() {
+           busStopAdapter.submitList(it)
+       }
+    }
+    ```
+6. Once app is running, return to the Database Inspector, and send the following query to insert a new arrival.
+   ```kotlin
+   INSERT INTO schedule
+   VALUES (null, 'Winding Way', 1617202500)
+   ```
+
+
+
+
+   
+
+
+   
+    
+   
+
+
