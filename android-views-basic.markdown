@@ -3136,12 +3136,60 @@ An easy way to use a database in an Android app, is with library called `Room`. 
 
 * **Add Room Dependancy** <br>
 First things, that we can define the `Room` dependancy to be able to use room.
+    ```kotlin
+    // build.grade (project-level)
+    ext {
+       kotlin_version = "1.6.20"
+       nav_version = "2.4.1"
+       room_version = '2.4.2'
+    }
+    ```
+    Next, we can define other depnedancies on app level gradle
+    ```kotlin
+    // build.grade (app-level)
+    ext {
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$room_version"}
+    ```
+
+* **Create an Entitiy** <br>
+When working with Room, each table is repersented by a class. In an `ORM` library such as Room, there are often called _model classes_, or _entities_.
+The database for the Bus Schedule app jsut consist of a single table, schedule, which includes basic information about a bus arrival.
++ `id`: An integer providing a unique identifier that serves as the primary key.
++ `stop_name`: A string
++ `arrival_time`: An integer
+When working with Room, however, you should only be concerned with the Kotlin types when defining your model classes. **Mapping** the data types in your model class to the ones used in the database. <br>
+
+When a project has many files, consider organizing your files in different package to provide better access control for each class and to make it easier to locate related classes. <br>
+
+To create an entity for the "schedule" table, add a new **package** called `database`. Within that package, add a new package called `schedule` for the **entitiy**. Then in `database.schedule` package, create a new file called `Schedule.kt` and define a data class called `Schedule`.
 ```kotlin
- //
-ext {
-   kotlin_version = "1.6.20"
-   nav_version = "2.4.1"
-   room_version = '2.4.2'
-}
+data class Schedule ()
+```
+Define the primary key to uniquely idenfity the each row. The first property you'll add to the `Schedule` class is an integer to represent a unique id. Add a new property and mark it with the `@PrimaryKey` annotation.
+```kotlin
+@PrimaryKey val id: Int
+```
+Add a column name of the bus stop. The column should be type `String`. For new columns, you'll to add a `@ColumnInfo` annotations to specify a name for the column. Typically SQL column names will have **words** _seperated by an underscore_ as opposed to the `lowerCamalCase` used by Kotlin properties. For this column, we also don't want the value to be null. so you should mark it with `@NonNull` annotations.
+```kotlin
+@NonNull @ColumnInfo(name = "stop_name") val stopName: String,
+```
+Arrival times are represented in the database using integers. This is [Unix timestamp](https://www.unixtimestamp.com/) that can be converted into a usable date. While different versions of SQL offer ways to converts dates, for your purposes, you'll stick Kotlin date formatting functions.
+```kotlin
+@NonNull @ColumnInfo(name = "arrival_time") val arrivalTime: Int
+```
+By default, Room uses the class name as the database table name. Thus, the table name as defined `@Entity(tableName="schedule")`, but since Room are not case sensitive, you can omit the table name.
+```kotlin
+@Entity
+data class Schedule(
+    @PrimaryKey val id: Int,
+    @NonNull @ColumnInfo(name = "stop_name") val stopName: String,
+    @NonNull @ColumnInfo(name = "arrival_time") val arrivalTime: Int )
 ```
 
+* **Define the DAO** <br>
+DAO stands or Data Access Objects and is a Kotlin class that provides access to the data. <br>
+Specifically, the DAO is where would you include 
