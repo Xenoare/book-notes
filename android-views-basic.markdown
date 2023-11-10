@@ -3112,11 +3112,36 @@ Let's make this appear in the app. We will use Binding Adapter for an `ImageView
     The above `ImageView` has the same constraints as the `RecyclerView`. However, the width and height use `wrap_content` to center the image rather than stretch the image to fill the view. Also notice the `app:marsApiStatus` attribute set to `viewModel.status`, which calls your `BindingAdapter` when the `status` property in the `ViewModel` changes.
    ![image](https://github.com/Xenoare/book-notes/assets/67181778/da266d23-5208-4fd2-9397-4067ead1d677)
 
+## Relational Database
+Notes:
++ [SQL Intro](https://github.com/google-developer-training/android-basics-kotlin-sql-basics-app)
++ [Bus Schedule](https://github.com/google-developer-training/android-basics-kotlin-bus-schedule-app/tree/starter)
++ [Aggregate functions](https://www.codecademy.com/learn/learn-sql/modules/learn-sql-aggregate-functions/cheatsheet)
++ [Joins](https://www.w3schools.com/sql/sql_join.asp)
 
+Table of Contents:
++ [Relational Database](#relational-database)
++ [Room and Flow](#introduction-to-room-and-flow)
 
-    
+#### Relational database
+A relational database is a common type of database that organizes data into tables, columns, and rows. When writing Kotlin code, you create classes that represent objects. A table in a relational database works the same way. Besides representing data, tables can also reference other tables so that you can have relationships between them. A classic example would be a table of "students", "teachers," and "course". 
+![image](https://github.com/Xenoare/book-notes/assets/67181778/f3a3c6b4-a354-4814-a280-d0541bbbd11f)
 
++ You can use variety of clauses in a `SELECT` statement including `WHERE`, `GROUP BY`, `ORDER BY` and `LIMIT` to make your quaries more specific.
++ You can use aggregate functions to combine data from multiple rows into a single column.
++ You can add, update and delete rows in a database using the SQL `INSERT`, `UPDATE`, and `DELETE` statements repectively.
 
+#### Introduction to Room and Flow
+An easy way to use a database in an Android app, is with library called `Room`. Room is what's called an `ORM` (`Object Relational Mapping`) library, which maps the tables in **relational database** to **objects usable** in Kotlin code. 
 
-
+* **Add Room Dependancy** <br>
+First things, that we can define the `Room` dependancy to be able to use room.
+```kotlin
+ //
+ext {
+   kotlin_version = "1.6.20"
+   nav_version = "2.4.1"
+   room_version = '2.4.2'
+}
+```
 
