@@ -3151,7 +3151,6 @@ First things, that we can define the `Room` dependancy to be able to use room.
     Next, we can define other depnedancies on app level gradle
     ```kotlin
     // build.grade (app-level)
-    ext {
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     
