@@ -3155,7 +3155,7 @@ First things, that we can define the `Room` dependancy to be able to use room.
     kapt "androidx.room:room-compiler:$room_version"
     
     // optional - Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:$room_version"}
+    implementation "androidx.room:room-ktx:$room_version"
     ```
 
 * **Create an Entitiy** <br>
@@ -3282,28 +3282,28 @@ The `AppDatabase` class gives you complete control over your models, DAO classes
       ```kotlin
       companion object {}
       ```
-    In the `companion object` add a property called `INSTANCE` of type `AppDatabase`. This value is initially set to `null`. This is also marked with a `@Volatile` annotation.
-   ```kotlin
-   @Volatile
-   private var INSTANCE: AppDatabase? = null
-   ```
-   Below the `INSTANCE` property, define a function to return the `AppDatabase` instance:
-   ```kotlin
-   fun getDatabase(context: Context): AppDatabase {
-        return INSTANCE ?: synchronized(this) {
-            val instance = Room.databaseBuilder(
-                context,
-                AppDatabase::class.java,
-                "app_database")
-                .createFromAsset("database/bus_schedule.db")
-                .build()
-            INSTANCE = instance
-    
-            instance
+        In the `companion object` add a property called `INSTANCE` of type `AppDatabase`. This value is initially set to `null`. This is also marked with a `@Volatile` annotation.
+       ```kotlin
+       @Volatile
+       private var INSTANCE: AppDatabase? = null
+       ```
+       Below the `INSTANCE` property, define a function to return the `AppDatabase` instance:
+       ```kotlin
+       fun getDatabase(context: Context): AppDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context,
+                    AppDatabase::class.java,
+                    "app_database")
+                    .createFromAsset("database/bus_schedule.db")
+                    .build()
+                INSTANCE = instance
+        
+                instance
+            }
         }
-    }
-   ```
-   In the implementation for `getDatabase()`, you use the Elvis operator to either return the existing instance of the database (if it already exists) or create the database for the first time if needed. In this app, since the data is prepopulated. You also call `createFromAsset()` to load the existing data. The `bus_schedule.db` file can be found in the assets.database package in your project.
+       ```
+       In the implementation for `getDatabase()`, you use the Elvis operator to either return the existing instance of the database (if it already exists) or create the database for the first time if needed. In this app, since the data is prepopulated. You also call `createFromAsset()` to load the existing data. The `bus_schedule.db` file can be found in the assets.database package in your project. <br>
    4. Just like the model classes and DAO, the database class requires an annotation providing some specific information. All the entity types (you access the type itself using `ClassName::class`) are listed in an array. The database is also given a version number, which you'll set to 1. Add the @Database annotation as follows.
       ```kotlin
       @Database(entities = arrayOf(Schedule::class), version = 1)
