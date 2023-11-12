@@ -1492,7 +1492,7 @@ The anatomy of Alert Dialogs
     1. Configure the gradle files. enable the `dataBinding` property under the `buildFeatures` section
        ```xml
        buildFeatures {
-        viewBinding = true
+        dataBinding = true
        }
        ```
     2. Also apply the `kotlin-kapt` plugin.
