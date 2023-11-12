@@ -230,6 +230,7 @@ Firstly we can enable the view binding options via `build.gradle` file
 ```kotlin
 buildFeatures {
         viewBinding = true
+        dataBinding = true
 }
 ```
 
