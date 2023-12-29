@@ -48,3 +48,18 @@ $$T = Fr$$
 + The Slotting (put the coil in the teeth of a rotor), we enable the reluctance of the magnetic circuit to be reduced and transfer the force from the conductor themself to the sides of the iron teeth. which are robust and well to transmit the resulting torque to the shaft.
 + To maximise the torque, we want as much current in the rotor conductors. Normally, we would use the copper as the highest current density ($2 - 8 A/mm^{2}$), also the cross-sectional area of the slots to accomodate copper as much as possible.
 
++ In linear system, work is force times distance, but in rotary terms work is torque times angle. Hence, the unit is **newton-metres**, and the angles are measured in **radians**
+$$W = F \times (r \times \theta) = (F \times r) \times \theta = T \times \theta$$
+
++ The one obvious disadvantage of a small high-speed motor and gearbox is that the acccoustic noise (both from the motor itself and from the power transmisson) is higher than it would be from a larger direct drive motor.
++ When noise must be minimised, a direct drive motor is therefore preferred, despite its larger size.
++ In order to link the mechanical and electric worlds, we need to maintain the **stationary condition**, where the current in the conductor is determined by the mass of the mechanical load.
+$$T = mg = BIl, I = \frac{mg}{BI}$$
+
++ The power-balanced from the both heat in the conductor, and the mechanical output power.
+<p align="center">
+    <img width="450" height="150" src="https://github.com/Xenoare/book-notes/assets/67181778/730451df-40bf-4a0b-b85e-13d669da9b43"/>
+</p>
+
++ In the e.m.f, if E is less than the applied voltage V, the current will be positive, and the electrical power will flow from the source, resulting in motoring action. On the other hand if E is larger than V, the current will flow back to the source, and the conductor will be acting as a generator.
++ Motoring implies that the conductors is moving in the same direction as the electromagnetic force (_BIl_) at a speed such that the back e.m.f. (_Blv_) is less that the applied voltage _V_.
