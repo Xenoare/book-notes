@@ -105,3 +105,39 @@ and T3 are fired simultaneously.
 <p align="center">
     <img width="450" height="150" src="https://github.com/Xenoare/book-notes/assets/67181778/d034f3af-fc9f-45b4-bdbc-fc693305c9d4"/>
 </p>
+
+## Chapter 3 : Conventional D.C. Motors
++ In principle, all that has to done is to alter the number of turns and the size of wire making up the coils in the machine. A 12 V, 4 A motor, for example, is more or less equivalence of 24 V, by winding its **coil twice**.
++ The input power and output power would be unchanged, and externally there would be no change in appearance, except that the terminals might be a bit smaller. 
++ Torque is produced by the interaction between the axial current-carrying conductors on the  rotor and the radical magnetic flux producced by the stator. The flux or `excitation` can be furnished by permanent magnets or by field windings.
++ The advantage of permanent magnets is that this required no electrical supply for the field, hence the overral size of the motor can be smaller. But, the strength of the field cannot be varied, so one possible option for control is ruled out.
++ We should recall that in the Chapter 1, that the mechanical output power actually comes from the field system. The excitation acts like a **catalysts**, making the energy conversion possible but not contributing to the output.
+<p align="center">
+    <img width="450" height="150" src="https://github.com/Xenoare/book-notes/assets/67181778/11ff5a21-0893-4736-a839-d33cb37d68f8"/>
+</p>
+
++ The main power of the circuit consist of a set of idential coils would in the **slots of the motor** (known as the armature). Current is fed into and out of the rotor via carbon `brushes` which make sliding contact with the `commutator`, which consist of insulated cooper segments counted on a cylindrical former.
++ The purpose of the commutator is to ensure that regardlesss of  the position of the rotor, the pattern of current flow in the rotor is always as shown below
+<p align="center">
+    <img width="450" height="150" src="https://github.com/Xenoare/book-notes/assets/67181778/34d32fc6-9638-4257-b558-68d6bedcc1e8"/>
+</p>
+
++ Current enters the rotor via one brush, flows through all the rotor coils in the directions shown in Figure above and leaves via the other brush.
++ It is straightforward to show that the total torque developed is given by
+$$T = K_{T}\Phi I$$
+
++ Where $\Phi$ is the total produced by the field, and $K_{T}$ is constant for a given motor. We can see that by this eq. the direction of the torque can be reversed by either reversing either the armature current (_I_) or the flux ($\Phi$), let's say when we want to motor to run in reverse.
++ Broadly speaking, the higher the number of coils (and commutator segments) the better, because the ideal armature would be one in which the pattern of current on the rotor corresponded to a `current sheet`, rather than a series of discrete packets of current.
++ Returning on how the commutator work, we note that from the commutator figure, for half a revolution - while side _a_ is under the N pole and the side _b_ is under the S pole. The current needs to be a positive in side _a_ and negative in side _b_ in order to produce positive torque.
++ For the other half revolution, while side _a_ is under the S pole and side _b_ is under the N pole, the current must flow in the opposite direction through the coil for it to continue to produce positive torque.
++  This reversal of current takes place in each coil as it passes through the interpolar axis, the coil being ‘switchedround’ by the action of the commutator sliding under the brush.
+<p align="center">
+    <img width="450" height="150" src="https://github.com/Xenoare/book-notes/assets/67181778/acc595a6-015e-470b-8e02-e3781575dfed"/>
+</p>
+
++ The diagram above shows that a single coil fed via the commutator, and burshes with current that always flows in at the top brush
++ In the left-hand sketch, coil-side _a_ is under the N pole and carries positive current because it is connected to the shaded commutator segment which in turn is fed from the top brush. Side _a_ therefore exposed to a flux density directed from left (N) to right (S) in the sketch, and will therefore experience a downward force.
++ Conversely, side _b_ has negative current but it also lies in a Xux density directed from right to left, so it experiences an upward force. There is thus an anti-clockwise torque on the rotor.
++ When the rotor turns to the position shown in the sketch on the right, the current in both sides is reversed, because side _b_ is now fed with the positive current v3 ia the unshaded commutator segments.
++ The direction of force on each coil also reversed, which is exactly what we want in order for the torque to remain clockwise. Overall, the torque is constant.
++ The main difficulty in achieving good commutation arises because of the sel inductance of the armature coils and the associated stored energy. Because, as we've seen earlier, the inductive circuits **tend to resist change in current**, and if the current reversal has not been fully completed by the time the brush slides off the commutator in question, there will be a spark at the trailing edge of the brush.
