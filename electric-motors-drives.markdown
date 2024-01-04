@@ -141,3 +141,37 @@ $$T = K_{T}\Phi I$$
 + When the rotor turns to the position shown in the sketch on the right, the current in both sides is reversed, because side _b_ is now fed with the positive current v3 ia the unshaded commutator segments.
 + The direction of force on each coil also reversed, which is exactly what we want in order for the torque to remain clockwise. Overall, the torque is constant.
 + The main difficulty in achieving good commutation arises because of the sel inductance of the armature coils and the associated stored energy. Because, as we've seen earlier, the inductive circuits **tend to resist change in current**, and if the current reversal has not been fully completed by the time the brush slides off the commutator in question, there will be a spark at the trailing edge of the brush.
+
++ It has already been mentioned that the flux is usually constant at its full value, that can be written in the form
+$$T = K_{t}I$$
+$$E = K_{e}\omega$$
+
++ Where $K_{t}$ is the motor torque constant, and the $k_{e} is the e.m.f constant, where the $\omega$ is the angular speed in `rad/s`.
++ Remember that the torque constant (Nm/A) and the e.m.f constant (V/rad/s) it is a different physical phenomena, where in fact 1 Nm/A = 1 V/rad/s
+<p align="center">
+    <img width="450" height="150" src="https://github.com/Xenoare/book-notes/assets/67181778/01964e92-9058-4721-aff3-42f3d1eb872f"/>
+</p>
+
++ Under the motoring conditions, the motional e.m.f. E is alawys opposes the applied voltage V, and for this reason it is referred to as the `back e.m.f.`, hence for the current to be force into the motor, voltage V must be greater than the e.m.f E, the armature circuit voltage eq. is given by.
+$$V = E + IR + L\frac{d\textit{I}}{d\textit{t}}$$
+
++ Where the last term represent the inductive volt-drop due to the armature self-inductance.
+<p align="center">
+    <img width="450" height="150" src="https://github.com/Xenoare/book-notes/assets/67181778/0059d93b-0d86-4f6b-9f40-1156ac7100ac"/>
+</p>
+
++ The motor can operate at any speed up to base speed, and at any
+torque (current) up to the rated value by appropriate choice of armature
+voltage.
++ To run faster than the base speed, then the field flux must be reduced as indicated by this eq. where _n_ is the speed
+$$V = E = K_{E}\Phi n$$ that is equivlent to $$n = \frac{V}{K_{E}\Phi}$$
+
++ This operation is known as the `field wweakening`. For example, that by halving the flux (keeping the armature voltage at its full value), the no-load speed is doubled.
+<p align="center">
+    <img width="450" height="150" src="https://github.com/Xenoare/book-notes/assets/67181778/b7df203f-fab9-4df1-ab55-3494693cbd58"/>
+</p>
+
++ The increase in speed is however obtained at the expanse of available torque, which is proportional to `flux` times `current`.
++ To sum up, the speed is controlled by these.
+    1. Below base speed, the Xux is maximum, and the speed is set by the armature voltage. Full torque is available at any speed.
+    2. Above base speed, the armature voltage is at (or close to) maximum and the flux is reduced in order to raise the speed. The maximum torque available reduces in proportion to the Xux.
