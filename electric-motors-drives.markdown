@@ -174,4 +174,39 @@ $$V = E = K_{E}\Phi n$$ that is equivlent to $$n = \frac{V}{K_{E}\Phi}$$
 + The increase in speed is however obtained at the expanse of available torque, which is proportional to `flux` times `current`.
 + To sum up, the speed is controlled by these.
     1. Below base speed, the Xux is maximum, and the speed is set by the armature voltage. Full torque is available at any speed.
-    2. Above base speed, the armature voltage is at (or close to) maximum and the flux is reduced in order to raise the speed. The maximum torque available reduces in proportion to the Xux.
+    2. Above base speed, the armature voltage is at (or close to) maximum and the flux is reduced in order to raise the speed. The maximum torque available reduces in proportion to the flux.
+
+## Chapter 4 : D.C. Motor Drives
++ For the motors up to a few kilowatts the armature converter can be supplied from either single-phase or three-phase mains (but generally speaking, for the larger motors three-phased is always being used).
++ The smoothing effect of the armature inductance is important proces in achieving succsfull motor operation i.e. that the armature acts as a low-pass filter, blocking most of the rippl , and leading to a more or less constant armature current.
++ There wil come a point where the current ripple will touches the zero-current line (such as the  discountinuous current) in the continuous d.c. motors operator from any given the converter delay angle.
+<p align="center">
+    <img width="450" height="150" src="https://github.com/Xenoare/book-notes/assets/67181778/4616f8ff-0e54-47bd-be27-c19368cdc06e"/>
+</p>
+
++ Typical armature voltage and current waveforms in the discountinuous mode are given in the graph below. The armature current consisting of the discrete pulses of current that occour only while the armature is connected to the supply, with zero current for the period (representated with $\theta$).
+<p align="center">
+    <img width="450" height="150" src="https://github.com/Xenoare/book-notes/assets/67181778/7fcfc50b-ed03-4f3b-8ab4-c4a95041e7b8"/>
+</p>
+
++ So faw, we've looked at the converter as a `rectifier`, where it supplying power from the a.c. mains to a d.c. machine running in the positive direction and acting as a `motor` (This stuff is called as one quadrant operation by the reference to quadrant 1 of the complete torque-speed plane)
+<p align="center">
+    <img width="450" height="150" src="https://github.com/Xenoare/book-notes/assets/67181778/3ee6c37c-fef5-45da-b304-26cf2e6805f8"/>
+</p>
+
++ What if the case that we want to reverse or achieve regenerative braking. The good news is that the `machine` itself is a `bidirectional` energy converter, where as if we apply a positive voltage `V` greater (`>`) than `E`. Hence, the current flows into the armature and the machine as the motor.
++ Based on this, if we reduce the voltage `V`, then the `E` is less, the torque and power automatically rever direction, and the machine acts as a generator. Converting the mechanical energy into electrical energy.
++ When the motor is running at full speed forward, the converter delay angle will be small, and the converter output voltage `V` and current `I` will both be positive, as the Figure shown below.
+<p align="center">
+    <img width="450" height="150" src="https://github.com/Xenoare/book-notes/assets/67181778/d07eafb4-baee-4654-ade4-931adefe7181"/>
+</p>
+
++ In order to brake the motor, the torque has to be reversed, the only way this can be done is by reversing the direction of the armature current. (The converter can only supply positive current, so to reverse the motor torque, we have to reverse the armature connection either by using `switch` or `contactor`)
++ One of the drawbacks of a converter-fed d.c. drive is that the supply power factor is very low when the motor is operating at the high torque (i.e. `high current`) and low speed (i.e. low `armature voltage`), and it less than unity even at base speed and full load.
+
++ The closed-loop current controller, or current loop is at the heart of the drive system and is indicated by the `shaded region` in the figure above.
+<p align="center">
+    <img width="450" height="150" src="https://github.com/Xenoare/book-notes/assets/67181778/baca8fd0-7ad0-405a-a120-e9a06219ee5a"/>
+</p>
+
++ The purpose of the current loop is to make the actual motor curerent follow the current reference signal ($I_{ref}$), it does this by comparing a feedback signal of actual motor current with the current reference signal, and amplifying the difference to control the firing angle $\alpha$.
