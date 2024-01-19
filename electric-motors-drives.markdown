@@ -2,7 +2,7 @@ by Austin Hughes
 
 ## Chapter 1 : Electric Motor
 + Magnetic Field (`Excitation`) is essential to the working of the motor, it acts only as a catalyst and all of the mechanical output power comes from the electrical supply to the conductors on which force is develop.
-+ The flux density (**B**) is simply the flu in the tube ($\Phi$) divided by the cross sectional area (**A**) of the tube.
++ The flux density (**B**) is simply the flux in the tube ($\Phi$) divided by the cross sectional area (**A**) of the tube.
 $$B = \frac{\Phi}{A}$$
 
 + In the SI system, the unit of magnetic flux is the Weber (Wb), the flux density is clearly one weber per square meter ($\frac{Wb}{m^2}$) or known as the one Tesla (T).
@@ -69,7 +69,7 @@ $$T = mg = BIl, I = \frac{mg}{BI}$$
 + It would be better if a significant amount of energy could be stored within the converter itself; short-term energy demands could then be met instanly, thereby reducing rapid fluctuations in the power drawn from the mains.
 + Transistor is effectively a controllable resistor, i.e. the resistance between collector and emitter depends on the current in the base-emitter junction.
 + When an inductance _L_ carries a current _I_, the energy stored in the magnetic field (_W_) is given by
-$$W = /frac{1}{2}LI^2$$
+$$W = \frac{1}{2}LI^2$$
 
 + A diode is a one-way valves because it offers very little resistance to the current flowing from anode to cathode. Given the circuit, when the transistor is on, the current _I_ flows through the load, but not through the diode as the on A. Otherwise, when transistor is turned off, the current and the battery drops suddenly to zero. But the stored energy in the inductance means that its current cannot suddenly disappear, as the in the B.
 <p align="center">
@@ -173,7 +173,7 @@ $$V = E = K_{E}\Phi n$$ that is equivlent to $$n = \frac{V}{K_{E}\Phi}$$
 
 + The increase in speed is however obtained at the expanse of available torque, which is proportional to `flux` times `current`.
 + To sum up, the speed is controlled by these.
-    1. Below base speed, the Xux is maximum, and the speed is set by the armature voltage. Full torque is available at any speed.
+    1. Below base speed, the flux is maximum, and the speed is set by the armature voltage. Full torque is available at any speed.
     2. Above base speed, the armature voltage is at (or close to) maximum and the flux is reduced in order to raise the speed. The maximum torque available reduces in proportion to the flux.
 
 ## Chapter 4 : D.C. Motor Drives
@@ -210,3 +210,7 @@ $$V = E = K_{E}\Phi n$$ that is equivlent to $$n = \frac{V}{K_{E}\Phi}$$
 </p>
 
 + The purpose of the current loop is to make the actual motor curerent follow the current reference signal ($I_{ref}$), it does this by comparing a feedback signal of actual motor current with the current reference signal, and amplifying the difference to control the firing angle $\alpha$.
+
+## Chapter 5 : Induction Motors - Rotating Field, Slip and Torque
++ The diff between induction motor and d.c. are `first` that the supply to the `induction motor` is a.c. (usually 3-phase, but induction motor rotates relative to the stator, whereas in the d.c. motor it is stationary and thirdly that both stator and rotor in the induction motor are non salient (or `effectively smooth`)
++ Whereas the d.c. motor stator has projecting poles or saliencies which define the position of the field windings.
