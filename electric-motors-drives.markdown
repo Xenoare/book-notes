@@ -223,4 +223,37 @@ $$V = E = K_{E}\Phi n$$ that is equivlent to $$n = \frac{V}{K_{E}\Phi}$$
 
 + If we plot the variation of the radial air-gap flux density with respect to the distance round the stator, at each of the three instants of time, we get the patterns shown in the table below.
 + `Note that`, the first feature is that the radial flux density `varies` sinusodially in space.
++ For the 4-pole wave here, one complete revolution takes two cycles of the supply, so the speed is `25 rev/s` (`1500 rev/min`) with a 50 Hz supply, or 30 rev/s (`1800 rev/min`) at 60 Hz. The general rule for th speed of the field (which is known as the synchronous speed) $N_{s}$, in `rev/min` is
+$$ N_{S} = \frac{120f}{p}$$
++ Where p is the pole number (it must be `even integer`). The synchronous speeds for commonly used pole numbers are given in the table below.
+<p align="center">
+    <img width="450" src="https://github.com/Xenoare/book-notes/assets/67181778/4ed8b0cc-64b9-446a-83c4-7c75a0c8a52a"/>
+</p>
+
++ Production of the rotating magnetic field. If we inspect the stator winding of an `induction motor`, we find that it consist of a uniform array of idential coils, and hence located in slots.
++ The `three-phase windings` are connected directly to a three-phase a.c. supply, and so the currents (which producce the MMF that sets up the flux) are of equal amplitude but differ in time phase by one-third of a cycle (120).
++ In Figure below, we can se that by positioning two coils (each of which spans one pole-pitch) `180 deg` apart we can obtain the correct number of poles.
+<p align="center">
+    <img width="450" src="https://github.com/Xenoare/book-notes/assets/67181778/e76fc4c7-da94-4756-b854-ad7528bbaa5c"/>
+</p>
+
++ A clearer picture of the air-gap flux wave is presented in the figure below, where more equally spaced flux lines have been added to emphasise the uniformity of the flux density between the go and `return sides of the coils`.
+<p align="center">
+    <img width="450" src="https://github.com/Xenoare/book-notes/assets/67181778/f45369a9-2145-41eb-9bd5-b4b412f40282"/>
+</p>
+
++ We can improve matters by adding more coils in the `adjacent slots`, as all the coils have the same number of turns, and carry the same current. The addition of the extra slightly displaced coils gives rise to th stepped waveform of the MMF and air-gap flux density.
+<p align="center">
+    <img width="450" src="https://github.com/Xenoare/book-notes/assets/67181778/05a7c571-f734-41a5-8e26-2d4769908644"/>
+</p>
+
++ We can get to close to the ideal sinusoidal pattern, especially when we use a `two-layer` winding. This type of winding is almost universla in all but small induction motor, the coils in each phase being groupped together to form `phase-bands` or `phase-belts`.
++ The current in each phase pulastes at the supply freq. so the field produced by, let's say phase A, pulsates in symphathy with the current in phase A, the axis of each `pole` remainng fixed in space, but its polarity changing from N to S and `back once per cycle`.
+<p align="center">
+    <img width="450" src="https://github.com/Xenoare/book-notes/assets/67181778/cca01447-37fd-4bc6-ad47-a9d4f6b2838c"/>
+</p>
+
++ The fundamental equation in indunctation motor operation such as
+$$B_{m} = k\frac{V}f}$$
++ Where the constant k depends on the number of turns per coil, shows that if the supply frequency _f_ is constant, the flux in the air-gap is directly proportional to the applied voltage, or in other words, the `voltage sets the flux`. 
 
