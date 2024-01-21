@@ -214,3 +214,13 @@ $$V = E = K_{E}\Phi n$$ that is equivlent to $$n = \frac{V}{K_{E}\Phi}$$
 ## Chapter 5 : Induction Motors - Rotating Field, Slip and Torque
 + The diff between induction motor and d.c. are `first` that the supply to the `induction motor` is a.c. (usually 3-phase, but induction motor rotates relative to the stator, whereas in the d.c. motor it is stationary and thirdly that both stator and rotor in the induction motor are non salient (or `effectively smooth`)
 + Whereas the d.c. motor stator has projecting poles or saliencies which define the position of the field windings.
++ The pattern of flux in ideal 4-pole induction motor is `supplied` from balanced `3-phase` source.
++ In the Figure below, the `top` sketch is corresponds to time _t_ = 0; the `middle` on shows th flux pattern on quarted of a cycle of the mains supply later (i.e. 5 ms if the freq is 50hz) and the lower one corresponds to a further quarter cycle later.
++ The term `pole` reflects the fact that he flux `leaves` the stator from `two` N poles, and returns at two S poles.
+<p align="center">
+    <img width="450" src="https://github.com/Xenoare/book-notes/assets/67181778/84d75980-438b-40c8-b2c7-2910e8d0840b"/>
+</p>
+
++ If we plot the variation of the radial air-gap flux density with respect to the distance round the stator, at each of the three instants of time, we get the patterns shown in the table below.
++ `Note that`, the first feature is that the radial flux density `varies` sinusodially in space.
+
