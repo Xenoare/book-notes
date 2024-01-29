@@ -254,6 +254,15 @@ $$ N_{S} = \frac{120f}{p}$$
 </p>
 
 + The fundamental equation in indunctation motor operation such as
-$$B_{m} = k\frac{V}f}$$
+$$B_{m} = k\frac{V}{f}$$
 + Where the constant k depends on the number of turns per coil, shows that if the supply frequency _f_ is constant, the flux in the air-gap is directly proportional to the applied voltage, or in other words, the `voltage sets the flux`. 
 
+## Chapter 6 : Operating Chracteristics of Induction Motors
++ The problem with motors that has over few kW is that the heavy current drawn while the motor is running up to speed may cause a large drop in the supply system voltage.
++ It is worthwhile by noting that any supply system, no matter how complicated, can be modelled by means of the simple `Thevenin equivalent circuit`.
+<p align="center">
+    <img width="450" src="https://github.com/Xenoare/book-notes/assets/67181778/8c18c1b2-a844-4aed-ab00-8d8829c2ecbc"/>
+</p>
+
++ Thee supply is represented by an ideal voltage source ($V_{s}$) in series with the supply impedance $Z_{s}$. When no load is connected to the supply, and the current is zero, the termial volatage is $V_{s}$; but as soon as a load is connected the load current (_I_) flowing through the source impedance result in a volt drop, and the output voltage falls from $V_{s}$ to V, where
+$$V=V_{s} - IZ_{s}$$
