@@ -31,3 +31,15 @@ by Bjarne Stroustrup
 + The standard libarary `<memory>` provides us way to manage objects in the free store by `unique_ptr` to represent unique ownership and `shared_ptr` to represent shared ownership
 
 ## Part 2
+### Chapter 6 :  Types and Declaration
++ The C++ does not imply that the language and the library itself guarentee good code, but there are three different behavior output on every scenario.
++ Many important things are on the `implementation-defined` by the standard, which means that any implementation details must be documented.
++ Any example on `implementation-defined` are the exact size of any data types such as `int` or `float`, the definition of `NULL` macro (0, `nullptr`, ((void)*0)). This implementation are documented somewhere else, such on the manual pages, or the library header.
++ The other behaviour is `unspecified` behaviour, where this behaviour arise when the standard gives multiple valid options for the behaviour of the certain construct, but it doesn't mandate which operation should be choosen, and it's up to the compiler to decide. Given the example
+```
+int x = 5;
+std::cout << x++ << "" << x++ << std::endl;
+```
+
++ In this example, the order of evaluation `x++` is unspecified. The compiler is free to decide the output of either `5 6` or `6 5`.
++ The last one is the `undefined` behaviour, where this behaviour is arise when you violate certain language rules (such as `deferencing a null pointer`). The standard doesn't define the what should happen when program enter the undefined behaviour.
