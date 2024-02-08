@@ -89,3 +89,97 @@ int_fast32_t z; // the fastest int type with at least 4 bytes
 <p align="center">
     <img width="500" src="https://github.com/Xenoare/book-notes/assets/67181778/59812d51-ce1c-4311-a732-b33df68639b3">
 </p>
+
++ The Pointer and Reference is the most tricky ones. So basically, the fundamental operation on a pointer is called `deferencing` (that's it, referencing to the object pointed by the pointer).
++ In other hand, `Reference` is an alternate names of an object, or so called an alias. The main usage of reference is to specifying an argument and return values for function in general and for overload operator in particular.
++ To reflect the lvalue/rvalue and const/non-const distinctions, there are three kinds of references:
+1. lvalue references: to refer to objects whose value we want to change
+2. const references: to refer to objects whose value we do not want to change (e.g., a constant)
+3. rvalue references: to refer to objects whose value we do not need to preserve after we have used it (e.g., a temporary)
+
++ First, the notation of `&x` means `reference to x`. It often called _lvalue references_, for examples
+```
+void g() {
+    int var = 0;
+    int& rr {var};
+    ++rr; // var is incremented to 1
+    int∗ pp = &rr; // pp points to va
+}
+```
+
++ Here, `++rr` doesn't increment the reference `rr`, but `++` is applied to the `int` which `rr` refers to (var). Consequently, the value of the reference cannot be change after initialization (it's always refers to the object was reference to denote).
++ To get the pointer to the object denoted by the reference we can use the `&` as on the line 4 of `g` function. Thus, we cannot have a pointer to a reference. Furthermore, we cannot define an array of references. In that sense, a reference is not an object.
++ A reference can be used to specify a function argument such that the value that passed to the function can be modified. For example
+```
+struct Point {
+    int x;
+    int y;
+};
+
+void modifyPoint(Point& p) {
+    p.x += 10;
+    p.y += 5;
+}
+
+int main() {
+    Point myPoint = {5, 8};
+    modifyPoint(myPoint);
+```
+
++ An `rvalue` reference in other hand refers to an temporary object, which the user of the reference can modify (assuming the object will never be used again).
++ `rvalue` references can be used for moving semantic, allowing efficient transfer of resources between object.
+```
+std::vector<int> createVector(){
+    std::vector<int> tempVec = {1, 2, 3, 4, 5};
+    return tempVec;
+}
+
+int main(){
+    // With move semantics (using an rvalue reference), ownership is transferred efficiently
+    std::vector<int>&& refVec = createVector();
+}
+```
+
++ One implemenation of using `rvalue`, consider a `swap()` function that takes an T type that can swap some element. But if the T is a type which can be expensive to copy elements (such as `string` or `vector`). This will result in an expensive operation.
++ Since we didn't want any copies at all (just move the values of a, b, and temp). We can try to do this
+```
+template <class T>
+void swap(T& a, T& b) {
+    T tmp {static_cast<T&&> (a)
+    a = static_cast<T&&> (b)
+    b = static_cast<T&&> (a)
+}
+```
+
++ The result value of `static_cast<T&&>(x)` is an rvalue of type T&& for x. But nowadays, the use of `static_cast` had been changed by using the `move()` (`move(x)` means `static_swap<T&&>(x)`).
++ Last and yet it was trival, the relation between pointer and references. Pointer and references are two mechanism for refferring an object from different program without needed to copying.
++ If you need to change object to refer to, use a pointer. You can use the `pointer arithmatic` to change the value of the pointer variable.
+```
+void fp(char *p){
+    while(*p){
+        cout << *++p;
+    }
+}
+```
+
++ If you want a collection of something that refers to an object, you must use a pointer
+```
+int x, y;
+string& a1[] = {x, y}; // error : array of references
+string∗ a2[] = {&x, &y}; // OK
+vector<string&> s1 = {x , y}; // error : vector of references
+vector<string∗> s2 = {&x, &y}; // OK
+```
+
++ Conversely, if you want to be sure that a name always refers to the same object, use a reference.
++ If you want to use a user-defined (overload) operator on something that refers to an object, use a reference.
+```
+Matrix operator+(const Matrix&, const Matrix&); // OK
+Matrix operator−(const Matrix∗, const Matrix∗); // error : no user-defined type argument
+
+Matrix y, z; // ...
+Matrix x = y+z; // OK
+Matrix x2 = &y−&z; // error and ugly
+```
+
++ Use containers (e.g., vector, array, and valarray) rather than built-in (C-style) arrays
