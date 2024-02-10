@@ -90,6 +90,7 @@ int_fast32_t z; // the fastest int type with at least 4 bytes
     <img width="500" src="https://github.com/Xenoare/book-notes/assets/67181778/59812d51-ce1c-4311-a732-b33df68639b3">
 </p>
 
+### Part 7 : Pointer and Reference
 + The Pointer and Reference is the most tricky ones. So basically, the fundamental operation on a pointer is called `deferencing` (that's it, referencing to the object pointed by the pointer).
 + In other hand, `Reference` is an alternate names of an object, or so called an alias. The main usage of reference is to specifying an argument and return values for function in general and for overload operator in particular.
 + To reflect the lvalue/rvalue and const/non-const distinctions, there are three kinds of references:
@@ -182,4 +183,55 @@ Matrix x = y+z; // OK
 Matrix x2 = &y−&z; // error and ugly
 ```
 
-+ Use containers (e.g., vector, array, and valarray) rather than built-in (C-style) arrays
++ Use containers (e.g., vector, array, and valarray) rather than built-in (C-style) arrays.
+
+### Part 8 : Structures, Unions and Enumeration
++ The expanded of user-defined types is very useful in certain scenarios. But there are 3 most primitives variants
+1. A `struct` is a sequence of elements (called `members`) of arbitary types.
+2. A `union` is a struct that holds the value of just one elements at any one time.
+3. An `enum` (or called enumeration) is a type with a set of named constants (called enumerators).
+
++ One trivial thing about the size of the `struct` is based on the order on how the are declared. So you can minimize the wasted space created on the `struct` by ordering based on the highest member first. For example
+```
+struct Readout {
+int value;
+char hour; // [0:23] 
+char seq; // ['a':'z']
+}
+```
+
++ This would give us the size of the `Readout Structure`
+<p align="center">
+    <img width="500" src="https://github.com/Xenoare/book-notes/assets/67181778/c4dcf677-16db-43ff-8acb-e2e6e857b09c">
+</p>
+
++ Every `struct` must have a `unique` definition on their program.
++ It is possible to bundle several tiny variable (in bit) in such a struct (this is called `bit-field`). A member is defined to be a field by specifying the number of bit to occupy. For example
+```
+struct Flags {
+    unsigned int isSet : 1;  // 1-bit bit-field
+    unsigned int value : 4;  // 4-bit bit-field
+};
+```
+
++ Fields are simply a convenient shorthand for using bitwise logical operators. It is typically much faster to access the `int` / `char` rather than the bit-field.
++ The `union` in other hands are completely different than struct, where union is to allow different types to share the same memory space. Hence, allowing to represent a value in multiple ways.
++ Use unions to save space (represent alternatives) and never for type conversion (Advice from the book)
++ Mostly union are used as the `Type Conversion` where we work with low-level bit program to manipulate the value. Take an example on how the union are used to represnt the floating-point types
+```
+union FloatComponents {
+    float floatValue;
+    struct {
+        uint32_t mantissa : 23;
+        uint32_t exponent : 8;
+        uint32_t sign : 1;
+    } components;
+};
+```
+
++ Lastly, `enum` (enumeration) are ways to represent a `set` of constants. There are two kinds of enumeration
+1. `enum class`es, for which the enumerator names (e.g., red) are local to the enum and their values do not implicitly convert to other types.
+2. `Plain` enum, for which the enumerator names are in the same scope as the enum and their values implicitly convert to `integers`.
+
++ By default the underlining types for `enum` are immplicitly `integer`. But for the `enum class`es, it must be explicitly define the underling types, whether `int`, `char`, `unsigned int`, and etc.
++ And for convertion itself, both enumeration need some explicit conversion to convert to other data types. This can be done with the help of `static_cast`.
