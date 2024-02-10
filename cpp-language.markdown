@@ -90,6 +90,11 @@ int_fast32_t z; // the fastest int type with at least 4 bytes
     <img width="500" src="https://github.com/Xenoare/book-notes/assets/67181778/59812d51-ce1c-4311-a732-b33df68639b3">
 </p>
 
++ The C++ Keywords are
+<p align="center">
+    <img width="500" src="https://github.com/Xenoare/book-notes/assets/67181778/5993f8ad-5f4b-44a8-a070-f720d4c40894">
+</p>
+
 ### Part 7 : Pointer and Reference
 + The Pointer and Reference is the most tricky ones. So basically, the fundamental operation on a pointer is called `deferencing` (that's it, referencing to the object pointed by the pointer).
 + In other hand, `Reference` is an alternate names of an object, or so called an alias. The main usage of reference is to specifying an argument and return values for function in general and for overload operator in particular.
@@ -235,3 +240,12 @@ union FloatComponents {
 
 + By default the underlining types for `enum` are immplicitly `integer`. But for the `enum class`es, it must be explicitly define the underling types, whether `int`, `char`, `unsigned int`, and etc.
 + And for convertion itself, both enumeration need some explicit conversion to convert to other data types. This can be done with the help of `static_cast`.
+
+### Part 9 : Statements
++ A good comment states the piece of code is supposed to do (the intent of the code), whereas the code itself states what it does (the way it does it). Some preference in making a good comments are
+1. A comment for each source file stating what the declarations in it have in common, references to manuals, the name of the programmer, general hints for maintenance, etc.
+2. A comment for each class, templates, and namespace.
+3. A comment for each global and namespace variable and constant
+
+### Part 10 : Expression
++ A program consist of four main parts: a `parser`, an `input function`, a `symbol table`, and a `driver`.
