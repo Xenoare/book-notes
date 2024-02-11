@@ -249,3 +249,29 @@ union FloatComponents {
 
 ### Part 10 : Expression
 + A program consist of four main parts: a `parser`, an `input function`, a `symbol table`, and a `driver`.
++ Basically, a program are some sequence of expression (the defition of `expression` are varied from the value of the variable, an argument of a function an many more). Such a basic expression are the binary and unary operation (+, -, *, /).
++ The next step is the parser do, is to tokenize the expression and identifier and applied the grammar rules of the language (This step is done by the `Token_stream` mechanism). We can look on how the tokenize of the code `int x = 4;`
+```
+std::vector<Token> tokenStream = {
+Token(Token::KEYWORD, "int"),
+    Token(Token::IDENTIFIER, "x"),
+    Token(Token::OPERATOR, "="),
+    Token(Token::INT_LITERAL, "4"),
+    Token(Token::SEMICOLON, ";")
+};
+```
+
++ As the parser processes the tokens and builds the AST, it populates the symbol table. The symbol table keeps track of all identifiers (such as variable names, function names, etc.) declared in the program along with their types, scopes, and other attributes. The parser uses the symbol table to check for name conflicts, verify that variables are declared before use, and resolve references to variables and functions.
++ Lastly, the driver orchestrates the overall process. It invokes the input function to read the source code, passes the tokens to the parser, and manages the interaction between the parser and the symbol table.
++ Here's some basic rules for the grammar. Remember, the operator in higher place have higher precedance. It means that the `*p++` is actually `*(p++)`, not `(*p)++`.
+<p align="center">
+    <img width="500" src="https://github.com/Xenoare/book-notes/assets/67181778/8e0b0000-0b0d-4046-90ba-10bc014da934">
+</p>
+<p align="center">
+    <img width="500" src="https://github.com/Xenoare/book-notes/assets/67181778/ce2c099c-7554-49ce-84cb-ac7c57fea4fe">
+</p>
+<p align="center">
+    <img width="500" src="https://github.com/Xenoare/book-notes/assets/67181778/7a97a2a4-4cfe-49d7-97f5-af3bcb4a631e">
+</p>
+
++ Back again on how the parser work. Before we applying the grammar rules of the language, some lexical token are commpose from a character. Like in the case of `int x = 4;`. This is called `Max Munch Rule`.
