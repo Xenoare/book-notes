@@ -275,3 +275,28 @@ Token(Token::KEYWORD, "int"),
 </p>
 
 + Back again on how the parser work. Before we applying the grammar rules of the language, some lexical token are commpose from a character. Like in the case of `int x = 4;`. This is called `Max Munch Rule`.
+<p align="center">
+    <img width="500" src="https://github.com/Xenoare/book-notes/assets/67181778/7706ef10-6820-4845-b2a5-8d4713ff3b67">
+</p>
+
+### Part 11 : Select Operation
++ Object allocated with `new` operator said to be on `free store` (or called `on the heap`, or in the `dynamic memory`).
++ As rule of thumb, any object created by `new` **exist** until it is explicitly destroyed by `delete`.
++ But the main problem with free store is that
+1. Leaked objects: People use new and then forget to delete the allocated object.
+2. Premature deletion: People delete an object that they have some other pointer to and later use that other pointer.
+3. Double deletion: An object is deleted twice, invoking its destructor (if any) twice.
+
++ We can try to overloading the `new` and `delete` operators. For the `new` operators there are 3 version of `new` based on the docs.
+```
+throwing (1)	void* operator new (std::size_t size);
+nothrow (2)	 void* operator new (std::size_t size, const std::nothrow_t& nothrow_value) noexcept;
+placement (3)	 void* operator new (std::size_t size, void* ptr) noexcept;
+```
+
++ Throwing new (1): This is the standard version of the new operator that attempts to allocate memory and throws a std::bad_alloc exception if it fails. It takes a single argument, the size of the memory to be allocated.
++ Nothrow new (2): This version of the new operator is similar to the throwing new but does not throw an exception if memory allocation fails. Instead, it returns a null pointer. It also takes a single argument, the size of the memory to be allocated, and a second argument, std::nothrow.
++ Placement new (3): This version of the new operator is used for constructing an object at a specific memory location (known as placement new). It takes two arguments: the size of the memory to be allocated and a pointer to the memory location where the object should be constructed. This version does not actually allocate new memory but merely constructs an object at the specified memory location.
++ For the `delete`, it just dealocate the storage (You can look up on the docs).
++ 
+   
