@@ -298,5 +298,25 @@ placement (3)	 void* operator new (std::size_t size, void* ptr) noexcept;
 + Nothrow new (2): This version of the new operator is similar to the throwing new but does not throw an exception if memory allocation fails. Instead, it returns a null pointer. It also takes a single argument, the size of the memory to be allocated, and a second argument, std::nothrow.
 + Placement new (3): This version of the new operator is used for constructing an object at a specific memory location (known as placement new). It takes two arguments: the size of the memory to be allocated and a pointer to the memory location where the object should be constructed. This version does not actually allocate new memory but merely constructs an object at the specified memory location.
 + For the `delete`, it just dealocate the storage (You can look up on the docs).
-+ 
-   
++ A `lambda expression` or just known as the `lambda function` is a way to define the anonymus function object. The basic syntax for the lambda are
+```
+[capture list] (parameters) mutable(optional) exception attribute -> return type { function body }
+```
+
++ Capture List: Specifies which external variables are available inside the lambda function. It can capture variables by value or by reference.
++ Parameters: The parameters of the lambda function, if any.
++ Mutable: Allows the lambda to modify captured variables by value.
++ Exception Attribute: Specifies the type of exceptions the lambda can throw.
++ Return Type: The return type of the lambda function.
++ Function Body: The code that is executed when the lambda is invoked.
+
++ You can use a capture-default mode to indicate how to capture any outside variables referenced in the lambda body: `[&]` means all variables that you refer to are captured by reference, and `[=]` means they're captured by value. You can use a default capture mode, and then specify the opposite mode explicitly for specific variables. For example, if a lambda body accesses the external variable `total` by reference and the external variable `factor` by value, then the following capture clauses are equivalent:
+```
+[&total, factor]
+[factor, &total]
+[&, factor]
+[=, &total]
+```
+
+
+
