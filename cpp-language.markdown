@@ -318,5 +318,132 @@ placement (3)	 void* operator new (std::size_t size, void* ptr) noexcept;
 [=, &total]
 ```
 
+### Part 12 : Functions
++ The definition of function declaration in C++, a function declaration can contain a variety of specifier and modifier. Such as we can have
+1. The name of the function; required
+2. The argument list, which may be empty `()`; required
+3. The return type, which may be void and which may be prefix or suffix (using `auto`); required
+4. inline, indicating a desire to have function calls implemented by inlining the function body
+5. constexpr, indicating that it should be possible to evaluate the function at compile time if given constant expressions as arguments.
+6. noexcept, indicating that the function may not throw an exception.
+7. A linkage specification, for example, `static`
+8. [[noreturn]], indicating that the function will not return using the normal call/return mechanism
 
++ In addition, member function may be specified as
+1. virtual, indicating that it can be overridden in a derived class 
+2. override, indicating that it must be overriding a virtual function from a base class 
+3. final, indicating that it cannot be overriden in a derived class 
+4. static, indicating that it is not associated with a particular object 
+5. const, indicating that it may not modify its object
 
++ I don't know but the syntax for the function declaration is more like this
+```
+struct S {
+[[noreturn]] virtual inline auto f(const unsigned long int ∗const) −> void const noexcept;
+};
+```
+
++ Every function declaration contains the specification of the function return `types`. However, there are two declaration for returning types
+```
+int multiply(int x){} // prefix
+auto multiply(int x){} -> int //suffix
+```
+
++ The essential use for a suffix return type comes in function template declarations in which the return type depends on the arguments. For example:
+```
+template<class T, class U>
+auto product(const vector<T>& x, const vector<U>& y) −> decltype(x∗y)
+```
+
++ In general, a function will not be evaluated at compile time and therefore it cannot be called in a constant expression. But, by defining the a function `constexpr` we indicate that we want it to be usable in constant expressions if given constant expressions as argument.
+```
+constexpr int fac(int x) {
+    return (x > 1) ? x fac(x-1): 1
+}
+
+constexpr int f9 = fac(9) // may be evaluated in compile time
+```
+
++ To be evaluated a compile time, a `constexpr` function must consist of a single `return` statement; no `loops` and no local `variables` are allowed. Also, a constexpr function may not have `side effects`. That is, a constexpr function is a pure function.
++ A local variable or constant is initialized when a thread of execution reaches its definiion. If a `local variable` declared as a `static`, a `single` statically allocated object will be used to represent that variable in all calls of a function. It will only initialized only the first time the thread of execution reaches is definition.
++ The general rule of thumb of passing an arguments to a function is like this
+1. Use `pass-by-value` for a small object
+2. Use `pass-by-const-reference` for a larger object that you don't need to modify
+3. Return an result as a `return` value rather than modifying the argument object
+4. Use rvalue references to implement move (§3.3.2, §17.5.2) and forwarding
+5. Pass a pointer if ‘‘no object’’ is a valid alternative (and represent ‘‘no object’’ by nullptr).
+6. Use pass-by-reference only if you have to.
+
++ For some case, where we don't know the number and type of arguments be expected in a function, we can solve this by introducing some `variadic function` which take variable number of arguments. One tool for doing this is `elipsis (...)`, this is done by the macros `<cstdarg>`.
++ When a function `fn` is called. The compiler must determine which of the function name `fn` to invoke. This can be done by comparing the types of an actual arguments with the type of the parameter of all functions in the scope called `fn`.
++ The idea is to invoke the function that is the best match to the arguments and give a compile-time error if no function is the best match
+```
+void print(long l)
+void print(double d)
+
+int main() {
+    print(1L) // print long
+    print(2.3) // print double
+    print(1) // Error, ambigous: print(long(1)) or print(double(1))
+}
+```
+
++ To approximate our notions of what is reasonable, a series of criteria are tried in order:
+1. Exact match; that is, match using no or only trivial conversions (for example, array name to pointer, function name to pointer to function, and T to const T)
+2. Match using promotions; that is, integral promotions (bool to int, char to int, short to int, and their unsigned counterparts; §10.5.1) and float to double
+3. Match using standard conversions (e.g., int to double, double to int, double to long double, `Derived∗` `to Base∗`, `T∗` to `void∗`, int to unsigned int 
+4. Match using user-defined conversions (e.g., double to complex<double>;)
+5. Match using the ellipsis ... in a function declaration
+
++ Return types are not consider an overload resolution. The reason is to keep the resolution for an individual operator or function call `context-independent`.
++ Multiple functions share the same name but differ in the types of their parameters. The compiler uses the argument types to decide which overloaded function to call.
+```
+int pow(int, int);
+double pow(double, double);
+complex pow(double, complex);
+complex pow(complex, int);
+complex pow(complex, complex);
+
+void k(complex z)
+{
+int i = pow(2,2); // invoke pow(int,int)
+double d = pow(2.0,2.0); // invoke pow(double,double)
+complex z2 = pow(2,z); // invoke pow(double,complex)
+complex z3 = pow(z,2); // invoke pow(complex,int)
+complex z4 = pow(z,z); // invoke pow(complex,complex)
+}
+```
+
++ Declaring too few (or too many) overloaded versions of a function can lead to ambiguities. Where possible, consider the set of overloaded versions of a function as a whole and see if it makes sense according to the semantics of the function. Often the problem can be solved by adding a version that resolves ambiguities
+```
+void inline fun1(n) { fun1(long(n)) }
+```
+
++ Finally, like an object, the code also put somewhere in the memory about the function body (so it has an address). We can point to an function, but here are only two things
+one can do to a function: `call it` and `take its address`. The pointer obtained by taking the address of a function can then be used to call the function
+```
+void error(string s) { /*... */ }
+void (∗efct)(string); // pointer to function taking a string argument and returning nothing
+
+void f()
+{
+efct = &error; // efct points to error
+efct("error"); // call error through efct
+}
+```
+
++ The compiler will discover `efct` is a pointer and call the function pointed to. For the deferencing itself, you can optianally deferencing the function pointer with `*` and use the `()` to call the function, or just directly call the function through the pointer.
+```
+void (∗f1)(string) = &error; // OK: same as = error
+void (∗f2)(string) = error; // OK: same as = &error
+
+void g()
+{
+f1("Vasa"); // OK: same as (*f1)("Vasa")
+(∗f1)("Mary Rose"); // OK: as f1("Mary Rose")
+}
+```
+
++ Prefer function objects (including lambdas) and virtual functions to pointers to functions
++ A function should perform a single logical operation
++ If you must use macros, use ugly names with lots of capital letters
