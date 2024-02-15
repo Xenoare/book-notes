@@ -447,3 +447,37 @@ f1("Vasa"); // OK: same as (*f1)("Vasa")
 + Prefer function objects (including lambdas) and virtual functions to pointers to functions
 + A function should perform a single logical operation
 + If you must use macros, use ugly names with lots of capital letters
+
+### Part 13 : Exception Handling
++ Use Hierarchial error handling, like this
+```
+exception
+   logic_error
+      domain_error
+      invalid_argument
+      length_error
+      out_of_range
+   runtime_error
+      range_error
+      overflow_error 
+      underflow_error 
+```
+
++ Use the `Resource Acquisition Is Initialization` technique to manage resources
++ Release locally owned resources before throwing an exception
++ Beware of memory leaks caused by memory allocated by new not being released in case of an exception
++ A library shouldn’t unilaterally terminate a program. Instead, throw an exception and let a caller decide
+
+### Part 14 : Namespaces
++ Use namespaces to express logical structure
++ If necessary, use namespace aliases to abbreviate long namespace names
++ Use the `Namespace::member` notation when defining namespace members
++ Use `using`-directives for transition, for foundational libraries (such as `std`), or within a local scope
++ Don’t put a `using`-directive in a header file
+
+### Part 15 : Source and Program Files
++ Don’t define global entities with the same name and similar-but-different meanings in different translation units
++ Distinguish between `users` interfaces and `implementers` interfaces
++ Use `#include` only at global scope and in namespaces
++ Use `include guards`
++ Make headers self-contained
