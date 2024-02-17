@@ -228,3 +228,12 @@ by Daniel Kahneman
 * Evaluasi itu relatif terhadap titik rujukan netral, yang terkadang disebut `tingkat adaptasi`
 * Prinsip pengurangan kepekaan berlaku bagi dimensi indra dan evaluasi perubahan kekayaan. Seperti layaknya menyalakan lampu redup besar pengaruhnya dalam ruang gelap, dimana perbedaan subjektif antara $900 dan $1000 jauh lebih kecil dibandingkan dengan $100 dan $200
 * Prinsip ketiga adalah tidak mau rugi. Rugi akan terasa lebih berat daripada untung, makhluk hidup menganggap ancaman lebih penting daripada kesempatan berpeluang lebih baik untuk bertahan hidup dan berkembang baik.
+
+#### Chapter 27 : Efek Pusaka
+* Richard Thaller, menemukan banyak contoh fenomena yang disebut `endowment effect`, terutama bagi barang-barang yang tak diperjualbelikan sering-sering.
+* Harga tinggi yang ditetapkan Penjual mencerminkan keenganan untuk melepas suatu barang yang sudah dimiliki, mirip seperti keengganan untuk melepas mainan yang sedang berada di tangan bayi.
+* Ketidaksukaan rugi sudah termasuk dalam evaluasi otomatis Sistem 1
+* Gagasan dasar teori prospek itu adalah bahwa titik rujukan itu ada, dan `kerugian` terasa `lebih berat` daripada keuntungan yang nilainya sama besar.
+* Pedagang veteran tidak terpengaruh oleh efek endowment. Mereka bertanya, "Seberapa besar keinginan saya untuk mendapatkan barang ini, dibandingkan dengan barang lain yang bisa saya miliki?"
+* Menjadi miskin berarti hidup di bawah titik rujukan seseorang. Uang dalam jumlah kecil yang mereka terima merupakan pengurangan kerugian, bukan keuntungan. Jadi, semua pilihan mereka adalah antara kerugian.
+
