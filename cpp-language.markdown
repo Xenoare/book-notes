@@ -34,7 +34,7 @@ by Bjarne Stroustrup
 ### Chapter 6 :  Types and Declaration
 + The C++ does not imply that the language and the library itself guarentee good code, but there are three different behavior output on every scenario.
 + Many important things are on the `implementation-defined` by the standard, which means that any implementation details must be documented.
-+ Any example on `implementation-defined` are the exact size of any data types such as `int` or `float`, the definition of `NULL` macro (0, `nullptr`, ((void)*0)). This implementation are documented somewhere else, such on the manual pages, or the library header.
++ Any example on `implementation-defined` are the exact size of any data types such as `int` or `float`, the definition of `NULL` macro (0, `nullptr`, `((void)*0))`. This implementation are documented somewhere else, such on the manual pages, or the library header.
 + The other behaviour is `unspecified` behaviour, where this behaviour arise when the standard gives multiple valid options for the behaviour of the certain construct, but it doesn't mandate which operation should be choosen, and it's up to the compiler to decide. Given the example
 ```
 int x = 5;
@@ -481,3 +481,111 @@ exception
 + Use `#include` only at global scope and in namespaces
 + Use `include guards`
 + Make headers self-contained
+
+## Part 3
+### Chapter 16 : Classes
++ Class is a user-defined type and it consist of set of members.
++ The `public` members provide the class's interface and `private` members provide the implementation details.
++ Also `struct` is a class where the members are default by `public`.
++ Function declared within the class definition itself are called `member function`. Consider this `member function` and also the class / struct `Date`.
+```
+struct Date {
+int d, m, y;
+
+void init(int dd, int mm, int yy); // initialize
+void add_year(int n); // add n years
+void add_month(int n); // add n months
+void add_day(int n); // add n days
+};
+
+void Date::init(int dd, int mm, int yy) {
+    d = dd;
+    m = mm;
+    y = yy;
+}
+```
+
++ The name refers to that member of an object for which the function was invoked. For example, when the `Date::init` was invoked for the `my_birthday` object. Then, `d=dd` is assigned to the `my_birthday.m`
++ The access control of the Class itself are divided into two parts `private` and `public`. The first part, `private` only can be used to access only by the member functions.
++ Also by default, the members of a class are `private`.
++ As for the style guide, it often makes sense to place the data member last to emphasize the functions providing by the public interface
+```
+class Something {
+public:
+    Something(int x, int y);
+    void do_something();
+private:
+    int x,y;
+}
+```
+
++ When a class have a `constructor`, all object of that class will be initialized by a `constructor` call.
++ Constructor obey the `overloading` rule as the normal function does. As long as the constructor itself differ sufficiently in their argument types, the compiler can select the correct one for a use:
+```
+public:
+    Date today{4} // 4, today.mm, today.yy
+    Date july4 {"July 4, 1983"};
+    Date guy {5,11}; // 5, November, today.y
+    Date now; // default initialized as today
+    Date start {}; // default initialized as today
+```
+
++ By default, a constructor invoked by a single argument acts as an implicit conversion from its arguments type to its type. For example:
+```
+complex<double> d {1} // It equivalent to complex(1,0)
+```
+
++ But, it leaves a problem where this such conversion may lead to confusion or even error. Consider this
+```
+void f() {
+    Date d {15}; // Ok, this evaluated to 15, this.mm, this, yy
+    d = 15; // some confusion
+```
+
++ There's no logical connection between the number `15` and a `Date`. So we can use some keyword `explicit` to make sure the constructor not used as an implicit conversion.
+```
+class Date {
+    int d, m, y;
+public:
+    explicit Date(int dd =0, int mm =0, int yy =0);
+};
+
+Date d1 {15}; // OK: considered explicit
+Date d2 = Date{15}; // OK: explicit
+Date d3 = {15}; // error : = initialization does not do implicit conversions
+Date d4 = 15; // error : = initialization does not do implicit conversions
+```
+
++ If a constructor is declared `explicit`, and defined outside of a class, that explicit `must not` be repeated.
++ The `const` keyword after the `(empty)` argument list in the function declaration indicates that the function itself do not modify the state of the class itself. Consider the `Date` class
+```
+class Date {
+    int d, m, y;
+public:
+    int day() const { return d; }
+    int month() const { return m; }
+```
+
++ A variable that is part of a class, yet is not part of an `object` of that class. Are called the `static member`.
++ Defining a Helper Function in the class itself would complicate the class interface and increase the number of functions that would potentially need to be examined when a change to the representa tion was considered.
++ We can make this helper function available by including the file that defined the interface. For example
+```
+#include "Date.h"
+```
+
++ In addition (or alternatively), we can make the association explicit by enclosing the class and its helper functions in a namespace
+```
+namespace Chrono { // facilities for dealing with time
+    class Date { /* ... */};
+
+    int diff(Date a, Date b);
+    bool is_leapyear(int y);
+    bool is_date(int d, Month m, int y);
+    const Date& default_date();
+    Date next_weekday(Date d);
+    Date next_saturday(Date d);
+    //
+    ...
+}
+```
+
