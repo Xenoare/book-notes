@@ -237,3 +237,31 @@ by Daniel Kahneman
 * Pedagang veteran tidak terpengaruh oleh efek endowment. Mereka bertanya, "Seberapa besar keinginan saya untuk mendapatkan barang ini, dibandingkan dengan barang lain yang bisa saya miliki?"
 * Menjadi miskin berarti hidup di bawah titik rujukan seseorang. Uang dalam jumlah kecil yang mereka terima merupakan pengurangan kerugian, bukan keuntungan. Jadi, semua pilihan mereka adalah antara kerugian.
 
+#### Chapter 28 Peristiwa Buruk
+* Hal negatif mengalahkan hal positif dalam berbagai cara, dan rasa tak mau rugi adalah salah satu di antara banyak perwujudan keunggulan negativitas yang umum.
+* Ketidakseimbangan intensitas motif menghindari rugi dan meraih untung muncul hampir dimana-mana.
+* Ketidaksukaan rugi adalah kekuatan konservatif besar yang memiliki perubahan sedikit saja dari status quo dalam kehidupan lembaga dan individu .
+* Konservatisme itu membantu membuat kita stabil di lingkungan yang menjaga hidup kita tetap di titik rujukan.
+
+#### Chapter 29 Pola Empat.
+* Populernya metafora juri dalam studi pembuatan keputusan adalah karena judi memberi aturan alami untuk pembobotan suatu hasil suatu prospek: Semakin besar peluang suatu hasil, seharusnya makin besar bobotnya.
+* Prinsip harapan tidak menyebutkan dengan tepat bagaimana berpikir mengenai teori probabilitas yang berkaitan dengan prospek beresiko.
+* Prinsip harapan menyatakan bahwa utilitas probabilitas dari 0 -> 5% menggambarkan adanya efek kemungkinan, yang menyebabkan hasil-hasil berkemungkinan kecil diberi bobot tidak proporsional.
+* Sebaliknya, peningkatan dari 95 -> 100% menggambarkan perubahan kualitatif yang disebut efek kepastian. Sebuah hasil yang hampir pasti diberi bobot yang lebih kecil daripada probabilitasnya
+* Membayar premi untuk menghilangkan kekhawatiran dengan pasti sesuai dengan psikologi kekhawatiran tetapi tidak dengan model rasional.
+* Antara kekalahan yang pasti dan pertaruhan dengan kemungkinan kerugian yang lebih besar, berkurangnya sensitivitas membuat kerugian yang pasti menjadi lebih tidak menyenangkan, dan efek kepastian mengurangi keengganan dari pertaruhan tersebut.
+* Hal ini menjelaskan mengapa orang menerima kemungkinan besar untuk memperburuk keadaan dengan harapan kecil untuk menghindari kerugian besar, yang dapat mengubah kegagalan yang dapat dikelola menjadi bencana.
+* Penyimpangan sistematis dari nilai yang diharapkan akan merugikan dalam jangka panjang. Aturan ini berlaku baik untuk penghindaran risiko maupun pencarian risiko.
+
+
+
+
+
+
+
+
+
+
+
+
+
