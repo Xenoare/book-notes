@@ -186,6 +186,109 @@ This page is dedicated for any note taking about material about mobile developme
     <p>The green circles indicate the order in which onscreen elements should receive focus.</p>
 </div>
 
+### Material Design 2
++ `Material Studies` showcase the flexibility of `Material Theming` and components to create exprssive and unique apps.
++ The principles of the Material Studies are divided into dedicated pages[^14].
+
+    | Expressive     | To highlight the capabilities, Material Theming has to offer, each Material study exprssed a different brand. |
+    | ---------------|---------------------------------------------------------------------------------------------------------------|
+    | Diverse        | To ensure that the Material Theming and component address as many product needs as possible.                  |
+    | Reality-based  | To replicate real products as closely as possible. Each study is identifies user, display functional user flow and applies real-world restriction |
+
++ Material surface can behave in certain ways:
+
+    | Rigid Surface      | Remain the same size through all interaction (one example is a card)                            |
+    | -------------------|-------------------------------------------------------------------------------------------------|
+    | Strechable Surface | Can grow and shrink along one or more edges up to size limit, then behave as rigid surface.     |
+    | Pannable Surface   | remain the same size throughout interactions. They can display additional content upon scrolling within the area, until reaching a content limit. When this limit is reached, they behave as rigid surfaces in that scroll direction. (One obvious example is (maps on android) |
+
++ Elevation in Material Design is measured as the distance between Material Surfaces along the `z`-axis in `density-independent pixels` (dps) and depicted using `shadows`.
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/f1165aa9-768b-4e1b-b73a-ed0f655844aa" width="743px" alt="Measuring Elevation">
+    <p>One surface at 1dp elevation and 8dp elevation as viewed from front and side.</p>
+</div>
+
++ Light sources and shadows are cast by a `key light` and `ambient light`. In Android or iOS, shadows occour when light sources are blocked by material surfaces along the `z`-axis
+
+    | Shadow cast by Key Light (Don't 🚫) | Shadow cast by Ambient Light (Don't 🚫) | Combined Both       | 
+    |-------------------------------------|------------------------------------------|---------------------|
+    | ![image](https://github.com/Xenoare/book-notes/assets/67181778/f2616df8-c8dc-4647-a0b9-fd740d67e484) | ![image](https://github.com/Xenoare/book-notes/assets/67181778/ea46aec2-fa29-4c8e-8b3b-ee40f63b99a5)               |  ![image](https://github.com/Xenoare/book-notes/assets/67181778/b5936fef-64ed-41de-9cae-5c5623ea8bed)               | 
+
++ Density Independent Pixel `dp` or called (`DIPS`) are flexible unit that scale to have uniform dimension on any screen.
++ A `is` equal to one physical pixel on a screen with the density of 160[^15].
+$$dp = \frac{\text{width in pixel} * 160}{\text{screen density}}$$
+
+    | Screen physical width | Screen density | Screen width in pixels | Screen width in dps |
+    |-----------------------|----------------|------------------------|---------------------|
+    | 1.5 in 1.5 in 1.5 in  | 120 160 240    | 180 px 240 px 360 px   | 240 dp              |
+
++ The responsive layout grid is made out of three elements: `columns`, `gutters`, and `margins`[^16].
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/6ac07c23-dc36-4097-8d5d-6c4d39067bc8" width="743px" alt="Responsive layout">
+    <p>1. Columns, 2. Gutters, 3. Margins</p>
+</div>
+
++ Content is placed in the area of the screen that contains columns.
++ In the context of `responsive layout`, column `width` is defined with percentages, rather than fixed values.
++ The number of columns can be represent by the breakpoint range that correspond with mobile, table or other screen.
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/e3accf2b-c69e-43ef-b89b-1f50375bf01a" width="743px" alt="Breakpoint of mobile">
+    <p>On mobile with breakpoint of 360dp, this layout use 4 columns</p>
+</div>
+
++ `Gutters`, in other hand are the space between the columns that seperate the content.
++ It should also increase in order for the larger screen.
++ Don't make gutters that's too `large` or have the `same` width as the columns.
++ `Margins` are the space between the content left and right.
+
++ Material Design provides responsive layout based on `4-columns`, `8-columns`, and `12-columns` grid.
+
+    | Screen size         | Margin  | Body    | Layout columns |
+    |---------------------|---------|---------|----------------|
+    | Extra-small (phone) |         |         |                |
+    | 0-599dp             | 16dp    | Scaling | 4              |
+    | Small (tablet)      |         |         |                |
+    | 600-904             | 32dp    | Scaling | 8              |
+    | 905-1239            | Scaling | 840dp   | 12             |
+    | Medium (laptop)     |         |         |                |
+    | 1240-1439           | 200dp   | Scaling | 12             |
+    | Large (desktop)     |         |         |                |
+    | 1440+               | Scaling | 1040    | 12             |
+
++ A container is to hold the UI elements such as images, icon, or surfaces.
++ An aspect ratio is the proportion element's width to its height (correspond to `width:height`)
++ The following aspect ratios are recommended for use across your UI: `16:9; 3:2; 4:3; 1:1; 3:4; 2:3`
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/a187f4c1-83e1-45f3-884c-f0a6689f7a34" width="743px" alt="Aspect Ratio">
+    <p>Common aspect ratio</p>
+</div>
+
++ Lastly, `Touch Targets` apply to any device that receives both touch input and non-touch input.
++ To balance the `usability` and `density`. Touch targets should be at leaast `48`x`48` dp
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/cc5d5fe8-7d9c-49a1-aed6-74658ba5011c" width="743px" alt="Touch target minimum">
+    <p>Touch target minimum of 48x48dp</p>
+</div>
+
++ One thing to be noted is that how Component adaption describe the changes in `visual presentation` (padding, size, layout, or alignment) out of one component to better suited with the `device size` and the `use case`[^17].
++  Here's some functionally-equivalent component group are defined below.
+
+    | Component type | Mobile option           | Tablet option           | Laptop option               |
+    |----------------|-------------------------|-------------------------|-----------------------------|
+    | Navigation     | Bottom navigation       | Navigation rail         | Navigation drawer           |
+    | Navigation     | Modal navigation drawer | Modal navigation drawer | Permanent navigation drawer |
+    | Communication  | Full-screen dialog      | Simple dialog           | Simple dialog               |
+    | Action         | Bottom sheet            | Menu                    | Menu                        |
+
++ Navigation is act to moving between screen of an app to complete task.
++ Based on your app information architecture, an `user` can move in `one` of `three` navigation directions[^18].
+
+    | Lateral Navigation      | Moving between screen that are the same level of hierarchy. This can be done usually by the Primary Navigation Component to give access to all destination                            |
+    | -------------------|-------------------------------------------------------------------------------------------------|
+    | Forward Navigation |      |
+    | Pannable Surface   | remain the same size throughout interactions. They can display additional content upon scrolling within the area, until reaching a content limit. When this limit is reached, they behave as rigid surfaces in that scroll direction. (One obvious example is (maps on android) |
+
+
 > Reference foot note:
 > [^1]: https://m1.material.io/material-design/introduction.html#introduction-principles.
 > [^2]: https://m1.material.io/material-design/environment.html#environment-3d-world
@@ -200,3 +303,8 @@ This page is dedicated for any note taking about material about mobile developme
 > [^11]: https://m1.material.io/style/imagery.html#imagery-best-practices
 > [^12]: https://m1.material.io/style/typography.html#typography-language-categories-reference
 > [^13]: https://m1.material.io/style/writing.html#writing-language
+> [^14]: https://m2.material.io/design/material-studies/about-our-material-studies.html#about-material-studies
+> [^15]: https://m2.material.io/design/layout/pixel-density.html#pixel-density-on-android
+> [^16]: https://m2.material.io/design/layout/responsive-layout-grid.html#columns-gutters-and-margins
+> [^17]: https://m2.material.io/design/layout/component-behavior.html#component-adaptation
+> [^18]: https://m2.material.io/design/navigation/understanding-navigation.html#types-of-navigation
