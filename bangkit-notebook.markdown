@@ -1,4 +1,4 @@
-![image](https://github.com/Xenoare/book-notes/assets/67181778/8845577a-5ec5-4487-a6bb-18011837418c)# Dedicated Bangkit Notebook
+# Dedicated Bangkit Notebook
 This page is dedicated for any note taking about material about mobile development, machine learning and cloud computing as long as myself in Bangkit Periode.
 
 ## Material Design Concept in Kotlin 📱
