@@ -1,4 +1,4 @@
-# Dedicated Bangkit Notebook
+![image](https://github.com/Xenoare/book-notes/assets/67181778/8845577a-5ec5-4487-a6bb-18011837418c)# Dedicated Bangkit Notebook
 This page is dedicated for any note taking about material about mobile development, machine learning and cloud computing as long as myself in Bangkit Periode.
 
 ## Material Design Concept in Kotlin 📱
@@ -283,10 +283,139 @@ $$dp = \frac{\text{width in pixel} * 160}{\text{screen density}}$$
 + Navigation is act to moving between screen of an app to complete task.
 + Based on your app information architecture, an `user` can move in `one` of `three` navigation directions[^18].
 
-    | Lateral Navigation      | Moving between screen that are the same level of hierarchy. This can be done usually by the Primary Navigation Component to give access to all destination                            |
+    | Lateral Navigation | Moving between screen that are the same level of hierarchy. This can be done usually by the Primary Navigation Component to give access to all destination                            |
     | -------------------|-------------------------------------------------------------------------------------------------|
-    | Forward Navigation |      |
-    | Pannable Surface   | remain the same size throughout interactions. They can display additional content upon scrolling within the area, until reaching a content limit. When this limit is reached, they behave as rigid surfaces in that scroll direction. (One obvious example is (maps on android) |
+    | Forward Navigation | Refers to moving in the consecutive level of hierarychy, steps in a flow, or accross the app. Forward navigation behaviour into container (such as card, lists, images), buttons, or by search |
+    | Reverse Navigation | Refers to moving backwards through screens, either chronologically (within one app or across an app) or hierarchically (wihin an app) |
+
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/1194bd29-69c9-4def-9070-9e73b9e2e591" width="743px" alt="Example of Lateral Navigation">
+    <p>Lateral navigation allows up to move at the top-level screens of this songs's app</p>
+</div>
+
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/f93d03f7-f2ee-486a-aeff-306a54f14f7b" width="743px" alt="Forward Navigation of accessing songs">
+    <p>User of this music app can use Forward Navigation to access songs by 2 ways. Either directly from the searching a songs, or from the albums menu</p>
+</div>
+
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/0bfa90de-4f9e-445f-b93f-7c686c0aaeb9" width="743px" alt="Reverse Navigation within Music app">
+    <p>From the screen songs, user can reverse navigate in two ways, of either back to search or back to albums.</p>
+</div>
+
++ So normally, the `Lateral Navigation` are being used for the Primary Drawer such as Menu, Navigation bar and more to give and access to navigate to other screens[^19].
+
+    | Component             | Use for                | # destinations | Devices                 |
+    |-----------------------|------------------------|----------------|-------------------------|
+    | Navigation drawer     | Top-level destinations | 5+             | Mobile, Tablet, Desktop |
+    | Bottom navigation bar | Top-level destinations | 3-5            | Mobile                  |
+    | Tabs                  | Any level of hierarchy | 2+             | Mobile, Tablet, Desktop |
+
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/14363975-dbd6-4da8-90fd-00ecdcb16a6f" width="743px" alt="Bottom Navigation Bar Example as Primary Navigation">
+    <p>Bottom navigation bars provide access to 3-5 top-level destinations on mobile devices. Their location, visibility, and persistence across screens allow quick pivoting between destinations. </p>
+</div>
+
++ The `Forward Navigation` refers to one of three types of movement between screen when accomplish a task. It usually are in these forms:
+
+    | Downward       | Form of Navigation that navigate from the parent screens (Higher level) to deeper (child screen)           |
+    | ---------------|------------------------------------------------------------------------------------------------------------|
+    | Sequential     | In a form of steps / flow on a ordered sequence of process, such as checkout process.                      |
+    | Directly       | from one screen to any other in the app, such as from a home screen to a screen deep in an app's hierarchy |
+
++ Forward Navigation can be implemented by such example like by `content containers`, such as lists / image. Also it can be implemented by `Button` that can advance to another screens, and in-app search on one or more screens.
++ The `Reverse Navigation` are usually implemented by `Back Button` to navigate in reverse
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/a7046d72-2b66-4867-8ba4-4696805e2ab1" width="743px" alt="Reverse Navigation">
+    <p>The Back button allows users to navigate recently viewed screens in reverse chronological order. </p>
+</div>
+
++ Search is allows user to quickly access content accross the app.
++ Use persistent search when search is the primary focus of your app. The search text field is presented inside of a search bar, ready to receive focus. Optionally you can put the historical search suggestion
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/161bdcf7-0702-4e5b-9613-c5dcea9f3d37" width="743px" alt="Persistant Search">
+    <p>Persistent search field receiving focus, loading results, and returning to an unfocused state.</p>
+</div>
+
++ Use expandable search when search is not the primary focus of your app. Expandable search displays a search icon in the toolbar, instead of an open search text box.
+
+<div align="center">
+    <video width="630" src="https://github.com/Xenoare/book-notes/assets/67181778/0a91cc93-a0fb-4bc3-859f-a3abb6e5e4eb"></video>
+</div>
+
++ One tool is to set up the colors and theming are [Material Design Pallete Pool](https://m2.material.io/design/color/the-color-system.html#color-theme-creation)
++ The principles of the Color System are:
+
+    | Hierarchical   | Color indicates which elements are interactive, how they relate to other elements, and their level of prominence. Important elements should stand out the most.           |
+    | ---------------|------------------------------------------------------------------------------------------------------------------|
+    | Legible        | Text and important elements, like icons, should meet legibility standards when appearing on colored backgrounds. |
+    | Expressive     | Show brand colors at memorable moments that reinforce your brand’s style.                                        |
+
++ Material design comes with a built in baseline themes that can be used as-is. Normally the includes this includes default colors for[^20].
+    + Primary and secondary colors
+    + Variants of primary and secondary colors
+    + Additional UI colors, such as colors for backgrounds, surfaces, errors, typography, and iconography.
+
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/895aef6d-3d1e-401e-a19c-22c1a6694863" width="743px" alt="Color Creation">
+    <p>The baseline Material color theme.</p>
+</div>
+
++ Your primary color can be used to make the `light` or `dark` variant of the primary color.
++ To create the contrast between `UI` elements, such as from the top app bar to the system bar, you can use the `light` or `dark` variants of your primary color.
+<div align="center">
+    <video width="630" src="https://github.com/Xenoare/book-notes/assets/67181778/d71b580a-3a66-45ea-bf09-6929baca09e4"></video>
+</div>
+
++ A secondary color provides more ways to accent and distinguish your product. Having a secondary color is optional, and should be applied sparingly to accent select parts of your UI.
++ Surface, background, and error colors typically don’t represent brand:
+    + `Surface` colors affect surfaces of components, such as cards, sheets, and menus.
+    + The `background color` appears behind scrollable content. The baseline background and surface color is #FFFFFF.
+    + `Error color` indicates errors in components, such as invalid text in a text field. The baseline error color is #B00020.
+
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/b6ff53a0-e6ef-419b-abc5-2f9fa6ba9a64" width="743px" alt="Surface Color">
+    <p>A UI showcasing the baseline colors for background, surface, and error color:</p>
+</div>
+
++ The principles when applying the Color to the UI are[^21].
+
+    | Consistent     | The color should be used consistenly and be compitable with the brand it represents.                          | 
+    | ---------------|---------------------------------------------------------------------------------------------------------------|
+    | Distinct       | Color should bring some distinct to the elements, within sufficient contrast between them.                    |
+    | Intentional    | Color should be applied purposefully as it can convey meaning in multiple ways, such as relationships between elements and degrees of hierarchy.                                                                                                    |
+
++ For the `identifying` the app bar. The top and bottom bar should be use with app's primary color. System bar can be use a `dark` / `light` variant to distinguish between them.
++ To emphesize the difference between app bar and other surface components, use the `secondary color` just like the case of `floating app button (FAB)`
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/7e6624de-4907-49e0-9ddb-e0f9d30d6a9e" width="743px" alt="The usage of Primary and Secondary Color">
+    <p>The primary color (blue 700) is being used for the app bar, and the secondary color (orange 500) being used for FAB</p>
+</div>
+
++ The baseline colors for sheets and surfaces, such as bottom sheets, navigation drawers, menus, dialogs and cards are `white`[^22].
++ Use contrasting colors on the surfaces that appear on the screen temporarily, such as `navigation drawer` / `dialog button`.
++ Usually this surfaces are white, but you can use your app's primary or secondary color.
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/9b3654b1-7b08-4286-be1c-98a85b959700" width="743px" alt="Example of using constrasting color">
+    <p>This app uses its primary color blue (blue 700) on the bottom navigation drawer, a primary dark variant (blue 800) for the account switcher, and a secondary color (orange 500) for selection. </p>
+</div>
+
++ Buttons, chips and selection controls can be emphasized by applying your primary or secondary color to them.
+    + The baseline color for contained, text and outlined buttons is your primary color.
+    + The baseline color for floating action buttons and extended floating action buttons is your secondary color.
+    + The baseline color for selection controls is your secondary color.
+      
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/f5be9acf-cae6-48a2-91a8-d4df8f4b99af" width="743px" alt="Button, chip, selection control colors">
+    <p>This app using primary color (purple 500) and its dark variant (purple 600) for the app bar with secondary color (teal 200) to be his floating-action-button color andselection control color</p>
+</div>
+
++ Instead of using `grey text`, it's better to create better contrast by displaying white or black text with reduced opacity.
++ For example, black text displayed at `75%` opacity on a green background gives the text an appearance of black, with a hint of green.
+<div style="display: block; margin: auto; text-align: center;" align="center">
+    <img src="https://github.com/Xenoare/book-notes/assets/67181778/54fd7348-c92d-4f12-8e6c-7eca6aec9fa9" width="743px" alt="Using text opacity">
+    <p>Use a transparent version of black on a colored surface to preserve legibility.</p>
+</div>
 
 
 > Reference foot note:
@@ -308,3 +437,7 @@ $$dp = \frac{\text{width in pixel} * 160}{\text{screen density}}$$
 > [^16]: https://m2.material.io/design/layout/responsive-layout-grid.html#columns-gutters-and-margins
 > [^17]: https://m2.material.io/design/layout/component-behavior.html#component-adaptation
 > [^18]: https://m2.material.io/design/navigation/understanding-navigation.html#types-of-navigation
+> [^19]: https://m2.material.io/design/navigation/understanding-navigation.html#lateral-navigation
+> [^20]: https://m2.material.io/design/color/the-color-system.html#color-theme-creation
+> [^21]: https://m2.material.io/design/color/applying-color-to-ui.html#top-and-bottom-app-bars
+> [^22]: https://m2.material.io/design/color/applying-color-to-ui.html#sheets-and-surfaces
